@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/userOption"
+        app:showAsAction="always"
+        android:icon="@drawable/bn_user"
+        android:title="user" />
+
+    <item
+        android:id="@+id/boxesListOption"
+        app:showAsAction="always"
+        android:icon="@drawable/bn_boxes"
+        android:title="boxes" />
+
+    <item
+        android:id="@+id/onlineOption"
+        app:showAsAction="always"
+        android:icon="@drawable/bn_user_default"
+        android:title="signed" />
+
+    <item
+        android:id="@+id/searchOption"
+        app:showAsAction="always"
+        android:icon="@drawable/bn_search"
+        android:title="search" />
+
+    <item
+        android:id="@+id/settingsOption"
+        app:showAsAction="always"
+        android:icon="@drawable/bn_settings"
+        android:title="settings" />
+
+
+</menu>
