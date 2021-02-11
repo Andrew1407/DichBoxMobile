@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_navigation"
+    app:startDestination="@id/user">
+
+    <fragment
+        android:id="@+id/user"
+        android:name="com.diches.dichboxmobile.User"
+        android:label="fragment_user"
+        tools:layout="@layout/fragment_user" />
+    <fragment
+        android:id="@+id/search"
+        android:name="com.diches.dichboxmobile.Search"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/boxes"
+        android:name="com.diches.dichboxmobile.Boxes"
+        android:label="fragment_boxes"
+        tools:layout="@layout/fragment_boxes" />
+    <fragment
+        android:id="@+id/settings"
+        android:name="com.diches.dichboxmobile.Settings"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+</navigation>

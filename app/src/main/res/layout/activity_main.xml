@@ -11,6 +11,14 @@
         layout="@layout/titlebar" />
 
     <include
-        layout="@layout/bottom_nav"/>
+        layout="@layout/fragment_container"
+        android:id="@+id/container"
+        app:layout_constraintTop_toBottomOf="@+id/mainTitleBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_nav_view" />
+
+    <include
+        layout="@layout/bottom_nav" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

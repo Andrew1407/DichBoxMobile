@@ -16,9 +16,10 @@
 
     <item
         android:id="@+id/onlineOption"
-        app:showAsAction="always"
+        app:showAsAction="never"
         android:icon="@drawable/bn_user_default"
-        android:title="signed" />
+        android:title=""
+        android:enabled="false"/>
 
     <item
         android:id="@+id/searchOption"
