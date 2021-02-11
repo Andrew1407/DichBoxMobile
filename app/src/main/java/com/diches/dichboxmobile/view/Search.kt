@@ -11,7 +11,5 @@ class Search : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_search, container, false)
-    }
+    ): View = inflater.inflate(R.layout.fragment_search, container, false)
 }

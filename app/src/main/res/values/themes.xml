@@ -18,4 +18,19 @@
         <item name="fontFamily">@font/dynar_shadow_c</item>
         <item name="android:textSize">42sp</item>
     </style>
+
+    <style name="signSubmitStyle">
+        <item name="android:background">@drawable/sign_submit_btn</item>
+        <item name="android:textColor">@color/light_blue</item>
+    </style>
+
+    <style name="signTypeStyle">
+        <item name="android:layout_width">120dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_marginTop">45dp</item>
+        <item name="android:background">@drawable/sign_inactive</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:textColor">@color/light_blue</item>
+        <item name="android:gravity">center</item>
+    </style>
 </resources>

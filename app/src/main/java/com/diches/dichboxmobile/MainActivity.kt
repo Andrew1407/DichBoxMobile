@@ -5,11 +5,15 @@ import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.diches.dichboxmobile.view.Boxes
 import com.diches.dichboxmobile.view.Search
 import com.diches.dichboxmobile.view.Settings
 import com.diches.dichboxmobile.view.User
+import com.diches.dichboxmobile.view.signForms.SignIn
+import com.diches.dichboxmobile.view.signForms.SignUp
+import com.diches.dichboxmobile.view.signForms.ViewPagerAdapter
 
 class MainActivity : AppCompatActivity() {
     private lateinit var toolbar: Toolbar
