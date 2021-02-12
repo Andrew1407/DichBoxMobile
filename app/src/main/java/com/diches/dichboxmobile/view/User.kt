@@ -45,7 +45,7 @@ class User : Fragment() {
     ) {
         val blue: Int = -0xff2601
         val black: Int = -0x1000000
-        val firstPos: Boolean = position === 0
+        val firstPos: Boolean = position == 0
 
         signUp.setTextColor(if (firstPos) black else blue)
         signIn.setTextColor(if (firstPos) blue else black)

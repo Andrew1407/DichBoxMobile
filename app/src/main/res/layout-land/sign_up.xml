@@ -6,22 +6,37 @@
     android:background="#000000">
 
     <EditText
-        android:id="@+id/editTextTextEmailAddress"
+        android:id="@+id/editTextTextPersonName"
         style="@style/inputStyle"
-        android:layout_marginTop="60dp"
-        android:layout_marginBottom="60dp"
-        android:hint="email"
-        android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toTopOf="@+id/editTextTextPassword"
+        android:layout_marginTop="100dp"
+        android:hint="username"
+        android:layout_marginBottom="38dp"
+        android:backgroundTint="@color/light_blue"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/editTextTextEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
+        android:id="@+id/editTextTextEmailAddress"
+        style="@style/inputStyle"
+        android:hint="email"
+        android:layout_marginBottom="38dp"
+        android:inputType="textEmailAddress"
+        android:backgroundTint="@color/light_blue"
+        app:layout_constraintBottom_toTopOf="@+id/editTextTextPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+
+    <EditText
         android:id="@+id/editTextTextPassword"
         style="@style/inputStyle"
-        android:layout_marginBottom="60dp"
         android:hint="password"
+        android:layout_marginBottom="38dp"
+        android:backgroundTint="@color/light_blue"
         android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,10 +46,10 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button"
         style="@style/signSubmitStyle"
-        android:layout_width="164dp"
-        android:layout_height="48dp"
+        android:layout_width="185dp"
+        android:layout_height="55dp"
         android:layout_marginBottom="160dp"
-        android:text="Sign in"
+        android:text="Create account"
         android:textAllCaps="true"
         android:textSize="17sp"
         android:textStyle="italic"
