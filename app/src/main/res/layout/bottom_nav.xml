@@ -9,7 +9,7 @@
 
     // Central item
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/homePageIcon"
         android:layout_width="71dp"
         android:layout_height="67dp"
         android:background="@drawable/central_item"
