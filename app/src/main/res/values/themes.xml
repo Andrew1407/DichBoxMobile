@@ -20,7 +20,7 @@
     </style>
 
     <style name="signSubmitStyle">
-        <item name="android:background">@drawable/sign_submit_btn</item>
+        <item name="android:background">@drawable/sign_submit_btn_inactive</item>
         <item name="android:textColor">@color/light_blue</item>
     </style>
 
@@ -33,4 +33,15 @@
         <item name="android:textColor">@color/light_blue</item>
         <item name="android:gravity">center</item>
     </style>
+
+    <style name="warningStyle">
+        <item name="android:layout_width">341dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/crimson</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:layout_marginTop">8dp</item>
+    </style>
+
+
 </resources>

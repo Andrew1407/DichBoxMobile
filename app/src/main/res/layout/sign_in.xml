@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000">
@@ -8,8 +9,9 @@
     <EditText
         android:id="@+id/editEmailAddress"
         style="@style/inputStyle"
-        android:layout_marginTop="60dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="80dp"
+        android:saveEnabled="true"
         android:hint="email"
         android:inputType="textEmailAddress"
         app:layout_constraintBottom_toTopOf="@+id/editPassword"
@@ -20,7 +22,7 @@
     <EditText
         android:id="@+id/editPassword"
         style="@style/inputStyle"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="90dp"
         android:hint="password"
         android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/submitSignIn"
@@ -33,7 +35,7 @@
         style="@style/signSubmitStyle"
         android:layout_width="164dp"
         android:layout_height="48dp"
-        android:layout_marginBottom="160dp"
+        android:layout_marginBottom="30dp"
         android:text="Sign in"
         android:textAllCaps="true"
         android:textSize="17sp"
@@ -42,6 +44,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwdWarning" />
+
+
+    <TextView
+        android:id="@+id/passwdWarning"
+        style="@style/warningStyle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editPassword" />
+
+    <TextView
+        android:id="@+id/emailWarning"
+        style="@style/warningStyle"
+        app:layout_constraintBottom_toTopOf="@+id/editPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editEmailAddress"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,10 +8,10 @@
     <EditText
         android:id="@+id/editPersonName"
         style="@style/inputStyle"
-        android:layout_marginTop="100dp"
-        android:hint="username"
-        android:layout_marginBottom="38dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="60dp"
         android:backgroundTint="@color/light_blue"
+        android:hint="username"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/editEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,10 +21,10 @@
     <EditText
         android:id="@+id/editEmailAddress"
         style="@style/inputStyle"
-        android:hint="email"
-        android:layout_marginBottom="38dp"
-        android:inputType="textEmailAddress"
+        android:layout_marginBottom="60dp"
         android:backgroundTint="@color/light_blue"
+        android:hint="email"
+        android:inputType="textEmailAddress"
         app:layout_constraintBottom_toTopOf="@+id/editPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -34,9 +34,9 @@
     <EditText
         android:id="@+id/editPassword"
         style="@style/inputStyle"
-        android:hint="password"
-        android:layout_marginBottom="38dp"
+        android:layout_marginBottom="80dp"
         android:backgroundTint="@color/light_blue"
+        android:hint="password"
         android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/submitSignUp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +48,7 @@
         style="@style/signSubmitStyle"
         android:layout_width="185dp"
         android:layout_height="55dp"
-        android:layout_marginBottom="160dp"
+        android:layout_marginBottom="150dp"
         android:text="Create account"
         android:textAllCaps="true"
         android:textSize="17sp"
@@ -58,5 +58,30 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editPassword" />
+
+    <TextView
+        android:id="@+id/passwdWarning"
+        style='@style/warningStyle'
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editPassword" />
+
+    <TextView
+        android:id="@+id/emailWarning"
+        style="@style/warningStyle"
+        app:layout_constraintBottom_toTopOf="@+id/editPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editEmailAddress"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/usernameWarning"
+        style="@style/warningStyle"
+        app:layout_constraintBottom_toTopOf="@+id/editEmailAddress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editPersonName"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

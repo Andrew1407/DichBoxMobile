@@ -9,7 +9,7 @@
         android:id="@+id/user"
         android:name="com.diches.dichboxmobile.User"
         android:label="fragment_user"
-        tools:layout="@layout/fragment_user" />
+        tools:layout="@layout/fragment_sign" />
     <fragment
         android:id="@+id/search"
         android:name="com.diches.dichboxmobile.Search"

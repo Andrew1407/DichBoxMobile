@@ -15,64 +15,66 @@ class UserAPI {
 
     init {
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.2:7041")
+            .baseUrl("http://192.168.1.6:7041")
             .build()
 
         service = retrofit.create(UserService::class.java)
     }
 
-    suspend fun search(searchContainer: UserContainer.SearchedChunk): UserContainer.FoundUsers {
+    suspend fun search(searchContainer: UserContainer.SearchedChunk): Pair<Int, UserContainer> {
         val reqBody = makeRequest(searchContainer)
         val response = service.search(reqBody)
         return getResponseData(
                 response, UserContainer.FoundUsers::class.java
-        ) as UserContainer.FoundUsers
+        )
     }
 
-    suspend fun createUser(signContainer: UserContainer.SignUp): UserContainer.NameContainer {
+    suspend fun createUser(signContainer: UserContainer.SignUp): Pair<Int, UserContainer> {
         val reqBody = makeRequest(signContainer)
         val response = service.signUp(reqBody)
         return getResponseData(
                 response, UserContainer.NameContainer::class.java
-        ) as UserContainer.NameContainer
+        )
     }
 
-    suspend fun enterUser(signContainer: UserContainer.SignUp): UserContainer.NameContainer {
+    suspend fun enterUser(signContainer: UserContainer.SignIn): Pair<Int, UserContainer> {
         val reqBody = makeRequest(signContainer)
         val response = service.signIn(reqBody)
         return getResponseData(
                 response, UserContainer.NameContainer::class.java
-        ) as UserContainer.NameContainer
+        )
     }
 
-    suspend fun verifyField(verContainer: UserContainer.VerifyField): UserContainer.VerifyFieldRes {
+    suspend fun verifyField(verContainer: UserContainer.VerifyField): Pair<Int, UserContainer> {
         val reqBody = makeRequest(verContainer)
         val response = service.verifyField(reqBody)
         return getResponseData(
                 response, UserContainer.VerifyFieldRes::class.java
-        ) as UserContainer.VerifyFieldRes
+        )
     }
 
-    suspend fun verifyPassword(verContainer: UserContainer.VerifyPasswd): UserContainer.VerifyPasswdRes {
+    suspend fun verifyPassword(verContainer: UserContainer.VerifyPasswd): Pair<Int, UserContainer> {
         val reqBody = makeRequest(verContainer)
         val response = service.verifyPasswd(reqBody)
         return getResponseData(
                 response, UserContainer.VerifyPasswdRes::class.java
-        ) as UserContainer.VerifyPasswdRes
+        )
     }
 
     private fun getResponseData(
             response: Response<ResponseBody>,
             respClass: Class<*>
-    ): UserContainer {
-        val resParsed = JsonParser.parseString(response.body()?.string())
+    ): Pair<Int, UserContainer> {
+        val resStr = if(response.isSuccessful) response.body() else response.errorBody()
+        val resParsed = JsonParser.parseString(resStr?.string())
         val resStrJSON = Gson().toJson(resParsed)
-        return UserContainer.parseJSON(resStrJSON, respClass)
+        val finalRes = UserContainer.parseJSON(resStrJSON, respClass)
+        return Pair(response.code(), finalRes)
     }
 
     private fun makeRequest(entries: UserContainer): RequestBody {
         val entriesStr = UserContainer.stringifyJSON(entries)
         val mediaType = "application/json".toMediaTypeOrNull()
-        return  entriesStr.toRequestBody(mediaType)
+        return entriesStr.toRequestBody(mediaType)
     }
 }

@@ -10,7 +10,7 @@ sealed class UserContainer {
         fun stringifyJSON(jsonObj: UserContainer): String = com.diches.dichboxmobile.datatypes.stringifyJSON(jsonObj)
     }
 
-    data class NameContainer(val name: String) : UserContainer()
+    data class NameContainer(val name: String?) : UserContainer()
 
     data class VerifyField(
             val inputField: String,
