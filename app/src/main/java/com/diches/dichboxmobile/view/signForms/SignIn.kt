@@ -10,10 +10,12 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.MainActivity
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.mv.SignInVerifier
 import com.diches.dichboxmobile.view.Profile
+import com.diches.dichboxmobile.view.SignViewModel
 
 class SignIn : Fragment(), FragmentCleaner {
     private lateinit var verifier: SignInVerifier
@@ -26,7 +28,10 @@ class SignIn : Fragment(), FragmentCleaner {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.sign_in, container, false)
+    ): View {
+        println("Sign In")
+        return inflater.inflate(R.layout.sign_in, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,6 +50,11 @@ class SignIn : Fragment(), FragmentCleaner {
             context?.openFileOutput("signed.txt", Context.MODE_PRIVATE).use {
                 it?.write(str.toByteArray())
             }
+
+            ViewModelProvider(requireActivity())
+                    .get(SignViewModel::class.java)
+                    .setIsSigned(true)
+
             activity
                     ?.supportFragmentManager
                     ?.beginTransaction()

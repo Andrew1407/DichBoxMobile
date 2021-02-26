@@ -52,9 +52,7 @@ class SignUpVerifier(submitBtn: Button) : SignInVerifier(submitBtn){
         val (name) = nameContainer as UserContainer.NameContainer
 
         println("STATUS: $status\tBODY: $nameContainer")
-        if (status == 201 && name != null) withContext(Dispatchers.IO) {
-            saveUser(name)
-        }
+        if (status == 201 && name != null) saveUser(name)
 
     }
 }

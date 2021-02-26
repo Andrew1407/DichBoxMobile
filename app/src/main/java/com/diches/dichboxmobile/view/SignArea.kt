@@ -19,7 +19,10 @@ class SignArea : Fragment() {
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.fragment_sign, container, false)
+    ): View {
+        retainInstance = true
+        return inflater.inflate(R.layout.fragment_sign, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -30,7 +33,6 @@ class SignArea : Fragment() {
 
         viewPager = view.findViewById(R.id.viewPager)
         viewPager.adapter = activity?.let { ViewPagerAdapter(it, fragmentsList) }
-        if (savedInstanceState != null) return
         viewPager.registerOnPageChangeCallback(object :
                 ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {

@@ -16,7 +16,6 @@ class UserProfile: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val isSigned = context?.getFileStreamPath("signed.txt")!!.exists()
         if (isSigned)
             context?.openFileInput("signed.txt").use { stream ->

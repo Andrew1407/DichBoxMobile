@@ -9,9 +9,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.mv.SignUpVerifier
 import com.diches.dichboxmobile.view.Profile
+import com.diches.dichboxmobile.view.SignViewModel
 
 class SignUp : Fragment(), FragmentCleaner {
     private lateinit var verifier: SignUpVerifier
@@ -48,6 +50,11 @@ class SignUp : Fragment(), FragmentCleaner {
             context?.openFileOutput("signed.txt", Context.MODE_PRIVATE).use {
                 it?.write(str.toByteArray())
             }
+
+            ViewModelProvider(requireActivity())
+                    .get(SignViewModel::class.java)
+                    .setIsSigned(true)
+
             activity
                     ?.supportFragmentManager
                     ?.beginTransaction()

@@ -64,9 +64,7 @@ open class SignInVerifier(submitBtn: Button) : SignVerifier(
             return
         }
 
-        if (name != null) withContext(Dispatchers.IO) {
-            saveUser(name)
-        }
+        if (name != null) saveUser(name)
     }
 
 }

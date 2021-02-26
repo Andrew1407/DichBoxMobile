@@ -4,34 +4,56 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.viewpager2.widget.ViewPager2
-import com.diches.dichboxmobile.MainActivity
+import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
-import com.diches.dichboxmobile.view.signForms.FragmentCleaner
-import com.diches.dichboxmobile.view.signForms.SignIn
-import com.diches.dichboxmobile.view.signForms.SignUp
-import com.diches.dichboxmobile.view.signForms.ViewPagerAdapter
-import java.io.File
+
 
 class User : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.fragment_user, container, false)
+    private lateinit var userProfile: Profile
+    private lateinit var signArea: SignArea
+
+      override fun onCreateView(
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View {
+          retainInstance = true
+          return inflater.inflate(R.layout.fragment_user, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         super.onViewCreated(view, savedInstanceState)
 
         val isSigned = context?.getFileStreamPath("signed.txt")!!.exists()
-        val containers = listOf(Profile(), SignArea())
+        val tags = listOf("PROFILE_TAG", "SIGN_AREA_TAG")
+        val signFragment = childFragmentManager.findFragmentByTag(tags[1])
+        val profileFragment = childFragmentManager.findFragmentByTag(tags[0])
         val curFragment = if (isSigned) 0 else 1
-        containers.forEach {
-            childFragmentManager.beginTransaction().add(R.id.user_container, it).commit()
+
+        if (savedInstanceState != null) {
+            userProfile = if (profileFragment != null) profileFragment as Profile
+            else Profile()
+            signArea = if (signFragment != null) signFragment as SignArea
+            else SignArea()
+        } else {
+            userProfile = Profile()
+            signArea = SignArea()
         }
 
-        childFragmentManager.beginTransaction().replace(R.id.user_container, containers[curFragment]).commit()
+        val containers = listOf(userProfile, signArea)
+        childFragmentManager
+                .beginTransaction()
+                .replace(R.id.user_container, containers[curFragment], tags[curFragment]).commit()
+
+        val viewModel = ViewModelProvider(requireActivity()).get(SignViewModel::class.java)
+        viewModel.isSigned.observe(viewLifecycleOwner, {
+            val fragment = if (it) Profile() else SignArea()
+            val tagInd = if (it) 0 else 1
+            childFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.user_container, fragment, tags[tagInd]).commit()
+        })
     }
 
 

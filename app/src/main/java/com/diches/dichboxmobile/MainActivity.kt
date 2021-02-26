@@ -2,46 +2,54 @@ package com.diches.dichboxmobile
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import androidx.viewpager2.widget.ViewPager2
 import com.diches.dichboxmobile.api.users.UserAPI
 import com.diches.dichboxmobile.datatypes.UserContainer
 import com.diches.dichboxmobile.view.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.diches.dichboxmobile.view.signForms.SignIn
-import com.diches.dichboxmobile.view.signForms.SignUp
-import com.diches.dichboxmobile.view.signForms.ViewPagerAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var user: User
+    private lateinit var boxes: Boxes
+    private lateinit var search: Search
+    private lateinit var settings: Settings
+
     private lateinit var toolbar: Toolbar
     private lateinit var bottomNav: BottomNavigationView
     private lateinit var navFragments: List<Fragment>
     private lateinit var activeFragment: Fragment
     private lateinit var userAPI: UserAPI
+
     private var currentNavPosition: Int = 0
+    private val tagList: List<String> = listOf("USER_TAG", "BOXES_TAG", "SEARCH_TAG", "SETTINGS_TAG")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_main)
-
-        if (savedInstanceState != null)
-            currentNavPosition = savedInstanceState.getInt("position")
-
         setUpTitle()
-        initialiseFragments()
-        setUpNavBar()
-        initListeners()
 
+        if (savedInstanceState != null) {
+            currentNavPosition = savedInstanceState.getInt("position")
+            user = supportFragmentManager.findFragmentByTag(tagList[0]) as User
+            boxes = supportFragmentManager.findFragmentByTag(tagList[1]) as Boxes
+            search = supportFragmentManager.findFragmentByTag(tagList[2]) as Search
+            settings = supportFragmentManager.findFragmentByTag(tagList[3]) as Settings
+            initialiseFragments()
+        } else {
+            user = User()
+            boxes = Boxes()
+            search = Search()
+            settings = Settings()
+            initialiseFragments()
+            setUpNavBar()
+        }
+        initListeners()
         clckTest()
     }
 
@@ -54,15 +62,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun initialiseFragments() {
         bottomNav = findViewById(R.id.bottom_nav_view)
-        navFragments = listOf(User(), Boxes(), Search(), Settings())
+        navFragments = listOf(user, boxes, search, settings)
         activeFragment = navFragments[currentNavPosition]
     }
 
     private fun setUpNavBar() {
         supportFragmentManager.beginTransaction().apply {
-            navFragments.forEach {
-                val transaction: FragmentTransaction = add(R.id.container, it)
-                if (it != activeFragment) transaction.hide(it)
+            for ((i, fragment) in navFragments.withIndex()) {
+                val transaction: FragmentTransaction = add(R.id.container, fragment, tagList[i])
+                if (fragment != activeFragment) transaction.hide(fragment)
             }
         }.commit()
     }
@@ -76,8 +84,6 @@ class MainActivity : AppCompatActivity() {
         activeFragment = fragment
         return true
     }
-
-
 
     private fun initListeners() {
         bottomNav.setOnNavigationItemSelectedListener {

@@ -11,5 +11,8 @@ class Boxes : Fragment() {
      override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.fragment_boxes, container, false)
+    ): View {
+         retainInstance = true
+         return inflater.inflate(R.layout.fragment_boxes, container, false)
+     }
 }
