@@ -1,4 +1,4 @@
-package com.diches.dichboxmobile.view
+package com.diches.dichboxmobile.view.userData
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,9 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager2.widget.ViewPager2
 import com.diches.dichboxmobile.R
-import com.diches.dichboxmobile.view.userData.BoxEditor
-import com.diches.dichboxmobile.view.userData.UserProfile
-import com.diches.dichboxmobile.view.userData.ViewPagerAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -31,7 +28,7 @@ class Profile : Fragment() {
         tabLayout = view.findViewById(R.id.tabLayout)
 
         options = listOf(
-                Pair("profile", UserProfile()),
+                Pair("profile", ProfileInfo()),
                 Pair("box editor", BoxEditor())
         )
         vpAdapter = ViewPagerAdapter(this, options.map { it.second })

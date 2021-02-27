@@ -1,4 +1,4 @@
-package com.diches.dichboxmobile.view
+package com.diches.dichboxmobile.view.signForms
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,10 +8,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.diches.dichboxmobile.R
-import com.diches.dichboxmobile.view.signForms.FragmentCleaner
-import com.diches.dichboxmobile.view.signForms.SignIn
-import com.diches.dichboxmobile.view.signForms.SignUp
-import com.diches.dichboxmobile.view.signForms.ViewPagerAdapter
 
 class SignArea : Fragment() {
     private lateinit var viewPager: ViewPager2

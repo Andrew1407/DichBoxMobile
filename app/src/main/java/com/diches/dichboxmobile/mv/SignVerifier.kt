@@ -57,7 +57,6 @@ abstract class SignVerifier(
         input.addTextChangedListener {
             CoroutineScope(Dispatchers.Main).launch {
                 val inputText = input.text.toString()
-                println(warning.text)
                 if (
                         warning.text.isEmpty() &&
                         fieldsValid[field]!!.isEmpty() &&

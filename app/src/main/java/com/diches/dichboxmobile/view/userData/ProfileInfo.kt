@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.diches.dichboxmobile.R
 
-class UserProfile: Fragment() {
+class ProfileInfo: Fragment() {
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?

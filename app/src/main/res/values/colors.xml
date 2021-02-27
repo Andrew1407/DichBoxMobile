@@ -15,4 +15,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="crimson">#DC143C</color>
     <color name="green">#00FF4c</color>
+    <color name="yellow">#FFA500</color>
 </resources>

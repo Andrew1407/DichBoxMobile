@@ -15,42 +15,48 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var user: User
-    private lateinit var boxes: Boxes
-    private lateinit var search: Search
-    private lateinit var settings: Settings
-
     private lateinit var toolbar: Toolbar
     private lateinit var bottomNav: BottomNavigationView
     private lateinit var navFragments: List<Fragment>
     private lateinit var activeFragment: Fragment
-    private lateinit var userAPI: UserAPI
+    private lateinit var tagList: List<String>
 
+    private lateinit var userAPI: UserAPI
     private var currentNavPosition: Int = 0
-    private val tagList: List<String> = listOf("USER_TAG", "BOXES_TAG", "SEARCH_TAG", "SETTINGS_TAG")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
         setUpTitle()
 
-        if (savedInstanceState != null) {
-            currentNavPosition = savedInstanceState.getInt("position")
-            user = supportFragmentManager.findFragmentByTag(tagList[0]) as User
-            boxes = supportFragmentManager.findFragmentByTag(tagList[1]) as Boxes
-            search = supportFragmentManager.findFragmentByTag(tagList[2]) as Search
-            settings = supportFragmentManager.findFragmentByTag(tagList[3]) as Settings
+        val isInstSaved = savedInstanceState != null
+        tagList = listOf("USER_TAG", "BOXES_TAG", "SEARCH_TAG", "SETTINGS_TAG")
+        navFragments = tagList.map { getFragment(it, isInstSaved) }
+
+        if (isInstSaved) {
+            currentNavPosition = savedInstanceState!!.getInt("position")
             initialiseFragments()
         } else {
-            user = User()
-            boxes = Boxes()
-            search = Search()
-            settings = Settings()
             initialiseFragments()
             setUpNavBar()
         }
+
         initListeners()
         clckTest()
+    }
+
+    private fun getFragment(tag: String, isSaved: Boolean): Fragment {
+        val getExisted = { supportFragmentManager.findFragmentByTag(tag) }
+
+        val res = when(tag) {
+            "USER_TAG" -> if (isSaved) getExisted() else User()
+            "BOXES_TAG" -> if (isSaved) getExisted() else Boxes()
+            "SEARCH_TAG" -> if (isSaved) getExisted() else Search()
+            else -> if (isSaved) getExisted() else Settings()
+        }
+
+        return res as Fragment
     }
 
     private fun setUpTitle() {
@@ -62,7 +68,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initialiseFragments() {
         bottomNav = findViewById(R.id.bottom_nav_view)
-        navFragments = listOf(user, boxes, search, settings)
+//        navFragments = listOf(user, boxes, search, settings)
         activeFragment = navFragments[currentNavPosition]
     }
 
@@ -77,10 +83,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleListener(fragment: Fragment): Boolean {
         supportFragmentManager
-            .beginTransaction()
-            .hide(activeFragment)
-            .show(fragment)
-            .commit()
+                .beginTransaction()
+                .hide(activeFragment)
+                .show(fragment)
+                .commit()
         activeFragment = fragment
         return true
     }

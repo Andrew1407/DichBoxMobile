@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.mv.SignUpVerifier
-import com.diches.dichboxmobile.view.Profile
+import com.diches.dichboxmobile.view.userData.Profile
 import com.diches.dichboxmobile.view.SignViewModel
 
 class SignUp : Fragment(), FragmentCleaner {

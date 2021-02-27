@@ -1,13 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black">
+
+    <ImageView
+        android:id="@+id/userLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/user_logo"
+        android:minHeight="180dp"
+        android:maxHeight="180dp"
+        android:minWidth="180dp"
+        android:maxWidth="180dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"/>
 
     <TextView
         android:id="@+id/userProfileText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="User profile"
-        android:textSize="40sp" />
+        android:textSize="45sp"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"/>
+
+    <TextView
+        android:id="@+id/userDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:text="description"
+        android:gravity="center"
+        android:layout_marginBottom="25dp"/>
+
+    <include layout="@layout/profile_info"/>
+
 </LinearLayout>

@@ -18,10 +18,6 @@ open class SignInVerifier(submitBtn: Button) : SignVerifier(
 ) {
     private lateinit var passwordFields: Pair<EditText, TextView>
 
-    init {
-        submitBtn.isEnabled = false
-    }
-
     open fun checkEmail(email: EditText, warning: TextView): SignInVerifier {
         handleInput(SignFields.EMAIL, email, warning) {
             when {
