@@ -1,4 +1,4 @@
-package com.diches.dichboxmobile.mv
+package com.diches.dichboxmobile.mv.signVerifiers
 
 enum class SignWarnings(val text: String) {
     EMAIL_INVALID("Incorrect email input form"),

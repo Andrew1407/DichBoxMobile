@@ -62,4 +62,6 @@ dependencies {
 
     // Gson (To convert raw JSON to pretty JSON)
     implementation 'com.google.code.gson:gson:2.8.6'
+
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 }

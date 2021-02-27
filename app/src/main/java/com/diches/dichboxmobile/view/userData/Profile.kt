@@ -29,7 +29,7 @@ class Profile : Fragment() {
 
         options = listOf(
                 Pair("profile", ProfileInfo()),
-                Pair("box editor", BoxEditor())
+                Pair("edit", BoxEditor())
         )
         vpAdapter = ViewPagerAdapter(this, options.map { it.second })
         viewPager.adapter = vpAdapter

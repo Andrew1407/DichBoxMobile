@@ -10,6 +10,7 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:tabGravity="start"
         android:minHeight="?attr/actionBarSize"
         android:background="@color/grey"
         app:tabMode="scrollable"
@@ -17,8 +18,16 @@
         app:tabIndicatorColor="@color/light_blue"
         app:tabSelectedTextColor="@color/light_blue"/>
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/user_viewPager"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" >
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/user_viewPager"
+            android:layout_width="match_parent"
+            android:paddingBottom="?attr/actionBarSize"
+            android:layout_height="wrap_content" />
+
+    </ScrollView>
+
 </LinearLayout>

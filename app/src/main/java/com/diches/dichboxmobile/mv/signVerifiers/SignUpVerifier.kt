@@ -1,4 +1,4 @@
-package com.diches.dichboxmobile.mv
+package com.diches.dichboxmobile.mv.signVerifiers
 
 import android.widget.Button
 import android.widget.EditText

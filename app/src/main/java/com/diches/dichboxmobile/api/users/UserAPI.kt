@@ -45,6 +45,14 @@ class UserAPI {
         )
     }
 
+    suspend fun findUser(signContainer: UserContainer.FindContainer): Pair<Int, UserContainer> {
+        val reqBody = makeRequest(signContainer)
+        val response = service.findUser(reqBody)
+        return getResponseData(
+                response, UserContainer.UserData::class.java
+        )
+    }
+
     suspend fun verifyField(verContainer: UserContainer.VerifyField): Pair<Int, UserContainer> {
         val reqBody = makeRequest(verContainer)
         val response = service.verifyField(reqBody)

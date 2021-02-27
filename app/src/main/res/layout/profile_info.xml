@@ -8,13 +8,16 @@
     <TextView
         android:id="@+id/userFollowers"
         style="@style/profileInfoStyle"
-        android:text="followers: 10"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="27dp" />
 
     <TextView
-        android:id="@+id/userSigned"
+        android:id="@+id/userEmailText"
         style="@style/profileInfoStyle"
-        android:text="signed: 02.22.2021"
+        android:layout_marginTop="15dp" />
+
+    <TextView
+        android:id="@+id/userSignedDate"
+        style="@style/profileInfoStyle"
         android:layout_marginTop="15dp" />
 
 </LinearLayout>

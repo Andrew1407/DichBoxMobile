@@ -1,4 +1,4 @@
-package com.diches.dichboxmobile.view
+package com.diches.dichboxmobile.mv.signVerifiers
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

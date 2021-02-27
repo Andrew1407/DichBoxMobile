@@ -47,4 +47,21 @@ sealed class UserContainer {
 
     data class SearchedChunk(val searchStr: String) : UserContainer()
 
+    data class FindContainer(
+            val pathName: String,
+            val username: String
+    ) : UserContainer()
+
+    data class UserData(
+            val name: String,
+            val name_color: String,
+            val description: String,
+            val description_color: String,
+            val followers: Int,
+            val reg_date: String,
+            val logo: String?,
+            val email: String? = null,
+            val notifications: String? = null,
+    ) : UserContainer()
+
 }

@@ -46,7 +46,8 @@
     <style name="profileInfoStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">23sp</item>
+        <item name="fontFamily">@font/times_new_roman400</item>
         <item name="android:textColor">@color/light_blue</item>
         <item name="android:textStyle">italic</item>
         <item name="android:layout_marginLeft">15dp</item>

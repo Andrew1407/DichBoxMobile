@@ -1,4 +1,4 @@
-package com.diches.dichboxmobile.mv
+package com.diches.dichboxmobile.mv.signVerifiers
 
 import android.widget.Button
 import android.widget.EditText
@@ -51,7 +51,6 @@ open class SignInVerifier(submitBtn: Button) : SignVerifier(
         }
         val (name) = nameContainer as UserContainer.NameContainer
 
-        println("STATUS: $status\tBODY: $nameContainer")
         if (status == 400 && name == null) {
             val crimson = -0x23ebc4
             val (field, warning) = passwordFields

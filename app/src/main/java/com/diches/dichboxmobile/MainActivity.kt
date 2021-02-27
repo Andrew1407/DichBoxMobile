@@ -29,7 +29,13 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
         setUpTitle()
+        handleNavBar(savedInstanceState)
 
+        initListeners()
+        clckTest()
+    }
+
+    private fun handleNavBar(savedInstanceState: Bundle?) {
         val isInstSaved = savedInstanceState != null
         tagList = listOf("USER_TAG", "BOXES_TAG", "SEARCH_TAG", "SETTINGS_TAG")
         navFragments = tagList.map { getFragment(it, isInstSaved) }
@@ -41,9 +47,6 @@ class MainActivity : AppCompatActivity() {
             initialiseFragments()
             setUpNavBar()
         }
-
-        initListeners()
-        clckTest()
     }
 
     private fun getFragment(tag: String, isSaved: Boolean): Fragment {
@@ -68,7 +71,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun initialiseFragments() {
         bottomNav = findViewById(R.id.bottom_nav_view)
-//        navFragments = listOf(user, boxes, search, settings)
         activeFragment = navFragments[currentNavPosition]
     }
 
@@ -81,37 +83,26 @@ class MainActivity : AppCompatActivity() {
         }.commit()
     }
 
-    private fun handleListener(fragment: Fragment): Boolean {
+    private fun handleListener(position: Int): Boolean {
+        if (position == -1) return false
+        currentNavPosition = position
+        val curFragment = navFragments[position]
         supportFragmentManager
                 .beginTransaction()
                 .hide(activeFragment)
-                .show(fragment)
+                .show(curFragment)
                 .commit()
-        activeFragment = fragment
+        activeFragment = curFragment
         return true
     }
 
     private fun initListeners() {
+        val optionsIds = listOf(
+                R.id.userOption, R.id.boxesListOption, R.id.searchOption, R.id.settingsOption
+        )
         bottomNav.setOnNavigationItemSelectedListener {
-            when (it.itemId) {
-                R.id.userOption -> {
-                    currentNavPosition = 0
-                    handleListener(navFragments[0])
-                }
-                R.id.boxesListOption -> {
-                    currentNavPosition = 1
-                    handleListener(navFragments[1])
-                }
-                R.id.searchOption -> {
-                    currentNavPosition = 2
-                    handleListener(navFragments[2])
-                }
-                R.id.settingsOption -> {
-                    currentNavPosition = 3
-                    handleListener(navFragments[3])
-                }
-                else -> false
-            }
+           val position = optionsIds.indexOf(it.itemId)
+           handleListener(position)
         }
     }
 
