@@ -1,7 +1,9 @@
 package com.diches.dichboxmobile.mv.userDataManager
 
+import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -11,26 +13,37 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.diches.dichboxmobile.api.users.UserAPI
 import com.diches.dichboxmobile.datatypes.UserContainer
+import kotlinx.coroutines.runBlocking
 
 class UserProfiler {
     private val api = UserAPI()
     private lateinit var userData: UserContainer.UserData
 
-    suspend fun fetchData(name: String): UserContainer.UserData {
+    fun getUserData(ctx: Context, bundle: Bundle?): UserContainer.UserData {
+        if (bundle != null) {
+            val dataStr = bundle.getString("userJSON")
+            userData = UserContainer.parseJSON(
+                    dataStr!!, UserContainer.UserData::class.java
+            ) as UserContainer.UserData
+        } else {
+            ctx.openFileInput("signed.txt").use { stream ->
+                val name = stream?.bufferedReader().use { it?.readText() }
+                runBlocking { userData = fetchData(name!!) }
+            }
+        }
+        return userData.copy()
+    }
+
+    fun saveUserDataState(bundle: Bundle) {
+        val dataStr = UserContainer.stringifyJSON(userData)
+        bundle.putString("userJSON", dataStr)
+    }
+
+    private suspend fun fetchData(name: String): UserContainer.UserData {
         val resData = UserContainer.FindContainer(name, name)
         val (st, data) = api.findUser(resData)
         userData = data as UserContainer.UserData
         return userData.copy()
-    }
-
-    fun setUserData(inputData: UserContainer.UserData) {
-        userData = inputData
-    }
-
-    fun toJSON(data: UserContainer.UserData): String = UserContainer.stringifyJSON(data)
-    fun fromJSON(str: String): UserContainer.UserData {
-        val res = UserContainer.parseJSON(str, UserContainer.UserData::class.java)
-        return res as UserContainer.UserData
     }
 
     private fun fillView(element: TextView, parameters: Pair<String, String>) {

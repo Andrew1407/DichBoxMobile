@@ -1,0 +1,9 @@
+package com.diches.dichboxmobile.datatypes
+
+enum class AppColors(val raw: Int) {
+    CRIMSON(-0x23ebc4),
+    GREEN(-0xff00b4),
+    BLUE(-0xff2601),
+    GRAY(-0x7f7f80),
+    PURPLE(-0x45ff17)
+}

@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
-import com.diches.dichboxmobile.mv.signVerifiers.SignViewModel
+import com.diches.dichboxmobile.mv.verifiers.signVerifiers.SignViewModel
 
 class Settings : Fragment() {
     private lateinit var viewModel: SignViewModel

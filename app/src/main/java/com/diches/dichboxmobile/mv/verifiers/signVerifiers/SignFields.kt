@@ -1,4 +1,4 @@
-package com.diches.dichboxmobile.mv.signVerifiers
+package com.diches.dichboxmobile.mv.verifiers.signVerifiers
 
 enum class SignFields {
     EMAIL, PASSWD, NAME;

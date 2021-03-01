@@ -1,4 +1,4 @@
-package com.diches.dichboxmobile.mv.signVerifiers
+package com.diches.dichboxmobile.mv.verifiers.signVerifiers
 
 enum class SignWarnings(val text: String) {
     EMAIL_INVALID("Incorrect email input form"),
@@ -9,7 +9,5 @@ enum class SignWarnings(val text: String) {
     NAME_TAKEN("This username is already taken"),
 
     PASSWD_INVALID("Password length should be 5-16 symbols (no spaces)"),
-    PASSWD_INCORRECT("Wrong password"),
-
-    EMPTY_WARNING("")
+    PASSWD_INCORRECT("Wrong password")
 }

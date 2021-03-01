@@ -29,7 +29,9 @@ class Profile : Fragment() {
 
         options = listOf(
                 Pair("profile", ProfileInfo()),
-                Pair("edit", BoxEditor())
+                Pair("edit", ProfileEditor()),
+                Pair("subscriptions", Subscriptions()),
+                Pair("notifications", Notifications())
         )
         vpAdapter = ViewPagerAdapter(this, options.map { it.second })
         viewPager.adapter = vpAdapter

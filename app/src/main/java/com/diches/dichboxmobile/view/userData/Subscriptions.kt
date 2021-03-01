@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.diches.dichboxmobile.R
 
-class BoxEditor: Fragment() {
+class Subscriptions : Fragment() {
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.fragment_box_editor, container, false)
+    ): View = inflater.inflate(R.layout.fragment_user_subscriptions, container, false)
 }

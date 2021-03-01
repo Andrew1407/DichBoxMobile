@@ -11,9 +11,9 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
-import com.diches.dichboxmobile.mv.signVerifiers.SignInVerifier
+import com.diches.dichboxmobile.mv.verifiers.signVerifiers.SignInVerifier
 import com.diches.dichboxmobile.view.userData.Profile
-import com.diches.dichboxmobile.mv.signVerifiers.SignViewModel
+import com.diches.dichboxmobile.mv.verifiers.signVerifiers.SignViewModel
 
 class SignIn : Fragment(), FragmentCleaner {
     private lateinit var verifier: SignInVerifier
