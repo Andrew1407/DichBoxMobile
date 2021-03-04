@@ -1,6 +1,7 @@
 package com.diches.dichboxmobile.datatypes
 
 enum class AppColors(val raw: Int) {
+    BLACK(-0x1000000),
     CRIMSON(-0x23ebc4),
     GREEN(-0xff00b4),
     BLUE(-0xff2601),

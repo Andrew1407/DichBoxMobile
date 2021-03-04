@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.diches.dichboxmobile.api.users.UserAPI
+import com.diches.dichboxmobile.datatypes.AppColors
 import com.diches.dichboxmobile.datatypes.UserContainer
 import kotlinx.coroutines.runBlocking
 
@@ -85,14 +86,14 @@ class UserProfiler {
 
     fun fillDate(date: TextView): UserProfiler {
         val prefix = "signed: "
-        val color = -0xff00b4
+        val color = AppColors.GREEN.raw
         decorateView(date, prefix, Pair(userData.reg_date, color))
         return this
     }
 
     fun fillFollowers(followers: TextView): UserProfiler {
         val prefix = "followers: "
-        val color = -0x7f7f80
+        val color = AppColors.GRAY.raw
         decorateView(followers, prefix, Pair(userData.followers.toString(), color))
         return this
     }
@@ -103,7 +104,7 @@ class UserProfiler {
             return this
         }
         val prefix = "email: "
-        val color = -0x45ff17
+        val color = AppColors.PURPLE.raw
         email.visibility = View.VISIBLE
         decorateView(email, prefix, Pair(userData.email!!, color))
         return this

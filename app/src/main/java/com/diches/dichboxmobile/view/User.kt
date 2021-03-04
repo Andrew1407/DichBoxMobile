@@ -12,49 +12,56 @@ import com.diches.dichboxmobile.view.signForms.SignArea
 import com.diches.dichboxmobile.view.userData.Profile
 
 class User : Fragment() {
-    private lateinit var userProfile: Profile
-    private lateinit var signArea: SignArea
+    private val tags = listOf("SIGN_AREA_TAG", "PROFILE_TAG")
+    private var currentPosition: Int = 0
 
-      override fun onCreateView(
+    override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View {
-          retainInstance = true
-          return inflater.inflate(R.layout.fragment_user, container, false)
-    }
+    ): View = inflater.inflate(R.layout.fragment_user, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         super.onViewCreated(view, savedInstanceState)
 
-        val isSigned = context?.getFileStreamPath("signed.txt")!!.exists()
-        val tags = listOf("PROFILE_TAG", "SIGN_AREA_TAG")
-        val signFragment = childFragmentManager.findFragmentByTag(tags[1])
-        val profileFragment = childFragmentManager.findFragmentByTag(tags[0])
-        val curFragment = if (isSigned) 0 else 1
-
-        if (savedInstanceState != null) {
-            userProfile = if (profileFragment != null) profileFragment as Profile else Profile()
-            signArea = if (signFragment != null) signFragment as SignArea else SignArea()
-        } else {
-            userProfile = Profile()
-            signArea = SignArea()
-        }
-
-        val containers = listOf(userProfile, signArea)
-        childFragmentManager
-                .beginTransaction()
-                .replace(R.id.user_container, containers[curFragment], tags[curFragment]).commit()
-
-        val viewModel = ViewModelProvider(requireActivity()).get(SignViewModel::class.java)
-        viewModel.isSigned.observe(viewLifecycleOwner, {
-            val fragment = if (it) Profile() else SignArea()
-            val tagInd = if (it) 0 else 1
-            childFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.user_container, fragment, tags[tagInd]).commit()
-        })
+        val currentFragment = getCurrentFragment(savedInstanceState)
+        val curTag = tags[currentPosition]
+        setFragmentVisible(currentFragment, curTag)
+        handleSignedStateObserver()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("isSigned", currentPosition)
+    }
 
+    private fun handleSignedStateObserver() {
+        val viewModel = ViewModelProvider(requireActivity()).get(SignViewModel::class.java)
+
+        viewModel.isSigned.observe(viewLifecycleOwner) { signed ->
+            currentPosition = if (signed) 1 else 0
+            val tag = tags[currentPosition]
+            val fragment = if (signed)
+                childFragmentManager.findFragmentByTag(tags[1]) ?: Profile()
+            else
+                childFragmentManager.findFragmentByTag(tags[0]) ?: SignArea()
+            setFragmentVisible(fragment, tag)
+        }
+    }
+
+    private fun setFragmentVisible(fragment: Fragment, tag: String) {
+        childFragmentManager
+                .beginTransaction()
+                .replace(R.id.user_container, fragment, tag)
+                .commit()
+    }
+
+    private fun getCurrentFragment(bundle: Bundle?): Fragment = if (bundle != null) {
+        currentPosition = bundle.getInt("isSigned")
+        val tag = tags[currentPosition]
+        childFragmentManager.findFragmentByTag(tag) as Fragment
+    } else {
+        val isSigned = context?.getFileStreamPath("signed.txt")!!.exists()
+        currentPosition = if (isSigned) 1 else 0
+        if (isSigned) Profile() else SignArea()
+    }
 }

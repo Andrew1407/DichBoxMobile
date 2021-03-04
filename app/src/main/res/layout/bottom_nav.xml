@@ -12,7 +12,7 @@
         android:id="@+id/homePageIcon"
         android:layout_width="71dp"
         android:layout_height="67dp"
-        android:background="@drawable/central_item"
+        android:background="@drawable/central_item_unsigned"
         android:elevation="10dp"
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"

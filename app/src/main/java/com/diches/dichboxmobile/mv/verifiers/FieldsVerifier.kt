@@ -1,56 +1,82 @@
 package com.diches.dichboxmobile.mv.verifiers
 
-class FieldsVerifier <K> (private val defaultWarning: String = "") {
-    private val verifiers: MutableMap<K, WarningHandler> = mutableMapOf()
-    private val warnings: MutableMap<K, Pair<String, Boolean>> = mutableMapOf()
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.widget.addTextChangedListener
+import com.diches.dichboxmobile.R
+import com.diches.dichboxmobile.datatypes.AppColors
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-    fun addVerifier(
-            key: K,
-            templateWarning: String,
-            templateTest: (String) -> Boolean,
-            fetchWarning: String? = null,
-            fetchHandler: (suspend (String) -> Boolean)? = null
-    ): FieldsVerifier<K> {
-        val verifier = WarningHandler(
-                templateWarning, templateTest, fetchWarning, fetchHandler
-        )
-        verifiers[key] = verifier
-        warnings[key] = Pair(defaultWarning, false)
-        return this
+class FieldsVerifier <K> (
+        private val inputVerifier: InputVerifier<K>,
+        private val submitter: Button
+) {
+    private val fieldsEntries: MutableMap<K, String> = mutableMapOf()
+
+    init {
+        submitter.isEnabled = false
     }
 
-    suspend fun verify(key: K, input: String): String {
-        val verifier = verifiers[key]!!
-        val isCorrect = true
-         if (!verifier.templateTest(input)) {
-             warnings[key] = Pair(verifier.templateWarning, !isCorrect)
-             return  warnings[key]!!.first
-         }
+    fun getInput(): Map<K, String> = fieldsEntries.toMap()
 
-        if (verifier.fetchHandler != null)
-            if (!verifier.fetchHandler.invoke(input)) {
-                warnings[key] = Pair(verifier.fetchWarning!!, !isCorrect)
-                return  warnings[key]!!.first
+    fun addSubmitListener(fn: suspend () -> Unit): FieldsVerifier<K> {
+        submitter.setOnClickListener {
+            CoroutineScope(Dispatchers.Main).launch {
+                fn()
             }
-
-        warnings[key] = Pair(defaultWarning, isCorrect)
-        return warnings[key]!!.first
-    }
-
-    fun clean(): FieldsVerifier<K> {
-        warnings.clear()
-        verifiers.clear()
+        }
         return this
     }
 
-    fun checkAll(): Boolean = warnings.values
-            .map { it.second }
-            .reduce { acc, b -> acc && b }
+    fun addInputEntry(key: K, input: String = ""): FieldsVerifier<K> {
+        fieldsEntries[key] = input
+        return this
+    }
 
-    private data class WarningHandler(
-            val templateWarning: String,
-            val templateTest: (String) -> Boolean,
-            val fetchWarning: String? = null,
-            val fetchHandler: (suspend (String) -> Boolean)? = null
-    )
+    fun onInputCheck(
+            key: K,
+            input: EditText,
+            warning: TextView
+    ) {
+        input.addTextChangedListener {
+            CoroutineScope(Dispatchers.Main).launch {
+                val inputText = input.text.toString()
+                val rotated = fieldsEntries[key] == inputText
+                if (rotated) return@launch
+
+                val warningText = withContext(Dispatchers.IO) {
+                    inputVerifier.verify(key, inputText)
+                }
+                fieldsEntries[key] = inputText
+                decorateFields(warningText, input, warning)
+                checkAllAdded()
+            }
+        }
+    }
+
+    private fun decorateFields(
+            warnMessage: String,
+            input: EditText,
+            warning: TextView
+    ) {
+        val hasWarning = warnMessage.isNotEmpty()
+        val warnColor = if (hasWarning) AppColors.CRIMSON else AppColors.GREEN
+        warning.text = warnMessage
+        DrawableCompat.setTint(input.background, warnColor.raw)
+    }
+
+    private fun checkAllAdded() {
+        val isValid = inputVerifier.checkAll()
+        submitter.isEnabled = isValid
+        val btnColor = if (isValid) AppColors.GREEN else AppColors.BLUE
+        val btnBackground = if (isValid) R.drawable.sign_submit_btn_active
+            else R.drawable.sign_submit_btn_inactive
+        submitter.setTextColor(btnColor.raw)
+        submitter.setBackgroundResource(btnBackground)
+    }
 }

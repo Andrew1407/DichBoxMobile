@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.diches.dichboxmobile.R
+import com.diches.dichboxmobile.datatypes.AppColors
 
 class SignArea : Fragment() {
     private lateinit var viewPager: ViewPager2
@@ -15,10 +16,7 @@ class SignArea : Fragment() {
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View {
-        retainInstance = true
-        return inflater.inflate(R.layout.fragment_sign, container, false)
-    }
+    ): View = inflater.inflate(R.layout.fragment_sign, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -47,12 +45,9 @@ class SignArea : Fragment() {
             signUp: TextView,
             signIn: TextView
     ) {
-        val blue: Int = -0xff2601
-        val black: Int = -0x1000000
         val firstPos: Boolean = position == 0
-
-        signUp.setTextColor(if (firstPos) black else blue)
-        signIn.setTextColor(if (firstPos) blue else black)
+        signUp.setTextColor(if (firstPos) AppColors.BLACK.raw else AppColors.BLUE.raw)
+        signIn.setTextColor(if (firstPos) AppColors.BLUE.raw else AppColors.BLACK.raw)
         signUp.setBackgroundResource(if (firstPos) R.drawable.sign_active else R.drawable.sign_inactive)
         signIn.setBackgroundResource(if (firstPos) R.drawable.sign_inactive else R.drawable.sign_active)
     }

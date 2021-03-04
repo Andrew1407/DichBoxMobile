@@ -54,12 +54,6 @@ class SignUp : Fragment(), FragmentCleaner {
             ViewModelProvider(requireActivity())
                     .get(SignViewModel::class.java)
                     .setIsSigned(true)
-
-            activity
-                    ?.supportFragmentManager
-                    ?.beginTransaction()
-                    ?.replace(R.id.user_container, Profile())
-                    ?.commit()
         }
     }
 

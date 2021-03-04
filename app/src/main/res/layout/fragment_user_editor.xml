@@ -1,14 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/black">
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Editor"
-        android:textSize="40sp" />
-</LinearLayout>
+        android:background="@color/black"
+        android:orientation="vertical"
+        android:paddingBottom="?attr/actionBarSize">
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:background="@drawable/dashed_border">
+
+            <include
+                layout="@layout/user_logo"
+                android:id="@+id/editUserLogo"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/changeLogoBtn"
+                android:text="change logo"
+                android:layout_marginBottom="20dp"
+                style="@style/editBtnStyle"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/setDefaultLogoBtn"
+                android:text="set default"
+                android:layout_marginBottom="35dp"
+                style="@style/editBtnStyle"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/dashed_border">
+
+            <EditText
+                android:id="@+id/editUsername"
+                style="@style/inputStyle"
+                android:saveEnabled="true"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="30dp"
+                android:importantForAutofill="no"
+                android:hint="username"
+                android:layout_width="match_parent"
+                android:inputType="textPersonName" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/editUsernameColor"
+                android:text="username color"
+                android:layout_marginBottom="35dp"
+                style="@style/editBtnStyle" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/dashed_border">
+
+            <EditText
+                android:id="@+id/editDescription"
+                android:background="@drawable/description_border"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:saveEnabled="true"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="25dp"
+                android:importantForAutofill="no"
+                android:hint="description"
+                android:textSize="23sp"
+                android:textColorHint="@color/light0_blue"
+                android:textColor="@color/light_blue"
+                android:ellipsize="start"
+                android:gravity="start"
+                android:padding="7dp"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:inputType="textMultiLine"
+                android:lines="10"
+                android:minLines="10"
+                android:maxLines="10"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/editDescriptionColor"
+                android:text="description color"
+                android:layout_marginBottom="35dp"
+                style="@style/editBtnStyle" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/dashed_border">
+
+            <EditText
+                android:id="@+id/editEmail"
+                style="@style/inputStyle"
+                android:saveEnabled="true"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="35dp"
+                android:importantForAutofill="no"
+                android:hint="email"
+                android:layout_width="match_parent"
+                android:inputType="textEmailAddress" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@drawable/dashed_border">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/changePasswdBtn"
+                android:text="change password"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="35dp"
+                style="@style/editBtnStyle"/>
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/editProfileBtn"
+            android:text="edit profile"
+            android:layout_marginTop="25dp"
+            style="@style/editBtnStyle"/>
+
+    </LinearLayout>
+
+</ScrollView>

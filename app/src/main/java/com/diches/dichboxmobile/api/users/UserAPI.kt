@@ -15,7 +15,7 @@ class UserAPI {
 
     init {
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.6:7041")
+            .baseUrl("http://192.168.1.4:7041")
             .build()
 
         service = retrofit.create(UserService::class.java)

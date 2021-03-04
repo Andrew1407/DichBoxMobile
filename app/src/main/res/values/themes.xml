@@ -54,4 +54,18 @@
         <item name="android:layout_marginStart">15dp</item>
         <item name="android:gravity">start</item>
     </style>
+
+    <style name="editBtnStyle">
+        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:background">@drawable/sign_submit_btn_inactive</item>
+        <item name="android:textColor">@color/light_blue</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="colorPickerTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/color_picker</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
 </resources>
