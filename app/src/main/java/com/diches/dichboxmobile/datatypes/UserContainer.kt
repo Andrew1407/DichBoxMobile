@@ -8,6 +8,8 @@ sealed class UserContainer {
         ): UserContainer = com.diches.dichboxmobile.datatypes.parseJSON(jsonStr, container) as UserContainer
 
         fun stringifyJSON(jsonObj: UserContainer): String = com.diches.dichboxmobile.datatypes.stringifyJSON(jsonObj)
+
+
     }
 
     data class NameContainer(val name: String?) : UserContainer()
@@ -62,6 +64,21 @@ sealed class UserContainer {
             val logo: String?,
             val email: String? = null,
             val notifications: String? = null,
+    ) : UserContainer()
+
+    data class EditData(
+            val username: String,
+            val logo: String?,
+            val edited: EditedFields
+    ) : UserContainer()
+
+    data class EditedFields(
+            var name: String?,
+            var name_color: String?,
+            var description: String?,
+            var description_color: String?,
+            var email: String?,
+            var passwd: String? = null
     ) : UserContainer()
 
 }

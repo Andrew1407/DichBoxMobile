@@ -7,7 +7,6 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface UserService {
-
     @POST("/users/verify")
     suspend fun verifyField(@Body requestBody: RequestBody): Response<ResponseBody>
 
@@ -26,4 +25,6 @@ interface UserService {
     @POST("/users/search")
     suspend fun search(@Body requestBody: RequestBody): Response<ResponseBody>
 
+    @POST("/users/edit")
+    suspend fun edit(@Body requestBody: RequestBody): Response<ResponseBody>
 }

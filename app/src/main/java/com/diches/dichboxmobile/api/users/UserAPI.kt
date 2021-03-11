@@ -69,6 +69,14 @@ class UserAPI {
         )
     }
 
+    suspend fun editUser(editContainer: UserContainer.EditData): Pair<Int, UserContainer> {
+        val reqBody = makeRequest(editContainer)
+        val response = service.edit(reqBody)
+        return getResponseData(
+                response, UserContainer.EditedFields::class.java
+        )
+    }
+
     private fun getResponseData(
             response: Response<ResponseBody>,
             respClass: Class<*>

@@ -1,10 +1,10 @@
 package com.diches.dichboxmobile.mv.verifiers
 
-class InputVerifier <K> (private val defaultWarning: String = "") {
+open class InputVerifier <K> (private val defaultWarning: String = "") {
     private val verifiers: MutableMap<K, WarningHandler> = mutableMapOf()
-    private val warnings: MutableMap<K, Pair<String, Boolean>> = mutableMapOf()
+    protected val warnings: MutableMap<K, Pair<String, Boolean>> = mutableMapOf()
 
-    fun addVerifier(
+    open fun addVerifier(
             key: K,
             templateWarning: String,
             templateTest: (String) -> Boolean,
@@ -19,13 +19,13 @@ class InputVerifier <K> (private val defaultWarning: String = "") {
         return this
     }
 
-    suspend fun verify(key: K, input: String): String {
+    open suspend fun verify(key: K, input: String): String {
         val verifier = verifiers[key]!!
         val isCorrect = true
-         if (!verifier.templateTest(input)) {
+        if (!verifier.templateTest(input)) {
              warnings[key] = Pair(verifier.templateWarning, !isCorrect)
              return  warnings[key]!!.first
-         }
+        }
 
         if (verifier.fetchHandler != null)
             if (!verifier.fetchHandler.invoke(input)) {
@@ -43,7 +43,7 @@ class InputVerifier <K> (private val defaultWarning: String = "") {
         return this
     }
 
-    fun checkAll(): Boolean = warnings.values
+    open fun checkAll(): Boolean = warnings.values
             .map { it.second }
             .reduce { acc, b -> acc && b }
 

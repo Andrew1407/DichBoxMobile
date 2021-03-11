@@ -1,115 +1,165 @@
 package com.diches.dichboxmobile.view.userData
 
-import android.app.Activity
+import android.content.Context
 import android.content.Intent
-import android.graphics.Paint
-import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.RectShape
-import android.net.Uri
+import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
-import com.skydoves.colorpickerview.ColorPickerDialog
-import com.skydoves.colorpickerview.flag.BubbleFlag
-import com.skydoves.colorpickerview.flag.FlagMode
-import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
-import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
+import com.diches.dichboxmobile.datatypes.UserContainer
+import com.diches.dichboxmobile.mv.inputPickers.ColorPicker
+import com.diches.dichboxmobile.mv.inputPickers.ImageCropper
+import com.diches.dichboxmobile.mv.userDataManager.UserDataViewModel
+import com.diches.dichboxmobile.mv.verifiers.editVerifiers.LogoEditor
+import com.diches.dichboxmobile.mv.verifiers.editVerifiers.user.SavedEditState
+import com.diches.dichboxmobile.mv.verifiers.editVerifiers.user.UserEditorVerifier
+import java.io.ByteArrayOutputStream
 
 class ProfileEditor: Fragment() {
     private lateinit var changeNameColorBtn: Button
     private lateinit var changeDescColorBtn: Button
     private lateinit var changeLogoBtn: Button
+    private lateinit var imagePicker: ImageCropper
+    private lateinit var logoEditor: LogoEditor
+    private lateinit var editHandler: UserEditorVerifier
+    private lateinit var nameColorBtn: Button
+    private lateinit var descriptionColorBtn: Button
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.fragment_user_editor, container, false)
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val viewModel = ViewModelProvider(requireActivity()).get(UserDataViewModel::class.java)
+        val userData = viewModel.liveData.value!!
+
+        val savedState = if (savedInstanceState == null) null
+            else SavedEditState(
+                logo = savedInstanceState.getString("logo"),
+                nameColor = savedInstanceState.getInt("nameColor"),
+                descriptionColor = savedInstanceState.getInt("descriptionColor"),
+                passwdAreaVisible = savedInstanceState.getBoolean("passwdArea")
+        )
+
+        val submitter = view.findViewById<Button>(R.id.editProfileBtn)
+        val name = requireView().findViewById<EditText>(R.id.editUsername)
+        val nameWarning = view.findViewById<TextView>(R.id.editUserNameWarning)
+        nameColorBtn = requireView().findViewById(R.id.editUsernameColor)
+        val description = requireView().findViewById<EditText>(R.id.editDescription)
+        descriptionColorBtn = requireView().findViewById(R.id.editDescriptionColor)
+        val email = view.findViewById<EditText>(R.id.editEmail)
+        val emailWarning = view.findViewById<TextView>(R.id.editUserEmailWarning)
+
+        val showPasswdBtn = view.findViewById<Button>(R.id.changePasswdBtn)
+        val passwdArea = view.findViewById<LinearLayout>(R.id.editUserPasswdArea)
+        val passwdCancelBtn = view.findViewById<Button>(R.id.cancelChangePasswdBtn)
+        val currentPasswd = view.findViewById<EditText>(R.id.editUserPasswd)
+        val currentPasswdWarning = view.findViewById<TextView>(R.id.editUserPasswdWarning)
+        val newPasswd = view.findViewById<EditText>(R.id.editUserNewPasswd)
+        val newPasswdWarning = view.findViewById<TextView>(R.id.editUserNewPasswdWarning)
+
+
+        imagePicker = ImageCropper(this)
+
+        val imageView = view.findViewById<ImageView>(R.id.editUserLogo)
+        val logoArgs = Pair(imageView, if (savedState == null) userData.logo else savedState.logo)
+        val logoBtns = listOf(
+            R.id.changeUserLogoBtn,
+            R.id.setDefaultUserLogoBtn,
+            R.id.cancelUserLogoBtn
+        ).map { view.findViewById<Button>(it) }
+
+        logoEditor = LogoEditor(userData.logo, logoArgs, logoBtns)
+
+        editHandler = UserEditorVerifier(submitter, userData)
+                .addNameCheck(name, nameWarning, nameColorBtn)
+                .addDescriptionCheck(description, descriptionColorBtn)
+                .handleSavedState(savedState)
+                .addEmailCheck(email, emailWarning)
+                .addPasswdCheck(
+                        passwdArea,
+                        Pair(showPasswdBtn, passwdCancelBtn),
+                        Pair(currentPasswd, currentPasswdWarning),
+                        Pair(newPasswd, newPasswdWarning)
+                )
+                .addLogoEditor(logoEditor, imagePicker)
+                .setSubmitClb { editData ->
+                    val editedFields = editData.edited
+                    if (editedFields.name != null)
+                        context?.openFileOutput("signed.txt", Context.MODE_PRIVATE).use {
+                            it?.write(editedFields.name?.toByteArray())
+                        }
+
+                    val editedData = userData.copy(
+                            name = editedFields.name ?: userData.name,
+                            description = editedFields.description ?: userData.description,
+                            name_color = editedFields.name_color ?: userData.name_color,
+                            description_color = editedFields.description_color ?: userData.description_color,
+                            email = editedFields.email ?: userData.email,
+                            logo = if (editData.logo == "removed") null else editData.logo
+                    )
+                    Toast.makeText(requireActivity().application, "Edited", Toast.LENGTH_LONG).show()
+                    viewModel.setUserData(editedData)
+                }
+
         changeNameColorBtn = view.findViewById(R.id.editUsernameColor)
         changeDescColorBtn = view.findViewById(R.id.editDescriptionColor)
-        changeLogoBtn = view.findViewById(R.id.changeLogoBtn)
+        changeLogoBtn = view.findViewById(R.id.changeUserLogoBtn)
 
-        setColorPikerDialog(changeNameColorBtn, "Username color")
-        setColorPikerDialog(changeDescColorBtn, "Description color")
+        ColorPicker.getDialogBuilder()
+            .setBtn(changeNameColorBtn)
+            .setTitle("Username color")
+            .setDefaultColor(savedState?.nameColor ?: Color.parseColor(userData.name_color))
+            .setOkCLb { envelope, _ ->
+                editHandler.changeNameColor(name, envelope.color, changeNameColorBtn)
+            }
+            .createDialog(requireContext())
 
-        changeLogoBtn.setOnClickListener {
-            pickFromGallery()
-        }
+        ColorPicker.getDialogBuilder()
+            .setBtn(changeDescColorBtn)
+            .setTitle("Description color")
+            .setDefaultColor(savedState?.descriptionColor ?: Color.parseColor(userData.description_color))
+            .setOkCLb { envelope, _ ->
+                editHandler.changeDescriptionColor(description, envelope.color, changeDescColorBtn)
+            }
+            .createDialog(requireContext())
     }
 
-    private fun setColorPikerDialog(btn: Button, title: String) {
-        btn.setOnClickListener {
-            val builder = ColorPickerDialog.Builder(context, R.style.colorPickerTheme)
-
-            val bubbleFlag = BubbleFlag(requireContext())
-            bubbleFlag.flagMode = FlagMode.ALWAYS
-
-            builder.colorPickerView.flagView = bubbleFlag
-            builder.setTitle(title)
-                .attachAlphaSlideBar(false)
-                .attachBrightnessSlideBar(true)
-                .setBottomSpace(12)
-                .setPositiveButton("ok", ColorEnvelopeListener { envelope, _ ->
-                    val color = envelope.color
-                    val shapeDrawable = ShapeDrawable()
-
-                    shapeDrawable.shape = RectShape()
-                    shapeDrawable.paint.color = color
-                    shapeDrawable.paint.strokeWidth = 20f
-                    shapeDrawable.paint.style = Paint.Style.STROKE
-
-                    btn.background = shapeDrawable
-                    btn.setTextColor(color)
-                })
-                .setNegativeButton("cancel") { di, _ ->
-                    di.dismiss()
-                }
-                .show()
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.KITKAT)
-    private fun pickFromGallery() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        intent.type = "image/*"
-        val mimeTypes = arrayOf("image/jpeg", "image/png", "image/jpg")
-        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
-        intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-        startActivityForResult(intent, 100)
-    }
-
-    private fun launchImageCrop(uri: Uri){
-        CropImage.activity(uri)
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(1, 1)
-                .start(requireContext(), this)
-    }
-
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == 100 && resultCode == Activity.RESULT_OK) {
-            data?.data?.let { uri ->
-                launchImageCrop(uri)
-            }
+        imagePicker.handleActivityResult(requestCode, resultCode, data)  {
+            view?.findViewById<ImageView>(R.id.editUserLogo)?.setImageBitmap(it)
+            val baos = ByteArrayOutputStream()
+            it.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+            val b: ByteArray = baos.toByteArray()
+            val imageEncoded = Base64.encodeToString(b, Base64.DEFAULT)
+            logoEditor.setLogo(imageEncoded)
+            editHandler.checkAllAdded()
         }
+    }
 
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE &&
-            resultCode == Activity.RESULT_OK) {
-                val result = CropImage.getActivityResult(data)
-                println(result.uri)
-        }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        val passwdAreaState = editHandler.getPasswdAreaState()
+        outState.putBoolean("passwdArea", passwdAreaState)
+        outState.putString("logo", logoEditor.getLogo().first)
+        outState.putInt("nameColor", nameColorBtn.currentTextColor)
+        outState.putInt("descriptionColor", descriptionColorBtn.currentTextColor)
     }
 }

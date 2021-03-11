@@ -1,6 +1,6 @@
-package com.diches.dichboxmobile.mv.verifiers.signVerifiers
+package com.diches.dichboxmobile.mv.verifiers
 
-enum class SignWarnings(val text: String) {
+enum class FieldsWarnings(val text: String) {
     EMAIL_INVALID("Incorrect email input form"),
     EMAIL_TAKEN("This email is already taken"),
     EMAIL_NOT_FOUND("This email is not registered"),

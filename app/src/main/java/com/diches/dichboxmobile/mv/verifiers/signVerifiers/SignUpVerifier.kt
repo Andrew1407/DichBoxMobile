@@ -3,33 +3,35 @@ package com.diches.dichboxmobile.mv.verifiers.signVerifiers
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import com.diches.dichboxmobile.mv.verifiers.FieldsTemplates
 import com.diches.dichboxmobile.datatypes.UserContainer
+import com.diches.dichboxmobile.mv.verifiers.FieldsWarnings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class SignUpVerifier(submitBtn: Button) : SignInVerifier(submitBtn) {
     init {
-        templates[SignFields.NAME] = """[^\s/]{1,40}"""
+        templates[SignFields.NAME] = FieldsTemplates.NAME
         verifier.addInputEntry(SignFields.NAME)
 
         inputHandler.clean()
                 .addVerifier(
                         key = SignFields.NAME,
-                        templateWarning = SignWarnings.NAME_INVALID.text,
+                        templateWarning = FieldsWarnings.NAME_INVALID.text,
                         templateTest = { checkFieldTemplate(SignFields.NAME, it) },
-                        fetchWarning = SignWarnings.NAME_TAKEN.text,
+                        fetchWarning = FieldsWarnings.NAME_TAKEN.text,
                         fetchHandler = { !verifyField(SignFields.NAME.getVal(), it) }
                 )
                 .addVerifier(
                         key = SignFields.EMAIL,
-                        templateWarning = SignWarnings.EMAIL_INVALID.text,
+                        templateWarning = FieldsWarnings.EMAIL_INVALID.text,
                         templateTest = { checkFieldTemplate(SignFields.EMAIL, it) },
-                        fetchWarning = SignWarnings.EMAIL_TAKEN.text,
+                        fetchWarning = FieldsWarnings.EMAIL_TAKEN.text,
                         fetchHandler = { !verifyField(SignFields.EMAIL.getVal(), it) }
                 )
                 .addVerifier(
                         key = SignFields.PASSWD,
-                        templateWarning = SignWarnings.PASSWD_INVALID.text,
+                        templateWarning = FieldsWarnings.PASSWD_INVALID.text,
                         templateTest = { checkFieldTemplate(SignFields.PASSWD, it) }
                 )
 

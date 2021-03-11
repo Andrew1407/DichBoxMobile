@@ -11,6 +11,7 @@ import android.util.Base64
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.api.users.UserAPI
 import com.diches.dichboxmobile.datatypes.AppColors
 import com.diches.dichboxmobile.datatypes.UserContainer
@@ -19,6 +20,10 @@ import kotlinx.coroutines.runBlocking
 class UserProfiler {
     private val api = UserAPI()
     private lateinit var userData: UserContainer.UserData
+
+    fun refreshData(data: UserContainer.UserData) {
+        userData = data
+    }
 
     fun getUserData(ctx: Context, bundle: Bundle?): UserContainer.UserData {
         if (bundle != null) {
@@ -117,6 +122,9 @@ class UserProfiler {
             val imageBytes = Base64.decode(logoSrc, Base64.DEFAULT)
             val decoded = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
             img.setImageBitmap(decoded)
+        } else {
+            println("asd")
+            img.setImageResource(R.drawable.default_user_logo)
         }
         return this
     }
