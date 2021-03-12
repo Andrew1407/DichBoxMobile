@@ -54,35 +54,47 @@ class ProfileEditor: Fragment() {
                 passwdAreaVisible = savedInstanceState.getBoolean("passwdArea")
         )
 
-        val submitter = view.findViewById<Button>(R.id.editProfileBtn)
-        val name = requireView().findViewById<EditText>(R.id.editUsername)
-        val nameWarning = view.findViewById<TextView>(R.id.editUserNameWarning)
-        nameColorBtn = requireView().findViewById(R.id.editUsernameColor)
-        val description = requireView().findViewById<EditText>(R.id.editDescription)
-        descriptionColorBtn = requireView().findViewById(R.id.editDescriptionColor)
-        val email = view.findViewById<EditText>(R.id.editEmail)
-        val emailWarning = view.findViewById<TextView>(R.id.editUserEmailWarning)
+        setImageEditor(savedState, userData)
+        val editColorFields = setUserVerifier(savedState, userData, viewModel)
+        setColorPickers(editColorFields, savedState, userData)
+    }
 
-        val showPasswdBtn = view.findViewById<Button>(R.id.changePasswdBtn)
-        val passwdArea = view.findViewById<LinearLayout>(R.id.editUserPasswdArea)
-        val passwdCancelBtn = view.findViewById<Button>(R.id.cancelChangePasswdBtn)
-        val currentPasswd = view.findViewById<EditText>(R.id.editUserPasswd)
-        val currentPasswdWarning = view.findViewById<TextView>(R.id.editUserPasswdWarning)
-        val newPasswd = view.findViewById<EditText>(R.id.editUserNewPasswd)
-        val newPasswdWarning = view.findViewById<TextView>(R.id.editUserNewPasswdWarning)
-
-
+    private fun setImageEditor(savedState: SavedEditState?, userData: UserContainer.UserData) {
         imagePicker = ImageCropper(this)
-
-        val imageView = view.findViewById<ImageView>(R.id.editUserLogo)
+        val imageView = view?.findViewById<ImageView>(R.id.editUserLogo)!!
         val logoArgs = Pair(imageView, if (savedState == null) userData.logo else savedState.logo)
         val logoBtns = listOf(
-            R.id.changeUserLogoBtn,
-            R.id.setDefaultUserLogoBtn,
-            R.id.cancelUserLogoBtn
-        ).map { view.findViewById<Button>(it) }
+                R.id.changeUserLogoBtn,
+                R.id.setDefaultUserLogoBtn,
+                R.id.cancelUserLogoBtn
+        ).map { view?.findViewById<Button>(it)!! }
 
         logoEditor = LogoEditor(userData.logo, logoArgs, logoBtns)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.KITKAT)
+    private fun setUserVerifier(
+            savedState: SavedEditState?,
+            userData: UserContainer.UserData,
+            viewModel: UserDataViewModel
+    ): Pair<EditText, EditText> {
+        val submitter = view?.findViewById<Button>(R.id.editProfileBtn)!!
+        val name = requireView().findViewById<EditText>(R.id.editUsername)!!
+        val nameWarning = view?.findViewById<TextView>(R.id.editUserNameWarning)!!
+        nameColorBtn = requireView().findViewById(R.id.editUsernameColor)!!
+        val description = requireView().findViewById<EditText>(R.id.editDescription)!!
+        descriptionColorBtn = requireView().findViewById(R.id.editDescriptionColor)!!
+        val email = view?.findViewById<EditText>(R.id.editEmail)!!
+        val emailWarning = view?.findViewById<TextView>(R.id.editUserEmailWarning)!!
+
+        val showPasswdBtn = view?.findViewById<Button>(R.id.changePasswdBtn)!!
+        val passwdArea = view?.findViewById<LinearLayout>(R.id.editUserPasswdArea)!!
+        val passwdCancelBtn = view?.findViewById<Button>(R.id.cancelChangePasswdBtn)!!
+        val currentPasswd = view?.findViewById<EditText>(R.id.editUserPasswd)!!
+        val currentPasswdWarning = view?.findViewById<TextView>(R.id.editUserPasswdWarning)!!
+        val newPasswd = view?.findViewById<EditText>(R.id.editUserNewPasswd)!!
+        val newPasswdWarning = view?.findViewById<TextView>(R.id.editUserNewPasswdWarning)!!
+
 
         editHandler = UserEditorVerifier(submitter, userData)
                 .addNameCheck(name, nameWarning, nameColorBtn)
@@ -115,27 +127,36 @@ class ProfileEditor: Fragment() {
                     viewModel.setUserData(editedData)
                 }
 
-        changeNameColorBtn = view.findViewById(R.id.editUsernameColor)
-        changeDescColorBtn = view.findViewById(R.id.editDescriptionColor)
-        changeLogoBtn = view.findViewById(R.id.changeUserLogoBtn)
+        return Pair(name, description)
+    }
+
+    private fun setColorPickers(
+            pickableFields: Pair<EditText, EditText>,
+            savedState: SavedEditState?,
+            userData: UserContainer.UserData
+    ) {
+        val (name, description) = pickableFields
+        changeNameColorBtn = view?.findViewById(R.id.editUsernameColor)!!
+        changeDescColorBtn = view?.findViewById(R.id.editDescriptionColor)!!
+        changeLogoBtn = view?.findViewById(R.id.changeUserLogoBtn)!!
 
         ColorPicker.getDialogBuilder()
-            .setBtn(changeNameColorBtn)
-            .setTitle("Username color")
-            .setDefaultColor(savedState?.nameColor ?: Color.parseColor(userData.name_color))
-            .setOkCLb { envelope, _ ->
-                editHandler.changeNameColor(name, envelope.color, changeNameColorBtn)
-            }
-            .createDialog(requireContext())
+                .setBtn(changeNameColorBtn)
+                .setTitle("Username color")
+                .setDefaultColor(savedState?.nameColor ?: Color.parseColor(userData.name_color))
+                .setOkCLb { envelope, _ ->
+                    editHandler.changeNameColor(name, envelope.color, changeNameColorBtn)
+                }
+                .createDialog(requireContext())
 
         ColorPicker.getDialogBuilder()
-            .setBtn(changeDescColorBtn)
-            .setTitle("Description color")
-            .setDefaultColor(savedState?.descriptionColor ?: Color.parseColor(userData.description_color))
-            .setOkCLb { envelope, _ ->
-                editHandler.changeDescriptionColor(description, envelope.color, changeDescColorBtn)
-            }
-            .createDialog(requireContext())
+                .setBtn(changeDescColorBtn)
+                .setTitle("Description color")
+                .setDefaultColor(savedState?.descriptionColor ?: Color.parseColor(userData.description_color))
+                .setOkCLb { envelope, _ ->
+                    editHandler.changeDescriptionColor(description, envelope.color, changeDescColorBtn)
+                }
+                .createDialog(requireContext())
     }
 
     @RequiresApi(Build.VERSION_CODES.P)

@@ -123,7 +123,6 @@ class UserProfiler {
             val decoded = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
             img.setImageBitmap(decoded)
         } else {
-            println("asd")
             img.setImageResource(R.drawable.default_user_logo)
         }
         return this
