@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:rowCount="1"
+    android:columnCount="4"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp"
+    android:paddingRight="10dp"
+    android:paddingEnd="10dp"
+    android:paddingLeft="10dp"
+    android:background="@drawable/subscriptions_separator">
+
+    <include
+        layout="@layout/user_logo"
+        android:id="@+id/subscription_logo"
+        android:layout_gravity="center_vertical"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_column="0"
+        android:layout_row="0" />
+
+    <TextView
+        android:id="@+id/subscription_name"
+        android:layout_marginLeft="20dp"
+        android:layout_column="1"
+        android:text="username"
+        android:layout_row="0"
+        android:textSize="22sp"
+        android:textColor="@color/light_blue"
+        android:layout_width="130dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="20dp" />
+
+    <ImageView
+        android:src="@mipmap/unsubscribe"
+        android:layout_column="3"
+        android:layout_row="0"
+        android:layout_gravity="center_vertical"
+        android:layout_height="50dp"
+        android:layout_width="50dp" />
+
+
+</GridLayout>

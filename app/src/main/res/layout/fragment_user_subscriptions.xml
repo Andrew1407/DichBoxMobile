@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:background="@color/black"
-    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="match_parent"
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Subsriptions"
-        android:textSize="40sp" />
-</LinearLayout>
+        android:background="@color/black">
+
+        <EditText
+            android:id="@+id/subscriptionsSearch"
+            style="@style/inputStyle"
+            android:saveEnabled="true"
+            android:layout_marginTop="30dp"
+            android:importantForAutofill="no"
+            android:layout_marginBottom="25dp"
+            android:hint="search"
+            android:layout_width="match_parent"
+            android:inputType="textPersonName" />
+
+        <ListView
+            android:id="@+id/subscriptionsList"
+            android:layout_width="match_parent"
+            android:paddingTop="25dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/subscriptions_border" />
+
+    </LinearLayout>
