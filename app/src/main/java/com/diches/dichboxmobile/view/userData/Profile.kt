@@ -5,8 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.diches.dichboxmobile.R
+import com.diches.dichboxmobile.mv.userDataManager.EditedViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -39,5 +41,10 @@ class Profile : Fragment() {
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = options.map { it.first }[position]
         }.attach()
+
+        val editedViewModel = ViewModelProvider(requireActivity()).get(EditedViewModel::class.java)
+        editedViewModel.isEdited.observe(viewLifecycleOwner) {
+            viewPager.currentItem = 0
+        }
     }
 }

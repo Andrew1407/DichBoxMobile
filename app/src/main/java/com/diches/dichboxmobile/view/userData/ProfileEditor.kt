@@ -18,6 +18,7 @@ import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.datatypes.UserContainer
 import com.diches.dichboxmobile.mv.inputPickers.ColorPicker
 import com.diches.dichboxmobile.mv.inputPickers.ImageCropper
+import com.diches.dichboxmobile.mv.userDataManager.EditedViewModel
 import com.diches.dichboxmobile.mv.userDataManager.UserDataViewModel
 import com.diches.dichboxmobile.mv.verifiers.editVerifiers.LogoEditor
 import com.diches.dichboxmobile.mv.verifiers.editVerifiers.user.SavedEditState
@@ -95,7 +96,6 @@ class ProfileEditor: Fragment() {
         val newPasswd = view?.findViewById<EditText>(R.id.editUserNewPasswd)!!
         val newPasswdWarning = view?.findViewById<TextView>(R.id.editUserNewPasswdWarning)!!
 
-
         editHandler = UserEditorVerifier(submitter, userData)
                 .addNameCheck(name, nameWarning, nameColorBtn)
                 .addDescriptionCheck(description, descriptionColorBtn)
@@ -125,6 +125,14 @@ class ProfileEditor: Fragment() {
                     )
                     Toast.makeText(requireActivity().application, "Edited", Toast.LENGTH_LONG).show()
                     viewModel.setUserData(editedData)
+
+                    val editedViewModel = ViewModelProvider(requireActivity()).get(EditedViewModel::class.java)
+                    editedViewModel.setEdited(true)
+                    parentFragmentManager
+                        .beginTransaction()
+                        .detach(this)
+                        .attach(this)
+                        .commit()
                 }
 
         return Pair(name, description)
