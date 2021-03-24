@@ -39,13 +39,15 @@ sealed class UserContainer {
             val passwd: String
     ) : UserContainer()
 
-    data class FoundUsers(val searched: List<FoundUser>) : UserContainer() {
-        data class FoundUser(
-            val name: String,
-            val name_color: String,
-            val logo: String? = null
-        )
-    }
+    data class Subscriptions(val subs: List<FoundUser>) : UserContainer()
+
+    data class FoundUsers(val searched: List<FoundUser>) : UserContainer()
+
+    data class FoundUser(
+        val name: String,
+        val name_color: String,
+        val logo: String? = null
+    ) : UserContainer()
 
     data class SearchedChunk(val searchStr: String) : UserContainer()
 
@@ -63,7 +65,7 @@ sealed class UserContainer {
             val reg_date: String,
             val logo: String?,
             val email: String? = null,
-            val notifications: String? = null,
+            val notifications: String? = null
     ) : UserContainer()
 
     data class EditData(
@@ -81,4 +83,17 @@ sealed class UserContainer {
             var passwd: String? = null
     ) : UserContainer()
 
+    data class SubsAction(
+            val action: String,
+            val personName: String,
+            val subscriptionName: String,
+            val responseValues: Boolean = false
+    ) : UserContainer()
+
+
+    data class SubsActionRes(
+            val unsubscribed: Boolean = false,
+            val followers: Int = 0,
+            val follower: Boolean = false
+    ) : UserContainer()
 }

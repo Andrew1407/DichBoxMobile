@@ -27,4 +27,13 @@ interface UserService {
 
     @POST("/users/edit")
     suspend fun edit(@Body requestBody: RequestBody): Response<ResponseBody>
+
+    @POST("/users/subs_list")
+    suspend fun getSubscriptions(@Body requestBody: RequestBody): Response<ResponseBody>
+
+    @POST("/users/subscription")
+    suspend fun subscribeAction(@Body requestBody: RequestBody): Response<ResponseBody>
+
+    @POST("/users/notifications_list")
+    suspend fun getNotifications(@Body requestBody: RequestBody): Response<ResponseBody>
 }

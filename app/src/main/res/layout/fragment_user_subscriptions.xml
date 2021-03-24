@@ -10,9 +10,9 @@
             android:id="@+id/subscriptionsSearch"
             style="@style/inputStyle"
             android:saveEnabled="true"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:importantForAutofill="no"
-            android:layout_marginBottom="25dp"
+            android:layout_marginBottom="10dp"
             android:hint="search"
             android:layout_width="match_parent"
             android:inputType="textPersonName" />

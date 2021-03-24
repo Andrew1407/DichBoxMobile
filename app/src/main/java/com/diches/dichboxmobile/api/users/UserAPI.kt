@@ -15,7 +15,7 @@ class UserAPI {
 
     init {
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.4:7041")
+            .baseUrl("http://192.168.1.6:7041")
             .build()
 
         service = retrofit.create(UserService::class.java)
@@ -74,6 +74,22 @@ class UserAPI {
         val response = service.edit(reqBody)
         return getResponseData(
                 response, UserContainer.EditedFields::class.java
+        )
+    }
+
+    suspend fun getSubscriptions(nameContainer: UserContainer.NameContainer): Pair<Int, UserContainer> {
+        val reqBody = makeRequest(nameContainer)
+        val response = service.getSubscriptions(reqBody)
+        return getResponseData(
+                response, UserContainer.Subscriptions::class.java
+        )
+    }
+
+    suspend fun subscribeAction(subContainer: UserContainer.SubsAction): Pair<Int, UserContainer> {
+        val reqBody = makeRequest(subContainer)
+        val response = service.subscribeAction(reqBody)
+        return getResponseData(
+                response, UserContainer.SubsActionRes::class.java
         )
     }
 

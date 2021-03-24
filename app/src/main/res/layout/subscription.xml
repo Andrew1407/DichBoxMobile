@@ -34,12 +34,13 @@
         android:layout_marginStart="20dp" />
 
     <ImageView
-        android:src="@mipmap/unsubscribe"
-        android:layout_column="3"
-        android:layout_row="0"
-        android:layout_gravity="center_vertical"
+        android:id="@+id/removeSubscription"
+        android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_width="50dp" />
+        android:layout_row="0"
+        android:layout_column="3"
+        android:layout_gravity="center_vertical"
+        android:src="@mipmap/unsubscribe" />
 
 
 </GridLayout>

@@ -36,7 +36,7 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/cancelUserLogoBtn"
-                android:text="caoncel"
+                android:text="cancel"
                 android:layout_marginBottom="20dp"
                 style="@style/editBtnStyle"/>
 

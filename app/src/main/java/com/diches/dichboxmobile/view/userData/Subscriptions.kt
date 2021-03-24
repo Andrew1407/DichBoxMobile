@@ -1,17 +1,20 @@
 package com.diches.dichboxmobile.view.userData
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ListView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
-import com.diches.dichboxmobile.mv.userDataManager.NotificationContainer
-import com.diches.dichboxmobile.mv.userDataManager.SubscriptionContainer
+import com.diches.dichboxmobile.mv.userDataManager.SubscriptionsHandler
+import com.diches.dichboxmobile.mv.userDataManager.UserDataViewModel
 
 class Subscriptions : Fragment() {
+    private lateinit var subsHandler: SubscriptionsHandler
+
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
@@ -20,12 +23,19 @@ class Subscriptions : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val listView = view.findViewById<ListView>(R.id.subscriptionsList)
-        val items = listOf(
-            SubscriptionContainer(null, "olegator", Color.parseColor("#03c9ff")),
-            SubscriptionContainer(null, "VlaD", Color.parseColor("#0cd452"))
-        )
+        val userViewModel = ViewModelProvider(requireActivity()).get(UserDataViewModel::class.java)
+        val username = userViewModel.liveData.value!!.name
 
-        listView.adapter = SubscriptionsAdapter(requireContext(), R.layout.subscription, items)
+        val listView = view.findViewById<ListView>(R.id.subscriptionsList)
+        val search = view.findViewById<EditText>(R.id.subscriptionsSearch)
+
+        subsHandler = SubscriptionsHandler(username, listView)
+                .createListAdapter(requireContext(), savedInstanceState)
+                .handleSearch(search)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        subsHandler.saveSubsList(outState)
     }
 }
