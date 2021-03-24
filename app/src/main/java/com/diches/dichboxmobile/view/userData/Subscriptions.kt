@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ListView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
@@ -27,6 +28,8 @@ class Subscriptions : Fragment() {
         val username = userViewModel.liveData.value!!.name
 
         val listView = view.findViewById<ListView>(R.id.subscriptionsList)
+        listView.emptyView = view.findViewById<TextView>(R.id.emptySubs)
+
         val search = view.findViewById<EditText>(R.id.subscriptionsSearch)
 
         subsHandler = SubscriptionsHandler(username, listView)
