@@ -1,4 +1,4 @@
-package com.diches.dichboxmobile.mv.userDataManager
+package com.diches.dichboxmobile.mv.userDataManager.subscriptions
 
 import android.content.Context
 import android.graphics.BitmapFactory
@@ -25,7 +25,6 @@ class SubscriptionsAdapter(
         private val onRemoveSub: suspend (name: String) -> Boolean
 ) : ArrayAdapter<UserContainer.FoundUser>(context, resource, items), Filterable {
 
-    @RequiresApi(Build.VERSION_CODES.N)
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val row = convertView ?: LayoutInflater
             .from(context)
@@ -63,7 +62,6 @@ class SubscriptionsAdapter(
         logoView.setImageBitmap(decoded)
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     private fun handleUnsubscribe(btn: ImageView, subscription: String) {
         btn.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {

@@ -7,7 +7,7 @@
         android:background="@color/black">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/cancelUserLogoBtn"
+            android:id="@+id/cleanNotificationsList"
             android:text="clear all"
             android:layout_width="120dp"
             android:layout_gravity="start"
@@ -22,7 +22,14 @@
             android:id="@+id/notificationsList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/cancelUserLogoBtn"
+            android:layout_below="@id/cleanNotificationsList"
             android:divider="@android:color/transparent"
             android:dividerHeight="20dp"/>
+
+        <TextView
+            android:id="@+id/ntsEmpty"
+            style="@style/emptyList"
+            android:layout_below="@id/cleanNotificationsList"
+            android:text="Notifications list is empty"/>
+
     </RelativeLayout>

@@ -1,4 +1,4 @@
-package com.diches.dichboxmobile.mv.userDataManager
+package com.diches.dichboxmobile.mv.userDataManager.subscriptions
 
 import android.content.Context
 import android.os.Bundle
@@ -9,9 +9,6 @@ import androidx.core.widget.addTextChangedListener
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.api.users.UserAPI
 import com.diches.dichboxmobile.datatypes.UserContainer
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class SubscriptionsHandler(
@@ -25,7 +22,7 @@ class SubscriptionsHandler(
         val itemsShown: List<UserContainer.FoundUser>
 
         if (bundle == null) {
-            items = getSubsByRequest(ctx).toMutableList()
+            items = getSubsByRequest().toMutableList()
             itemsShown = items.toMutableList()
         } else {
             val (i, ish) = parseSavedSubs(bundle)
@@ -36,13 +33,13 @@ class SubscriptionsHandler(
         listView.adapter = SubscriptionsAdapter(ctx, R.layout.subscription, items, itemsShown) {
             unsubscribe(it)
         }
+
         return this
     }
 
     fun handleSearch(search: EditText): SubscriptionsHandler {
         search.addTextChangedListener {
             (listView.adapter as Filterable).filter.filter(search.text)
-
         }
         return this
     }
@@ -57,7 +54,7 @@ class SubscriptionsHandler(
         return Pair(parse("items"), parse("itemsShown"))
     }
 
-    private fun getSubsByRequest(ctx: Context): List<UserContainer.FoundUser> {
+    private fun getSubsByRequest(): List<UserContainer.FoundUser> {
         val requestContainer = UserContainer.NameContainer(username)
         val (st, res) = runBlocking { api.getSubscriptions(requestContainer) }
         val (subs) = (res as UserContainer.Subscriptions)
@@ -83,7 +80,7 @@ class SubscriptionsHandler(
         )
 
         val (st, res) = api.subscribeAction(subContainer)
-        val (unsubscribed) = res as UserContainer.SubsActionRes
-        return (st == 200 && unsubscribed)
+        val unsubscribed = (res as UserContainer.SubsActionRes).unsubscribed
+        return st == 200 && unsubscribed
     }
 }

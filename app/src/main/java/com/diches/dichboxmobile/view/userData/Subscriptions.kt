@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
-import com.diches.dichboxmobile.mv.userDataManager.SubscriptionsHandler
+import com.diches.dichboxmobile.mv.userDataManager.subscriptions.SubscriptionsHandler
 import com.diches.dichboxmobile.mv.userDataManager.UserDataViewModel
 
 class Subscriptions : Fragment() {

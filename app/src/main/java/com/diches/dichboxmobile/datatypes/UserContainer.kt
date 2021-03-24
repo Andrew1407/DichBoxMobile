@@ -8,8 +8,6 @@ sealed class UserContainer {
         ): UserContainer = com.diches.dichboxmobile.datatypes.parseJSON(jsonStr, container) as UserContainer
 
         fun stringifyJSON(jsonObj: UserContainer): String = com.diches.dichboxmobile.datatypes.stringifyJSON(jsonObj)
-
-
     }
 
     data class NameContainer(val name: String?) : UserContainer()
@@ -90,10 +88,30 @@ sealed class UserContainer {
             val responseValues: Boolean = false
     ) : UserContainer()
 
-
     data class SubsActionRes(
             val unsubscribed: Boolean = false,
             val followers: Int = 0,
             val follower: Boolean = false
     ) : UserContainer()
+
+    data class Notifications(val notifications: List<NotificationData>) : UserContainer()
+
+    data class NotificationData(
+            val id: Int,
+            val icon: String?,
+            val type: String,
+            val msgEntries: List<String>,
+            val note_date: String,
+            val user_name: String? = null,
+            val user_color: String? = null,
+            val box_name: String? = null,
+            val box_color: String? = null
+    ) : UserContainer()
+
+    data class NotificationsRemoved(
+            val username: String,
+            val ntsIds: List<Int>
+    ) : UserContainer()
+
+    data class NotificationsRemovedRes(val removed: Boolean) : UserContainer()
 }

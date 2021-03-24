@@ -93,6 +93,22 @@ class UserAPI {
         )
     }
 
+    suspend fun getNotifications(nameContainer: UserContainer.NameContainer): Pair<Int, UserContainer> {
+        val reqBody = makeRequest(nameContainer)
+        val response = service.getNotifications(reqBody)
+        return getResponseData(
+                response, UserContainer.Notifications::class.java
+        )
+    }
+
+    suspend fun removeNotifications(rmContainer: UserContainer.NotificationsRemoved): Pair<Int, UserContainer> {
+        val reqBody = makeRequest(rmContainer)
+        val response = service.removeNotifications(reqBody)
+        return getResponseData(
+                response, UserContainer.NotificationsRemovedRes::class.java
+        )
+    }
+
     private fun getResponseData(
             response: Response<ResponseBody>,
             respClass: Class<*>
