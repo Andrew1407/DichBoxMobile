@@ -53,7 +53,7 @@ class NotificationsHandler(
         val removed = withContext(Dispatchers.IO) {
             val rmContainer = UserContainer.NotificationsRemoved(username, ids)
             val (st, res) = api.removeNotifications(rmContainer)
-            val (removed) = res as UserContainer.NotificationsRemovedRes
+            val (removed) = res as UserContainer.RemovedRes
             removed && st == 200
         }
 

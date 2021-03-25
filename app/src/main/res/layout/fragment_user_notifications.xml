@@ -24,6 +24,7 @@
             android:layout_height="match_parent"
             android:layout_below="@id/cleanNotificationsList"
             android:divider="@android:color/transparent"
+            android:layout_alignParentBottom="true"
             android:dividerHeight="20dp"/>
 
         <TextView

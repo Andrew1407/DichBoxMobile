@@ -37,6 +37,14 @@ class UserAPI {
         )
     }
 
+    suspend fun removeUser(rmContainer: UserContainer.RemovedUser): Pair<Int, UserContainer> {
+        val reqBody = makeRequest(rmContainer)
+        val response = service.removeUser(reqBody)
+        return getResponseData(
+                response, UserContainer.RemovedRes::class.java
+        )
+    }
+
     suspend fun enterUser(signContainer: UserContainer.SignIn): Pair<Int, UserContainer> {
         val reqBody = makeRequest(signContainer)
         val response = service.signIn(reqBody)
@@ -105,7 +113,7 @@ class UserAPI {
         val reqBody = makeRequest(rmContainer)
         val response = service.removeNotifications(reqBody)
         return getResponseData(
-                response, UserContainer.NotificationsRemovedRes::class.java
+                response, UserContainer.RemovedRes::class.java
         )
     }
 

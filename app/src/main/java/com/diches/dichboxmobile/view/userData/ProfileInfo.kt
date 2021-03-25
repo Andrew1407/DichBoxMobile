@@ -38,7 +38,6 @@ class ProfileInfo: Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-
         userProfiler.saveUserDataState(outState)
     }
 

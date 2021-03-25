@@ -19,6 +19,9 @@ interface UserService {
     @POST("/users/enter")
     suspend fun signIn(@Body requestBody: RequestBody): Response<ResponseBody>
 
+    @POST("/users/remove")
+    suspend fun removeUser(@Body requestBody: RequestBody): Response<ResponseBody>
+
     @POST("/users/find")
     suspend fun findUser(@Body requestBody: RequestBody): Response<ResponseBody>
 

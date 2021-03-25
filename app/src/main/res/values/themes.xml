@@ -90,4 +90,28 @@
         <item name="android:paddingTop">30dp</item>
         <item name="android:visibility">gone</item>
     </style>
+
+    <style name="settingsOptions">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textColor">@color/light_blue</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingBottom">15dp</item>
+        <item name="android:background">@drawable/settings_separator</item>
+    </style>
+
+    <style name="dialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/color_picker</item>
+        <item name="android:textColor">@color/purple</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:textColorPrimary">@color/purple</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="buttonBarNegativeButtonStyle">@style/buttonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/buttonStyle</item>
+    </style>
+
 </resources>

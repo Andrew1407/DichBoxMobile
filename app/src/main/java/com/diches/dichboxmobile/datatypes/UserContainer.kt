@@ -113,5 +113,10 @@ sealed class UserContainer {
             val ntsIds: List<Int>
     ) : UserContainer()
 
-    data class NotificationsRemovedRes(val removed: Boolean) : UserContainer()
+    data class RemovedRes(val removed: Boolean) : UserContainer()
+
+    data class RemovedUser(
+            val username: String,
+            val confirmation: String
+    ) : UserContainer()
 }

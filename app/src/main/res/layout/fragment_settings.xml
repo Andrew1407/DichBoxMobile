@@ -1,24 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/frameLayout3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
-    tools:context=".Settings">
+    android:background="@color/black">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/settingsText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_alignParentTop="true"
+        android:text="Settings"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/light_blue"
+        android:textSize="35sp" />
+
+    <LinearLayout
+        android:id="@+id/settingsOptions"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/settingsText"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/subscriptions_border"
+        android:paddingTop="25dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/signOut"
+            android:layout_width="match_parent"
+            style="@style/settingsOptions"
+            android:text="Sign out" />
+
+        <TextView
+            android:id="@+id/removeUserAccount"
+            android:paddingTop="10dp"
+            android:layout_width="match_parent"
+            style="@style/settingsOptions"
+            android:text="Remove account" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/settingsNotSigned"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Settings"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_below="@id/settingsText"
+        android:background="@drawable/subscriptions_border"
+        android:paddingTop="25dp"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:text="No settings available for unauthorised users"
+        android:textColor="@color/light_blue"
+        android:textSize="25sp"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="20dp"
+        android:paddingLeft="20dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="version: 0.0.1"
+            android:textColor="@color/green"
+            android:textSize="19sp"/>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="DichES"
+            android:textColor="@color/light_blue"
+            android:gravity="end"
+            android:textStyle="bold"
+            android:textSize="19sp"/>
+    </LinearLayout>
+
+</RelativeLayout>
