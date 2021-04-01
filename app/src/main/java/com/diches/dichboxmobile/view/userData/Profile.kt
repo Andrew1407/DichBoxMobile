@@ -8,9 +8,10 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.diches.dichboxmobile.R
-import com.diches.dichboxmobile.mv.userDataManager.EditedViewModel
+import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.EditedViewModel
 import com.diches.dichboxmobile.mv.userDataManager.UserDataFetcher
-import com.diches.dichboxmobile.mv.userDataManager.UserDataViewModel
+import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
+import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -23,15 +24,17 @@ class Profile : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val dataFetcher = UserDataFetcher()
         val userViewModel = ViewModelProvider(requireActivity()).get(UserDataViewModel::class.java)
+        val stateViewModel = ViewModelProvider(requireActivity()).get(UserStateViewModel::class.java)
 
-        if (userViewModel.liveData.value == null)
-            dataFetcher.fillUserViewModel(userViewModel, requireContext())
+        val userData = userViewModel.liveData.value
+        if (userData == null || !userData.ownPage)
+            UserDataFetcher().fillUserViewModel(userViewModel, stateViewModel)
 
         val viewPager = view.findViewById<ViewPager2>(R.id.user_viewPager)
         val tabLayout = view.findViewById<TabLayout>(R.id.tabLayout)
-        val notificationsLabel = getNotificationsLabel(userViewModel.liveData.value!!.notifications!!)
+        val notificationsLabel = if (userData == null) "notifications"
+            else getNotificationsLabel(userViewModel.liveData.value!!.notifications!!)
         val options = listOf(
                 Pair("profile", ProfileInfo()),
                 Pair("edit", ProfileEditor()),
@@ -55,7 +58,7 @@ class Profile : Fragment() {
 
     private fun setNotificationsListener(userViewModel: UserDataViewModel, tabLayout: TabLayout) {
         userViewModel.liveData.observe(viewLifecycleOwner) {
-            if (it == null) return@observe
+            if (it == null || !it.ownPage) return@observe
             val notifications = it.notifications!!
             val oldLabel = tabLayout.getTabAt(3)!!.text.toString()
             if (notifications == 0 && oldLabel == "notifications")

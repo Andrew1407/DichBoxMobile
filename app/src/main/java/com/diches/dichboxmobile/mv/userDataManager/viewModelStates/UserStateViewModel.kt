@@ -1,4 +1,4 @@
-package com.diches.dichboxmobile.mv.userDataManager
+package com.diches.dichboxmobile.mv.userDataManager.viewModelStates
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

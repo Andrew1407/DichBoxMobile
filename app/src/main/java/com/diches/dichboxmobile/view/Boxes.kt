@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
-import com.diches.dichboxmobile.mv.userDataManager.UserStateViewModel
+import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 import com.diches.dichboxmobile.view.boxes.BoxesInfo
 import com.diches.dichboxmobile.view.boxes.BoxesUnauthorised
 

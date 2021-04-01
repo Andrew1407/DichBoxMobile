@@ -255,7 +255,7 @@ class UserEditorVerifier (
                 defaultData.email != edited.email
 
         val colorsChanged = defaultData.name_color != edited.name_color ||
-                defaultData.description_color != defaultData.description_color
+                defaultData.description_color != edited.description_color
 
         val isValid = inputVerifier.checkAll() && textChanged || colorsChanged ||
                 passwdVerifier.getChecked().first || logoEditor.getLogo().second

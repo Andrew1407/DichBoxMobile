@@ -2,11 +2,9 @@ package com.diches.dichboxmobile.view.userData
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,14 +16,13 @@ import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.datatypes.UserContainer
 import com.diches.dichboxmobile.mv.inputPickers.ColorPicker
 import com.diches.dichboxmobile.mv.inputPickers.ImageCropper
-import com.diches.dichboxmobile.mv.userDataManager.EditedViewModel
-import com.diches.dichboxmobile.mv.userDataManager.UserDataViewModel
-import com.diches.dichboxmobile.mv.userDataManager.UserStateViewModel
+import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.EditedViewModel
+import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
+import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 import com.diches.dichboxmobile.mv.verifiers.editVerifiers.LogoEditor
 import com.diches.dichboxmobile.mv.verifiers.editVerifiers.user.SavedEditState
 import com.diches.dichboxmobile.mv.verifiers.editVerifiers.user.UserEditorVerifier
 import com.diches.dichboxmobile.tools.fromBitmapToBase64
-import java.io.ByteArrayOutputStream
 
 class ProfileEditor: Fragment() {
     private lateinit var changeNameColorBtn: Button
@@ -59,7 +56,7 @@ class ProfileEditor: Fragment() {
         )
 
         setImageEditor(savedState, userData)
-        val editColorFields = setUserVerifier(savedState, userData, userDataViewModel, userStateviewModel)
+        val editColorFields = setUserVerifier(savedState, userDataViewModel, userStateviewModel)
         setColorPickers(editColorFields, savedState, userData)
     }
 
@@ -79,7 +76,6 @@ class ProfileEditor: Fragment() {
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     private fun setUserVerifier(
             savedState: SavedEditState?,
-            userData: UserContainer.UserData,
             userDataVM: UserDataViewModel,
             userStateVM: UserStateViewModel
     ): Pair<EditText, EditText> {
@@ -100,7 +96,7 @@ class ProfileEditor: Fragment() {
         val newPasswd = view?.findViewById<EditText>(R.id.editUserNewPasswd)!!
         val newPasswdWarning = view?.findViewById<TextView>(R.id.editUserNewPasswdWarning)!!
 
-        editHandler = UserEditorVerifier(submitter, userData)
+        editHandler = UserEditorVerifier(submitter, userDataVM.liveData.value!!)
                 .addNameCheck(name, nameWarning, nameColorBtn)
                 .addDescriptionCheck(description, descriptionColorBtn)
                 .handleSavedState(savedState)
@@ -121,7 +117,7 @@ class ProfileEditor: Fragment() {
                             it?.write(editedName.toByteArray())
                         }
                     }
-
+                    val userData = userDataVM.liveData.value!!
                     val editedData = userData.copy(
                             name = editedFields.name ?: userData.name,
                             description = editedFields.description ?: userData.description,

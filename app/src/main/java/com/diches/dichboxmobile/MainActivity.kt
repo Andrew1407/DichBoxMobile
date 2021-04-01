@@ -7,7 +7,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
-import com.diches.dichboxmobile.mv.userDataManager.UserStateViewModel
+import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 import com.diches.dichboxmobile.view.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -111,7 +111,8 @@ class MainActivity : AppCompatActivity(), Search.Redirector {
         homePageIcon = findViewById(R.id.homePageIcon)
         homePageIcon.setOnClickListener {
             val oldNamesState = viewModel.namesState.value!!
-            viewModel.setState(oldNamesState.copy(second = oldNamesState.first))
+            if (oldNamesState.first != oldNamesState.second)
+                viewModel.setState(oldNamesState.copy(second = oldNamesState.first))
             redirectToUserPage()
         }
     }

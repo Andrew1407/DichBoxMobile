@@ -1,4 +1,4 @@
-package com.diches.dichboxmobile.mv.userDataManager
+package com.diches.dichboxmobile.mv.userDataManager.profilers
 
 import android.graphics.Color
 import android.os.Bundle
@@ -11,9 +11,10 @@ import android.widget.TextView
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.datatypes.AppColors
 import com.diches.dichboxmobile.datatypes.UserContainer
+import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
 import com.diches.dichboxmobile.tools.fromBase64ToBitmap
 
-class UserProfiler {
+open class UserProfiler {
     private lateinit var userData: UserContainer.UserData
 
     fun refreshData(data: UserContainer.UserData) {
@@ -41,7 +42,7 @@ class UserProfiler {
         element.setTextColor(Color.parseColor(color))
     }
 
-    private fun decorateView(
+    protected fun decorateView(
             element: TextView,
             prefix: String,
             parameters: Pair<String, Int>

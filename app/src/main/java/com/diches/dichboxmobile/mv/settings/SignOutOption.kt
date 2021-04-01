@@ -2,8 +2,8 @@ package com.diches.dichboxmobile.mv.settings
 
 import android.content.Context
 import android.widget.TextView
-import com.diches.dichboxmobile.mv.userDataManager.UserDataViewModel
-import com.diches.dichboxmobile.mv.userDataManager.UserStateViewModel
+import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
+import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 
 open class SignOutOption(
         private val context: Context,

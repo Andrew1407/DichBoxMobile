@@ -3,8 +3,8 @@ package com.diches.dichboxmobile.mv.settings
 import android.content.Context
 import com.diches.dichboxmobile.api.users.UserAPI
 import com.diches.dichboxmobile.datatypes.UserContainer
-import com.diches.dichboxmobile.mv.userDataManager.UserDataViewModel
-import com.diches.dichboxmobile.mv.userDataManager.UserStateViewModel
+import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
+import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 import kotlinx.coroutines.*
 
 class RemoveAccountOption(

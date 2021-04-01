@@ -8,7 +8,7 @@ import android.widget.ListView
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.api.users.UserAPI
 import com.diches.dichboxmobile.datatypes.UserContainer
-import com.diches.dichboxmobile.mv.userDataManager.UserDataViewModel
+import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
 import kotlinx.coroutines.*
 
 class NotificationsHandler(

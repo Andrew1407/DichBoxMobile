@@ -11,8 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.mv.settings.RemoveAccountOption
 import com.diches.dichboxmobile.mv.settings.SignOutOption
-import com.diches.dichboxmobile.mv.userDataManager.UserDataViewModel
-import com.diches.dichboxmobile.mv.userDataManager.UserStateViewModel
+import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
+import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 
 class Settings : Fragment() {
     override fun onCreateView(

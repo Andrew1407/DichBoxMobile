@@ -1,15 +1,17 @@
 package com.diches.dichboxmobile.mv.usersSearch
 
-import android.content.Context
 import android.os.Bundle
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ListView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.api.users.UserAPI
 import com.diches.dichboxmobile.datatypes.UserContainer
-import com.diches.dichboxmobile.mv.userDataManager.UserStateViewModel
+import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 import com.diches.dichboxmobile.view.Search
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +25,7 @@ class UsersSearch(
 ) {
     private val api = UserAPI()
     private lateinit var onEmptyMsg: TextView
+    private lateinit var searchInput: EditText
 
     private suspend fun searchUsers(chunk: String): List<UserContainer.FoundUser> {
         val chunkContainer = UserContainer.SearchedChunk(chunk)
@@ -31,16 +34,24 @@ class UsersSearch(
         return searched
     }
 
-    fun createListAdapter(ctx: Context, bundle: Bundle?, redirector: Search.Redirector): UsersSearch {
+    fun createListAdapter(view: View, bundle: Bundle?, redirector: Search.Redirector): UsersSearch {
         val initialList = if (bundle == null) emptyList() else {
             val usersStr = bundle.getString("users")!!
             val usersParsed = UserContainer.parseJSON(usersStr, UserContainer.FoundUsers::class.java)
             (usersParsed as UserContainer.FoundUsers).searched
         }
-        listView.adapter = UsersSearchAdapter(ctx, R.layout.found_user, initialList) {
+        listView.adapter = UsersSearchAdapter(view.context, R.layout.found_user, initialList) {
             visitUserPage(it, redirector)
+            redirectionCleanup(view)
         }
         return this
+    }
+
+    private fun redirectionCleanup(view: View) {
+        searchInput.text.clear()
+        ContextCompat
+                .getSystemService(view.context, InputMethodManager::class.java)
+                ?.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     private fun visitUserPage(name: String, redirector: Search.Redirector) {
@@ -57,7 +68,8 @@ class UsersSearch(
     }
 
     fun handleInputSearch(inputField: EditText): UsersSearch {
-        inputField.addTextChangedListener {
+        searchInput = inputField
+        searchInput.addTextChangedListener {
             CoroutineScope(Dispatchers.Main).launch {
                 val inputChunk = inputField.text.toString()
                 val chunkIsEmpty = inputChunk.isEmpty()
