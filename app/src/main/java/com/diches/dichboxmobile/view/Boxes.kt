@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
-import com.diches.dichboxmobile.mv.verifiers.signVerifiers.SignViewModel
+import com.diches.dichboxmobile.mv.userDataManager.UserStateViewModel
 import com.diches.dichboxmobile.view.boxes.BoxesInfo
 import com.diches.dichboxmobile.view.boxes.BoxesUnauthorised
 
@@ -35,9 +35,10 @@ class Boxes : Fragment() {
     }
 
     private fun handleSignedStateObserver() {
-        val viewModel = ViewModelProvider(requireActivity()).get(SignViewModel::class.java)
+        val viewModel = ViewModelProvider(requireActivity()).get(UserStateViewModel::class.java)
 
-        viewModel.isSigned.observe(viewLifecycleOwner) { signed ->
+        viewModel.namesState.observe(viewLifecycleOwner) { (signedName, _) ->
+            val signed = signedName != null
             currentPosition = if (signed) 1 else 0
             val tag = tags[currentPosition]
             val fragment = if (signed)

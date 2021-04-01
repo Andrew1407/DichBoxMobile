@@ -9,7 +9,7 @@ class UserDataViewModel : ViewModel() {
     private val data = MutableLiveData<UserContainer.UserData>()
     val liveData: LiveData<UserContainer.UserData> = data
 
-    fun setUserData(dataVal: UserContainer.UserData) {
+    fun setUserData(dataVal: UserContainer.UserData?) {
         data.value = dataVal
     }
 }

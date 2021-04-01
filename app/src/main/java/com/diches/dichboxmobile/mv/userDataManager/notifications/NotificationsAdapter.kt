@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.datatypes.UserContainer
+import com.diches.dichboxmobile.tools.fromBase64ToBitmap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,11 +23,10 @@ class NotificationsAdapter(
     private val items: MutableList<UserContainer.NotificationData>,
     private val onRemoveNotification: suspend (id: Int) -> Unit
 ) : ArrayAdapter<UserContainer.NotificationData>(context, resource, items) {
-    private lateinit var row: View
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
-        row = convertView ?: LayoutInflater
+        val row = convertView ?: LayoutInflater
                 .from(context)
                 .inflate(resource, parent, false)
 
@@ -49,15 +49,12 @@ class NotificationsAdapter(
     fun getItems(): MutableList<UserContainer.NotificationData> = items
 
     private fun setNoteIcon(logoView: ImageView, logoSrc: String?) {
-        if (logoSrc == null) {
+        if (logoSrc != null) {
+            val decoded = fromBase64ToBitmap(logoSrc)
+            logoView.setImageBitmap(decoded)
+        } else {
             logoView.setImageResource(R.drawable.default_user_logo)
-            return
         }
-        val basePrefix = Regex("""^data:image\/png;base64,""")
-        val logoSrcRaw = logoSrc.replace(basePrefix, "")
-        val imageBytes = Base64.decode(logoSrcRaw, Base64.DEFAULT)
-        val decoded = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-        logoView.setImageBitmap(decoded)
     }
 
     private fun handleNotificationRemoval(btn: ImageView, id: Int) {

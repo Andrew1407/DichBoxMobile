@@ -12,6 +12,7 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.datatypes.UserContainer
+import com.diches.dichboxmobile.tools.fromBase64ToBitmap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -51,15 +52,12 @@ class SubscriptionsAdapter(
     }
 
     private fun setSubscriptionIcon(logoView: ImageView, logoSrc: String?) {
-        if (logoSrc == null) {
+        if (logoSrc != null) {
+            val decoded = fromBase64ToBitmap(logoSrc)
+            logoView.setImageBitmap(decoded)
+        } else {
             logoView.setImageResource(R.drawable.default_user_logo)
-            return
         }
-        val basePrefix = Regex("""^data:image\/png;base64,""")
-        val logoSrcRaw = logoSrc.replace(basePrefix, "")
-        val imageBytes = Base64.decode(logoSrcRaw, Base64.DEFAULT)
-        val decoded = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-        logoView.setImageBitmap(decoded)
     }
 
     private fun handleUnsubscribe(btn: ImageView, subscription: String) {

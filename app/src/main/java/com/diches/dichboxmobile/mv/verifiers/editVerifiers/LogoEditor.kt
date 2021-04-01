@@ -10,6 +10,7 @@ import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.mv.inputPickers.ImageCropper
+import com.diches.dichboxmobile.tools.fromBase64ToBitmap
 
 class LogoEditor(
         private val initialLogo: String?,
@@ -30,7 +31,7 @@ class LogoEditor(
                 setDefaultBtn.visibility = View.GONE
                 logoContainer.setImageResource(R.drawable.default_user_logo)
             } else {
-                logoContainer.setImageBitmap(convertLogo(initialLogo))
+                logoContainer.setImageBitmap(fromBase64ToBitmap(initialLogo))
             }
         } else {
             if (logo === "removed" || initialLogo === null)
@@ -38,7 +39,7 @@ class LogoEditor(
             if (logo === null || logo === "removed")
                 logoContainer.setImageResource(R.drawable.default_user_logo)
             else
-                logoContainer.setImageBitmap(convertLogo(logo!!))
+                logoContainer.setImageBitmap(fromBase64ToBitmap(logo!!))
         }
     }
 
@@ -57,17 +58,10 @@ class LogoEditor(
     }
 
     private fun setLogoView() {
-        if (logo === null || logo === "removed")
+        if (logo == null || logo == "removed")
             logoContainer.setImageResource(R.drawable.default_user_logo)
         else
-            logoContainer.setImageBitmap(convertLogo(logo!!))
-    }
-
-    private fun convertLogo(logo: String): Bitmap {
-        val basePrefix = Regex("""^data:image\/png;base64,""")
-        val logoSrc = logo.replace(basePrefix, "")
-        val imageBytes = Base64.decode(logoSrc, Base64.DEFAULT)
-        return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+            logoContainer.setImageBitmap(fromBase64ToBitmap(logo!!))
     }
 
     fun setLogo(src: String) {

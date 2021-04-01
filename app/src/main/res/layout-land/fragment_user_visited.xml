@@ -52,11 +52,44 @@
 
         </LinearLayout>
 
-        <include layout="@layout/profile_info"
-            android:layout_columnSpan="3"
-            android:layout_column="0"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent" />
+        <LinearLayout
+                android:layout_columnSpan="3"
+                android:layout_column="0"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:background="@drawable/profile_separator"
+                    android:id="@+id/userSubscription"
+                    style="@style/profileInfoStyle"
+                    android:layout_marginStart="0dp"
+                    android:textStyle="normal"
+                    android:gravity="center"
+                    android:paddingStart="15dp"
+                    android:layout_marginTop="27dp"
+                    android:paddingBottom="25dp"
+                    android:paddingTop="20dp"
+                    android:textColor="@color/purple"/>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/profile_separator">
+
+                    <TextView
+                        android:id="@+id/userFollowersText"
+                        style="@style/profileInfoStyle"
+                        android:layout_marginTop="15dp" />
+
+                    <TextView
+                        android:id="@+id/userSignedDate"
+                        style="@style/profileInfoStyle"
+                        android:layout_marginTop="15dp" />
+                </LinearLayout>
+
+        </LinearLayout>
 
     </GridLayout>
 

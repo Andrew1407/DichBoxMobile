@@ -6,15 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
-import com.diches.dichboxmobile.datatypes.UserContainer
 import com.diches.dichboxmobile.mv.userDataManager.UserDataViewModel
 import com.diches.dichboxmobile.mv.userDataManager.UserProfiler
-import com.diches.dichboxmobile.mv.verifiers.signVerifiers.SignViewModel
-import kotlinx.coroutines.runBlocking
 
 class ProfileInfo: Fragment() {
     private val userProfiler = UserProfiler()
@@ -28,9 +24,9 @@ class ProfileInfo: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val viewModel = ViewModelProvider(requireActivity()).get(UserDataViewModel::class.java)
-        val userData = userProfiler.getUserData(requireContext(), savedInstanceState)
-        viewModel.setUserData(userData)
+        userProfiler.setUserData(viewModel, savedInstanceState)
         viewModel.liveData.observe(viewLifecycleOwner) {
+            if (it == null) return@observe
             userProfiler.refreshData(it)
             handleInfoFields(view)
         }
@@ -40,7 +36,6 @@ class ProfileInfo: Fragment() {
         super.onSaveInstanceState(outState)
         userProfiler.saveUserDataState(outState)
     }
-
 
     private fun handleInfoFields(view: View) {
         val username = view.findViewById<TextView>(R.id.userName)

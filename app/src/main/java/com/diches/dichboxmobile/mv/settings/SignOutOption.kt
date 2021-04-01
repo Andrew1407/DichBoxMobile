@@ -2,11 +2,13 @@ package com.diches.dichboxmobile.mv.settings
 
 import android.content.Context
 import android.widget.TextView
-import com.diches.dichboxmobile.mv.verifiers.signVerifiers.SignViewModel
+import com.diches.dichboxmobile.mv.userDataManager.UserDataViewModel
+import com.diches.dichboxmobile.mv.userDataManager.UserStateViewModel
 
 open class SignOutOption(
         private val context: Context,
-        private val signViewModel: SignViewModel
+        private val userStateViewModel: UserStateViewModel,
+        private val userViewModel: UserDataViewModel,
 ) {
     private val dialog = ConfirmDialog()
 
@@ -21,7 +23,8 @@ open class SignOutOption(
     protected open fun onOkClick() {
         val signedFile = context.getFileStreamPath("signed.txt")
         if (signedFile!!.exists()) {
-            signViewModel.setIsSigned(false)
+            userStateViewModel.setState(Pair(null, null))
+            userViewModel.setUserData(null)
             signedFile.delete()
         }
     }

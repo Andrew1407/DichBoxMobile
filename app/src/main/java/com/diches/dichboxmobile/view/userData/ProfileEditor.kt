@@ -20,9 +20,11 @@ import com.diches.dichboxmobile.mv.inputPickers.ColorPicker
 import com.diches.dichboxmobile.mv.inputPickers.ImageCropper
 import com.diches.dichboxmobile.mv.userDataManager.EditedViewModel
 import com.diches.dichboxmobile.mv.userDataManager.UserDataViewModel
+import com.diches.dichboxmobile.mv.userDataManager.UserStateViewModel
 import com.diches.dichboxmobile.mv.verifiers.editVerifiers.LogoEditor
 import com.diches.dichboxmobile.mv.verifiers.editVerifiers.user.SavedEditState
 import com.diches.dichboxmobile.mv.verifiers.editVerifiers.user.UserEditorVerifier
+import com.diches.dichboxmobile.tools.fromBitmapToBase64
 import java.io.ByteArrayOutputStream
 
 class ProfileEditor: Fragment() {
@@ -40,12 +42,13 @@ class ProfileEditor: Fragment() {
         savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.fragment_user_editor, container, false)
 
-    @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewModel = ViewModelProvider(requireActivity()).get(UserDataViewModel::class.java)
-        val userData = viewModel.liveData.value!!
+        val userDataViewModel = ViewModelProvider(requireActivity()).get(UserDataViewModel::class.java)
+        val userStateviewModel = ViewModelProvider(this).get(UserStateViewModel::class.java)
+
+        val userData = userDataViewModel.liveData.value!!
 
         val savedState = if (savedInstanceState == null) null
             else SavedEditState(
@@ -56,7 +59,7 @@ class ProfileEditor: Fragment() {
         )
 
         setImageEditor(savedState, userData)
-        val editColorFields = setUserVerifier(savedState, userData, viewModel)
+        val editColorFields = setUserVerifier(savedState, userData, userDataViewModel, userStateviewModel)
         setColorPickers(editColorFields, savedState, userData)
     }
 
@@ -77,7 +80,8 @@ class ProfileEditor: Fragment() {
     private fun setUserVerifier(
             savedState: SavedEditState?,
             userData: UserContainer.UserData,
-            viewModel: UserDataViewModel
+            userDataVM: UserDataViewModel,
+            userStateVM: UserStateViewModel
     ): Pair<EditText, EditText> {
         val submitter = view?.findViewById<Button>(R.id.editProfileBtn)!!
         val name = requireView().findViewById<EditText>(R.id.editUsername)!!
@@ -110,10 +114,13 @@ class ProfileEditor: Fragment() {
                 .addLogoEditor(logoEditor, imagePicker)
                 .setSubmitClb { editData ->
                     val editedFields = editData.edited
-                    if (editedFields.name != null)
+                    if (editedFields.name != null) {
+                        val editedName = editedFields.name!!
+                        userStateVM.setState(Pair(editedName, editedName))
                         context?.openFileOutput("signed.txt", Context.MODE_PRIVATE).use {
-                            it?.write(editedFields.name?.toByteArray())
+                            it?.write(editedName.toByteArray())
                         }
+                    }
 
                     val editedData = userData.copy(
                             name = editedFields.name ?: userData.name,
@@ -124,7 +131,7 @@ class ProfileEditor: Fragment() {
                             logo = if (editData.logo == "removed") null else editData.logo
                     )
                     Toast.makeText(requireActivity().application, "Edited", Toast.LENGTH_LONG).show()
-                    viewModel.setUserData(editedData)
+                    userDataVM.setUserData(editedData)
 
                     val editedViewModel = ViewModelProvider(requireActivity()).get(EditedViewModel::class.java)
                     editedViewModel.setEdited(true)
@@ -173,10 +180,7 @@ class ProfileEditor: Fragment() {
 
         imagePicker.handleActivityResult(requestCode, resultCode, data)  {
             view?.findViewById<ImageView>(R.id.editUserLogo)?.setImageBitmap(it)
-            val baos = ByteArrayOutputStream()
-            it.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-            val b: ByteArray = baos.toByteArray()
-            val imageEncoded = Base64.encodeToString(b, Base64.DEFAULT)
+            val imageEncoded = fromBitmapToBase64(it)
             logoEditor.setLogo(imageEncoded)
             editHandler.checkAllAdded()
         }

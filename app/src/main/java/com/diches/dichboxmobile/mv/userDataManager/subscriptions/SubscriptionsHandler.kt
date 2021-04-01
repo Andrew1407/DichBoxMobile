@@ -30,7 +30,7 @@ class SubscriptionsHandler(
             itemsShown = ish.toMutableList()
         }
 
-        listView.adapter = SubscriptionsAdapter(ctx, R.layout.subscription, items, itemsShown) {
+        listView.adapter = SubscriptionsAdapter(ctx, R.layout.found_user, items, itemsShown) {
             unsubscribe(it)
         }
 

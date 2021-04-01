@@ -51,7 +51,7 @@ sealed class UserContainer {
 
     data class FindContainer(
             val pathName: String,
-            val username: String
+            val username: String?
     ) : UserContainer()
 
     data class UserData(
@@ -62,8 +62,10 @@ sealed class UserContainer {
             val followers: Int,
             val reg_date: String,
             val logo: String?,
+            val ownPage: Boolean,
+            val follower: Boolean,
             val email: String? = null,
-            val notifications: String? = null
+            val notifications: Int? = null
     ) : UserContainer()
 
     data class EditData(

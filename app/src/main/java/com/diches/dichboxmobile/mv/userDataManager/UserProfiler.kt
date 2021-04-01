@@ -1,55 +1,38 @@
 package com.diches.dichboxmobile.mv.userDataManager
 
-import android.content.Context
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import android.util.Base64
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.diches.dichboxmobile.R
-import com.diches.dichboxmobile.api.users.UserAPI
 import com.diches.dichboxmobile.datatypes.AppColors
 import com.diches.dichboxmobile.datatypes.UserContainer
-import kotlinx.coroutines.runBlocking
+import com.diches.dichboxmobile.tools.fromBase64ToBitmap
 
 class UserProfiler {
-    private val api = UserAPI()
     private lateinit var userData: UserContainer.UserData
 
     fun refreshData(data: UserContainer.UserData) {
         userData = data
     }
 
-    fun getUserData(ctx: Context, bundle: Bundle?): UserContainer.UserData {
-        if (bundle != null) {
-            val dataStr = bundle.getString("userJSON")
-            userData = UserContainer.parseJSON(
-                    dataStr!!, UserContainer.UserData::class.java
+    fun setUserData(viewModel: UserDataViewModel, bundle: Bundle?) {
+        userData = if (bundle != null)
+            UserContainer.parseJSON(
+                bundle.getString("userJSON")!!,
+                UserContainer.UserData::class.java
             ) as UserContainer.UserData
-        } else {
-            ctx.openFileInput("signed.txt").use { stream ->
-                val name = stream?.bufferedReader().use { it?.readText() }
-                runBlocking { userData = fetchData(name!!) }
-            }
-        }
-        return userData.copy()
+        else
+            viewModel.liveData.value!!.copy()
     }
 
     fun saveUserDataState(bundle: Bundle) {
         val dataStr = UserContainer.stringifyJSON(userData)
         bundle.putString("userJSON", dataStr)
-    }
-
-    private suspend fun fetchData(name: String): UserContainer.UserData {
-        val resData = UserContainer.FindContainer(name, name)
-        val (st, data) = api.findUser(resData)
-        userData = data as UserContainer.UserData
-        return userData.copy()
     }
 
     private fun fillView(element: TextView, parameters: Pair<String, String>) {
@@ -117,10 +100,7 @@ class UserProfiler {
 
     fun fillLogo(img: ImageView): UserProfiler {
         if (userData.logo != null) {
-            val basePrefix = Regex("""^data:image\/png;base64,""")
-            val logoSrc = userData.logo!!.replace(basePrefix, "")
-            val imageBytes = Base64.decode(logoSrc, Base64.DEFAULT)
-            val decoded = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+            val decoded = fromBase64ToBitmap(userData.logo!!)
             img.setImageBitmap(decoded)
         } else {
             img.setImageResource(R.drawable.default_user_logo)

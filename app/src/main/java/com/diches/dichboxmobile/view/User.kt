@@ -7,13 +7,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
-import com.diches.dichboxmobile.mv.verifiers.signVerifiers.SignViewModel
+import com.diches.dichboxmobile.mv.userDataManager.UserStateViewModel
 import com.diches.dichboxmobile.view.signForms.SignArea
 import com.diches.dichboxmobile.view.userData.Profile
+import com.diches.dichboxmobile.view.userData.VisitedUser
 
 class User : Fragment() {
-    private val tags = listOf("SIGN_AREA_TAG", "PROFILE_TAG")
+    private val tags = listOf("SIGN_AREA_TAG", "PROFILE_TAG", "VISITED_TAG")
     private var currentPosition: Int = 0
+    private lateinit var viewModel: UserStateViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -23,6 +25,7 @@ class User : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel = ViewModelProvider(requireActivity()).get(UserStateViewModel::class.java)
         val currentFragment = getCurrentFragment(savedInstanceState)
         val curTag = tags[currentPosition]
         setFragmentVisible(currentFragment, curTag)
@@ -35,15 +38,20 @@ class User : Fragment() {
     }
 
     private fun handleSignedStateObserver() {
-        val viewModel = ViewModelProvider(requireActivity()).get(SignViewModel::class.java)
-
-        viewModel.isSigned.observe(viewLifecycleOwner) { signed ->
-            currentPosition = if (signed) 1 else 0
+        viewModel.namesState.observe(viewLifecycleOwner) { (signedName, visitedName) ->
+            val isSigned = signedName != null
+            currentPosition = when {
+                signedName != visitedName -> 2
+                isSigned -> 1
+                else -> 0
+            }
             val tag = tags[currentPosition]
-            val fragment = if (signed)
-                childFragmentManager.findFragmentByTag(tags[1]) ?: Profile()
-            else
-                childFragmentManager.findFragmentByTag(tags[0]) ?: SignArea()
+            val tempFragment = childFragmentManager.findFragmentByTag(tag)
+            val fragment = when {
+                signedName != visitedName -> tempFragment ?: VisitedUser()
+                isSigned -> tempFragment ?: Profile()
+                else -> tempFragment ?: SignArea()
+            }
             setFragmentVisible(fragment, tag)
         }
     }
@@ -60,7 +68,7 @@ class User : Fragment() {
         val tag = tags[currentPosition]
         childFragmentManager.findFragmentByTag(tag) as Fragment
     } else {
-        val isSigned = context?.getFileStreamPath("signed.txt")!!.exists()
+        val isSigned = viewModel.namesState.value!!.first != null
         currentPosition = if (isSigned) 1 else 0
         if (isSigned) Profile() else SignArea()
     }

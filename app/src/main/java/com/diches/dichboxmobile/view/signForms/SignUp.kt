@@ -11,9 +11,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
+import com.diches.dichboxmobile.mv.userDataManager.UserStateViewModel
 import com.diches.dichboxmobile.mv.verifiers.signVerifiers.SignUpVerifier
-import com.diches.dichboxmobile.view.userData.Profile
-import com.diches.dichboxmobile.mv.verifiers.signVerifiers.SignViewModel
 
 class SignUp : Fragment(), FragmentCleaner {
     private lateinit var verifier: SignUpVerifier
@@ -47,13 +46,11 @@ class SignUp : Fragment(), FragmentCleaner {
                 .checkPassword(password, passwordWarning)
 
         verifier.setSaveHandler { str ->
+            val viewModel = ViewModelProvider(requireActivity()).get(UserStateViewModel::class.java)
+            viewModel.setState(Pair(str, str))
             context?.openFileOutput("signed.txt", Context.MODE_PRIVATE).use {
                 it?.write(str.toByteArray())
             }
-
-            ViewModelProvider(requireActivity())
-                    .get(SignViewModel::class.java)
-                    .setIsSigned(true)
         }
     }
 

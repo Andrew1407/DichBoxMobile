@@ -8,11 +8,13 @@ import android.widget.ListView
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.api.users.UserAPI
 import com.diches.dichboxmobile.datatypes.UserContainer
+import com.diches.dichboxmobile.mv.userDataManager.UserDataViewModel
 import kotlinx.coroutines.*
 
 class NotificationsHandler(
         private val username: String,
-        private val listView: ListView
+        private val listView: ListView,
+        private val userViewModel: UserDataViewModel
 ) {
     private val api = UserAPI()
     private lateinit var cleanBtn: Button
@@ -60,7 +62,14 @@ class NotificationsHandler(
         if (!removed) return
         ntsItems.removeIf { ids.indexOf(it.id) != -1 }
         (listView.adapter as NotificationsAdapter).notifyDataSetChanged()
+        refreshNotificationsAmount(ids.size)
         onEmptyListCheck()
+    }
+
+    private fun refreshNotificationsAmount(deleted: Int) {
+        val userState = userViewModel.liveData.value!!
+        val ntsNewAmount = userState.notifications!! - deleted
+        userViewModel.setUserData(userState.copy(notifications = ntsNewAmount))
     }
 
     private fun onEmptyListCheck() {

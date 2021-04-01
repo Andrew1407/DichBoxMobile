@@ -7,30 +7,26 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
-import com.diches.dichboxmobile.api.users.UserAPI
-import com.diches.dichboxmobile.datatypes.AppColors
-import com.diches.dichboxmobile.datatypes.UserContainer
-import com.diches.dichboxmobile.mv.verifiers.signVerifiers.SignViewModel
+import com.diches.dichboxmobile.mv.userDataManager.UserStateViewModel
 import com.diches.dichboxmobile.view.*
-import com.diches.dichboxmobile.view.signForms.SignArea
-import com.diches.dichboxmobile.view.userData.Profile
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), Search.Redirector {
     private lateinit var toolbar: Toolbar
     private lateinit var bottomNav: BottomNavigationView
     private lateinit var navFragments: List<Fragment>
     private lateinit var activeFragment: Fragment
     private lateinit var tagList: List<String>
     private lateinit var homePageIcon: ImageView
+    private lateinit var viewModel: UserStateViewModel
     private var currentNavPosition: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        viewModel = ViewModelProvider(this).get(UserStateViewModel::class.java)
+
+        if (savedInstanceState == null) initUserPresence()
         setContentView(R.layout.activity_main)
         setUpTitle()
         handleNavBar(savedInstanceState)
@@ -112,25 +108,47 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun goToHomePage() {
-        homePageIcon = findViewById<ImageView>(R.id.homePageIcon)
+        homePageIcon = findViewById(R.id.homePageIcon)
         homePageIcon.setOnClickListener {
-            currentNavPosition = 0
-            supportFragmentManager.beginTransaction()
-                    .hide(activeFragment)
-                    .show(navFragments[currentNavPosition])
-                    .commit()
-            bottomNav.selectedItemId = R.id.userOption
+            val oldNamesState = viewModel.namesState.value!!
+            viewModel.setState(oldNamesState.copy(second = oldNamesState.first))
+            redirectToUserPage()
         }
     }
 
     private fun setUserBtnColor() {
         val isSigned = applicationContext.getFileStreamPath("signed.txt")!!.exists()
         if (isSigned) homePageIcon.setBackgroundResource(R.drawable.central_item_signed)
-        val viewModel = ViewModelProvider(this).get(SignViewModel::class.java)
-        viewModel.isSigned.observe(this) {
-            val background = if (it) R.drawable.central_item_signed
+        viewModel.namesState.observe(this) { (signedName, _) ->
+            val background = if (signedName != null) R.drawable.central_item_signed
                 else R.drawable.central_item_unsigned
             homePageIcon.setBackgroundResource(background)
+        }
+    }
+
+    override fun handleRedirection() {
+        redirectToUserPage()
+    }
+
+    private fun redirectToUserPage() {
+        if (currentNavPosition == 0) return
+        currentNavPosition = 0
+        supportFragmentManager.beginTransaction()
+                .hide(activeFragment)
+                .show(navFragments[currentNavPosition])
+                .commit()
+        bottomNav.selectedItemId = R.id.userOption
+    }
+
+    private fun initUserPresence() {
+        val isSigned = getFileStreamPath("signed.txt")!!.exists()
+        if (!isSigned) {
+            viewModel.setState(Pair(null, null))
+            return
+        }
+        openFileInput("signed.txt").use { stream ->
+            val name = stream?.bufferedReader().use { it?.readText() }
+            viewModel.setState(Pair(name, name))
         }
     }
 

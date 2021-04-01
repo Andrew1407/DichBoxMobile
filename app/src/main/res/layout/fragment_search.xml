@@ -1,24 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout2"
-    android:layout_width="match_parent"
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
-    tools:context=".Search">
+    android:background="@color/black">
 
-    <!-- TODO: Update blank fragment layout -->
+    <EditText
+        android:id="@+id/userSearch"
+        style="@style/inputStyle"
+        android:saveEnabled="true"
+        android:layout_marginTop="15dp"
+        android:importantForAutofill="no"
+        android:layout_marginBottom="10dp"
+        android:hint="users search"
+        android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
+        android:inputType="textPersonName" />
+
+    <ListView
+        android:id="@+id/usersList"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/userSearch"
+        android:paddingTop="25dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/subscriptions_border" />
+
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Search"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/userSearchPrompt"
+        style="@style/emptyList"
+        android:background="@drawable/subscriptions_border"
+        android:layout_below="@id/userSearch"
+        android:text="Search here for users"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

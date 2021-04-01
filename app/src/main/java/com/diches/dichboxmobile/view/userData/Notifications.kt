@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.mv.userDataManager.UserDataViewModel
-import com.diches.dichboxmobile.mv.userDataManager.notifications.NotificationsAdapter
 import com.diches.dichboxmobile.mv.userDataManager.notifications.NotificationsHandler
 
 class Notifications : Fragment() {
@@ -31,7 +30,7 @@ class Notifications : Fragment() {
         val listView = view.findViewById<ListView>(R.id.notificationsList)
         listView.emptyView = view.findViewById<TextView>(R.id.ntsEmpty)
 
-        ntsHandler = NotificationsHandler(username, listView)
+        ntsHandler = NotificationsHandler(username, listView, userViewModel)
                 .handleCleanAction(cleanBtn)
                 .createListAdapter(requireContext(), savedInstanceState)
     }

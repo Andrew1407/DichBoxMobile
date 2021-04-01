@@ -3,13 +3,15 @@ package com.diches.dichboxmobile.mv.settings
 import android.content.Context
 import com.diches.dichboxmobile.api.users.UserAPI
 import com.diches.dichboxmobile.datatypes.UserContainer
-import com.diches.dichboxmobile.mv.verifiers.signVerifiers.SignViewModel
+import com.diches.dichboxmobile.mv.userDataManager.UserDataViewModel
+import com.diches.dichboxmobile.mv.userDataManager.UserStateViewModel
 import kotlinx.coroutines.*
 
 class RemoveAccountOption(
         private val context: Context,
-        signViewModel: SignViewModel
-) : SignOutOption(context, signViewModel) {
+        userStateViewModel: UserStateViewModel,
+        userViewModel: UserDataViewModel
+) : SignOutOption(context, userStateViewModel, userViewModel) {
     private val api = UserAPI()
 
     override fun onOkClick() {

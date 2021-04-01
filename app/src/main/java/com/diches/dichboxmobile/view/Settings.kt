@@ -11,8 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.mv.settings.RemoveAccountOption
 import com.diches.dichboxmobile.mv.settings.SignOutOption
-import com.diches.dichboxmobile.mv.verifiers.signVerifiers.SignViewModel
-import org.w3c.dom.Text
+import com.diches.dichboxmobile.mv.userDataManager.UserDataViewModel
+import com.diches.dichboxmobile.mv.userDataManager.UserStateViewModel
 
 class Settings : Fragment() {
     override fun onCreateView(
@@ -23,13 +23,14 @@ class Settings : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewModel = ViewModelProvider(requireActivity()).get(SignViewModel::class.java)
+        val userStateViewModel = ViewModelProvider(requireActivity()).get(UserStateViewModel::class.java)
+        val userViewModel = ViewModelProvider(requireActivity()).get(UserDataViewModel::class.java)
 
         val signOutBtn = view.findViewById<TextView>(R.id.signOut)
         val rmAccountBtn = view.findViewById<TextView>(R.id.removeUserAccount)
 
-        val signOutOption = SignOutOption(requireContext(), viewModel)
-        val rmAccOption = RemoveAccountOption(requireContext(), viewModel)
+        val signOutOption = SignOutOption(requireContext(), userStateViewModel, userViewModel)
+        val rmAccOption = RemoveAccountOption(requireContext(), userStateViewModel, userViewModel)
         signOutOption.handleOptionAction(signOutBtn, "Sign out")
         rmAccOption.handleOptionAction(rmAccountBtn, "Remove this account")
 
@@ -39,9 +40,9 @@ class Settings : Fragment() {
         settingsArea.visibility = if (isSigned) View.VISIBLE else View.GONE
         notSignedText.visibility = if (isSigned) View.GONE else View.VISIBLE
 
-        viewModel.isSigned.observe(viewLifecycleOwner) { signed ->
-            settingsArea.visibility = if (signed) View.VISIBLE else View.GONE
-            notSignedText.visibility = if (signed) View.GONE else View.VISIBLE
+        userStateViewModel.namesState.observe(viewLifecycleOwner) { (signedName, _) ->
+            settingsArea.visibility = if (signedName != null) View.VISIBLE else View.GONE
+            notSignedText.visibility = if (signedName != null) View.GONE else View.VISIBLE
         }
 
     }
