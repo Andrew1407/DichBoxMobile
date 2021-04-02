@@ -25,12 +25,12 @@
         android:layout_below="@id/userSearch"
         android:paddingTop="25dp"
         android:layout_height="match_parent"
-        android:background="@drawable/subscriptions_border" />
+        android:background="@drawable/top_border_solid" />
 
     <TextView
         android:id="@+id/userSearchPrompt"
         style="@style/emptyList"
-        android:background="@drawable/subscriptions_border"
+        android:background="@drawable/top_border_solid"
         android:layout_below="@id/userSearch"
         android:text="Search here for users"/>
 

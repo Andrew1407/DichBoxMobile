@@ -13,6 +13,7 @@
         android:gravity="center_horizontal"
         android:layout_alignParentTop="true"
         android:text="Settings"
+        android:textStyle="bold"
         android:layout_marginBottom="15dp"
         android:layout_marginTop="15dp"
         android:textColor="@color/light_blue"
@@ -24,7 +25,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/settingsText"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/subscriptions_border"
+        android:background="@drawable/top_border_solid"
         android:paddingTop="25dp"
         android:orientation="vertical">
 
@@ -47,7 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/settingsText"
-        android:background="@drawable/subscriptions_border"
+        android:background="@drawable/top_border_solid"
         android:paddingTop="25dp"
         android:gravity="center"
         android:layout_centerHorizontal="true"

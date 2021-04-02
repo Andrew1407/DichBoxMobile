@@ -5,9 +5,11 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:textSize="40sp"
+        android:textSize="28sp"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Boxes"/>
+        android:textColor="@color/light_blue"
+        android:textStyle="bold"
+        android:text="No user's boxes are opened"/>
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.diches.dichboxmobile.api.users
+package com.diches.dichboxmobile.api.user
 
 import okhttp3.RequestBody
 import okhttp3.ResponseBody

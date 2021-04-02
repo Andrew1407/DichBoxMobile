@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ListView
 import com.diches.dichboxmobile.R
-import com.diches.dichboxmobile.api.users.UserAPI
+import com.diches.dichboxmobile.api.user.UserAPI
 import com.diches.dichboxmobile.datatypes.UserContainer
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
 import kotlinx.coroutines.*

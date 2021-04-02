@@ -47,10 +47,10 @@ class User : Fragment() {
             }
             val tag = tags[currentPosition]
             val tempFragment = childFragmentManager.findFragmentByTag(tag)
-            val fragment = when {
-                signedName != visitedName -> tempFragment ?: VisitedUser()
-                isSigned -> tempFragment ?: Profile()
-                else -> tempFragment ?: SignArea()
+            val fragment = tempFragment ?: when {
+                signedName != visitedName -> VisitedUser()
+                isSigned -> Profile()
+                else -> SignArea()
             }
             setFragmentVisible(fragment, tag)
         }

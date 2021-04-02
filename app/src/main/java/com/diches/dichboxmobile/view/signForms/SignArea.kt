@@ -8,7 +8,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.diches.dichboxmobile.R
-import com.diches.dichboxmobile.datatypes.AppColors
+import com.diches.dichboxmobile.mv.verifiers.signVerifiers.ViewPagerAdapter
+import com.diches.dichboxmobile.tools.AppColors
 
 class SignArea : Fragment() {
     private lateinit var viewPager: ViewPager2

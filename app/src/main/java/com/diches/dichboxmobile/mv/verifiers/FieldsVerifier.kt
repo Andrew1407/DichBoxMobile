@@ -6,7 +6,7 @@ import android.widget.TextView
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.widget.addTextChangedListener
 import com.diches.dichboxmobile.R
-import com.diches.dichboxmobile.datatypes.AppColors
+import com.diches.dichboxmobile.tools.AppColors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

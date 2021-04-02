@@ -1,4 +1,4 @@
-package com.diches.dichboxmobile.view
+package com.diches.dichboxmobile.view.boxes.boxesList
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,12 +8,11 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
-import com.diches.dichboxmobile.view.boxes.BoxesInfo
-import com.diches.dichboxmobile.view.boxes.BoxesUnauthorised
 
-class Boxes : Fragment() {
+class BoxesList : Fragment() {
     private val tags = listOf("UNAUTHORISED_TAG", "BOXES_TAG")
     private var currentPosition: Int = 0
+    private lateinit var stateViewModel: UserStateViewModel
 
      override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,6 +22,7 @@ class Boxes : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        stateViewModel = ViewModelProvider(requireActivity()).get(UserStateViewModel::class.java)
         val currentFragment = getCurrentFragment(savedInstanceState)
         val curTag = tags[currentPosition]
         setFragmentVisible(currentFragment, curTag)
@@ -35,16 +35,12 @@ class Boxes : Fragment() {
     }
 
     private fun handleSignedStateObserver() {
-        val viewModel = ViewModelProvider(requireActivity()).get(UserStateViewModel::class.java)
-
-        viewModel.namesState.observe(viewLifecycleOwner) { (signedName, _) ->
-            val signed = signedName != null
-            currentPosition = if (signed) 1 else 0
+        stateViewModel.namesState.observe(viewLifecycleOwner) { (_, visitedName) ->
+            val boxesShown = visitedName != null
+            currentPosition = if (boxesShown) 1 else 0
             val tag = tags[currentPosition]
-            val fragment = if (signed)
-                childFragmentManager.findFragmentByTag(tags[1]) ?: BoxesInfo()
-            else
-                childFragmentManager.findFragmentByTag(tags[0]) ?: BoxesUnauthorised()
+            val initialFragment = childFragmentManager.findFragmentByTag(tag)
+            val fragment = initialFragment ?: if (boxesShown) BoxesInfo() else  BoxesNone()
             setFragmentVisible(fragment, tag)
         }
     }
@@ -61,8 +57,8 @@ class Boxes : Fragment() {
         val tag = tags[currentPosition]
         childFragmentManager.findFragmentByTag(tag) as Fragment
     } else {
-        val isSigned = context?.getFileStreamPath("signed.txt")!!.exists()
-        currentPosition = if (isSigned) 1 else 0
-        if (isSigned) BoxesInfo() else BoxesUnauthorised()
+        val boxesShown = stateViewModel.namesState.value!!.second != null
+        currentPosition = if (boxesShown) 1 else 0
+        if (boxesShown) BoxesInfo() else BoxesNone()
     }
 }

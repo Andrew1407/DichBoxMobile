@@ -9,7 +9,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.diches.dichboxmobile.R
-import com.diches.dichboxmobile.datatypes.AppColors
+import com.diches.dichboxmobile.tools.AppColors
 import com.diches.dichboxmobile.datatypes.UserContainer
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
 import com.diches.dichboxmobile.tools.fromBase64ToBitmap

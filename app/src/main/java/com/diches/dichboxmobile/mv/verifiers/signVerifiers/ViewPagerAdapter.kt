@@ -1,4 +1,4 @@
-package com.diches.dichboxmobile.view.signForms
+package com.diches.dichboxmobile.mv.verifiers.signVerifiers
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity

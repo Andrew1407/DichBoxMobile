@@ -1,5 +1,6 @@
-package com.diches.dichboxmobile.api.users
+package com.diches.dichboxmobile.api.user
 
+import com.diches.dichboxmobile.api.ApiParser
 import com.diches.dichboxmobile.datatypes.UserContainer
 import com.google.gson.Gson
 import com.google.gson.JsonParser
@@ -10,16 +11,8 @@ import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.Retrofit
 
-class UserAPI {
-    private val service: UserService
-
-    init {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.6:7041")
-            .build()
-
-        service = retrofit.create(UserService::class.java)
-    }
+class UserAPI : ApiParser<UserContainer>() {
+    private val service: UserService = retrofit.create(UserService::class.java)
 
     suspend fun search(searchContainer: UserContainer.SearchedChunk): Pair<Int, UserContainer> {
         val reqBody = makeRequest(searchContainer)
@@ -117,20 +110,11 @@ class UserAPI {
         )
     }
 
-    private fun getResponseData(
-            response: Response<ResponseBody>,
-            respClass: Class<*>
-    ): Pair<Int, UserContainer> {
-        val resStr = if(response.isSuccessful) response.body() else response.errorBody()
-        val resParsed = JsonParser.parseString(resStr?.string())
-        val resStrJSON = Gson().toJson(resParsed)
-        val finalRes = UserContainer.parseJSON(resStrJSON, respClass)
-        return Pair(response.code(), finalRes)
+    override fun parseJSON(jsonStr: String, container: Class<*>): UserContainer {
+        return UserContainer.parseJSON(jsonStr, container)
     }
 
-    private fun makeRequest(entries: UserContainer): RequestBody {
-        val entriesStr = UserContainer.stringifyJSON(entries)
-        val mediaType = "application/json".toMediaTypeOrNull()
-        return entriesStr.toRequestBody(mediaType)
+    override fun stringifyJSON(entries: UserContainer): String {
+        return UserContainer.stringifyJSON(entries)
     }
 }

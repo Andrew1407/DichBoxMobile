@@ -1,6 +1,6 @@
 package com.diches.dichboxmobile.mv.verifiers.signVerifiers
 
-import com.diches.dichboxmobile.api.users.UserAPI
+import com.diches.dichboxmobile.api.user.UserAPI
 import com.diches.dichboxmobile.mv.verifiers.FieldsTemplates
 import com.diches.dichboxmobile.datatypes.UserContainer
 import com.diches.dichboxmobile.mv.verifiers.FieldsVerifier

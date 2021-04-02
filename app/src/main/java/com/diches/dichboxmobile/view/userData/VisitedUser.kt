@@ -42,9 +42,9 @@ class VisitedUser : Fragment() {
 
         handleInfoFields(view)
 
-        userStateViewModel.namesState.observe(viewLifecycleOwner) {
+        userStateViewModel.namesState.observe(viewLifecycleOwner) { (_, visitedName) ->
             val name = username.text.toString()
-            if (name == it.second) return@observe
+            if (visitedName == null || name == visitedName) return@observe
             dataFetcher.fillUserViewModel(userDataViewModel, userStateViewModel)
             userProfiler.refreshData(userDataViewModel.liveData.value!!)
             handleInfoFields(view)

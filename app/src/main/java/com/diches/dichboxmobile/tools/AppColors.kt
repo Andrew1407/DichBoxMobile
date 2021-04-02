@@ -1,4 +1,4 @@
-package com.diches.dichboxmobile.datatypes
+package com.diches.dichboxmobile.tools
 
 enum class AppColors(val raw: Int) {
     BLACK(-0x1000000),

@@ -4,7 +4,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.core.graphics.drawable.DrawableCompat
-import com.diches.dichboxmobile.datatypes.AppColors
+import com.diches.dichboxmobile.tools.AppColors
 import com.diches.dichboxmobile.mv.verifiers.FieldsTemplates
 import com.diches.dichboxmobile.datatypes.UserContainer
 import com.diches.dichboxmobile.mv.verifiers.FieldsVerifier

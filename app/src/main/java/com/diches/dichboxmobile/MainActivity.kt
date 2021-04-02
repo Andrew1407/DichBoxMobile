@@ -7,8 +7,11 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
+import com.diches.dichboxmobile.mv.userDataManager.UserDataFetcher
+import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 import com.diches.dichboxmobile.view.*
+import com.diches.dichboxmobile.view.boxes.boxesList.BoxesList
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity(), Search.Redirector {
@@ -55,7 +58,7 @@ class MainActivity : AppCompatActivity(), Search.Redirector {
 
         val res = when(tag) {
             "USER_TAG" -> if (isSaved) getExisted() else User()
-            "BOXES_TAG" -> if (isSaved) getExisted() else Boxes()
+            "BOXES_TAG" -> if (isSaved) getExisted() else BoxesList()
             "SEARCH_TAG" -> if (isSaved) getExisted() else Search()
             else -> if (isSaved) getExisted() else Settings()
         }
@@ -150,6 +153,8 @@ class MainActivity : AppCompatActivity(), Search.Redirector {
         openFileInput("signed.txt").use { stream ->
             val name = stream?.bufferedReader().use { it?.readText() }
             viewModel.setState(Pair(name, name))
+            val userDataViewModel = ViewModelProvider(this).get(UserDataViewModel::class.java)
+            UserDataFetcher().fillUserViewModel(userDataViewModel, viewModel)
         }
     }
 

@@ -13,8 +13,8 @@ import androidx.annotation.RequiresApi
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.widget.addTextChangedListener
 import com.diches.dichboxmobile.R
-import com.diches.dichboxmobile.api.users.UserAPI
-import com.diches.dichboxmobile.datatypes.AppColors
+import com.diches.dichboxmobile.api.user.UserAPI
+import com.diches.dichboxmobile.tools.AppColors
 import com.diches.dichboxmobile.datatypes.UserContainer
 import com.diches.dichboxmobile.mv.inputPickers.ImageCropper
 import com.diches.dichboxmobile.mv.verifiers.FieldsTemplates

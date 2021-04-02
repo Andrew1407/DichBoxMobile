@@ -47,6 +47,7 @@
         <item name="android:textSize">23sp</item>
         <item name="android:textColorHint">@color/light0_blue</item>
         <item name="android:textColor">@color/light_blue</item>
+        <item name="backgroundTint">@color/light_blue</item>
     </style>
 
     <style name="signArea">
