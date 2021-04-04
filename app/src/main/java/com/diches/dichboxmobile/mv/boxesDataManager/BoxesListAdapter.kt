@@ -23,6 +23,7 @@ class BoxesListAdapter(
     private val resource: Int,
     var items: List<BoxesContainer.BoxDataListItem>,
     var itemsShown: List<BoxesContainer.BoxDataListItem>,
+    private val openBoxClb: (name: String) -> Unit
 ) : ArrayAdapter<BoxesContainer.BoxDataListItem>(context, resource, items), Filterable {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -52,7 +53,12 @@ class BoxesListAdapter(
 
         val boxName = view.findViewById<TextView>(R.id.boxesListItem)
         boxName.text = spannable
+        redirectToBox(view, box.name)
         return view
+    }
+
+    private fun redirectToBox(view: View, name: String) {
+        view.setOnClickListener { openBoxClb(name) }
     }
 
     override fun getCount(): Int = itemsShown.size

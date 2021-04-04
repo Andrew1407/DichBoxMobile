@@ -11,10 +11,18 @@ import com.diches.dichboxmobile.mv.userDataManager.UserDataFetcher
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 import com.diches.dichboxmobile.view.*
-import com.diches.dichboxmobile.view.boxes.boxesList.BoxesList
+import com.diches.dichboxmobile.view.boxesList.AddBox
+import com.diches.dichboxmobile.view.boxesList.BoxesInfo
+import com.diches.dichboxmobile.view.boxesList.BoxesList
+import com.diches.dichboxmobile.view.boxesList.box.BoxInfo
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class MainActivity : AppCompatActivity(), Search.Redirector {
+class MainActivity :
+        AppCompatActivity(),
+        Search.Redirector,
+        BoxesInfo.BoxesInfoRedirect,
+        AddBox.AddBoxRedirect,
+        BoxInfo.BoxInfoRedirect {
     private lateinit var toolbar: Toolbar
     private lateinit var bottomNav: BottomNavigationView
     private lateinit var navFragments: List<Fragment>
@@ -132,6 +140,18 @@ class MainActivity : AppCompatActivity(), Search.Redirector {
 
     override fun handleRedirection() {
         redirectToUserPage()
+    }
+
+    override fun changeFragmentToBoxAdd() {
+        (navFragments[1] as BoxesList).setCurrentPosition(2)
+    }
+
+    override fun changeFragmentToBoxInfo() {
+        (navFragments[1] as BoxesList).setCurrentPosition(1)
+    }
+
+    override fun changeFragmentToBoxesList() {
+        (navFragments[1] as BoxesList).redirectToBoxesList()
     }
 
     private fun redirectToUserPage() {

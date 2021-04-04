@@ -8,15 +8,18 @@
     <include layout="@layout/boxes_list_raw" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addBoxIcon"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:background="@color/light_blue"
         android:backgroundTint="@color/light_blue"
-        android:layout_marginRight="20dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
         android:src="@drawable/box_add"
-        app:maxImageSize="40dp"/>
+        app:maxImageSize="40dp"
+        android:contentDescription="add box" />
 
 </RelativeLayout>

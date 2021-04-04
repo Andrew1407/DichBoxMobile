@@ -9,6 +9,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
+import com.diches.dichboxmobile.mv.boxesDataManager.BoxDataViewModel
+import com.diches.dichboxmobile.mv.boxesDataManager.CurrentBoxViewModel
 import com.diches.dichboxmobile.mv.settings.RemoveAccountOption
 import com.diches.dichboxmobile.mv.settings.SignOutOption
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
@@ -25,12 +27,17 @@ class Settings : Fragment() {
 
         val userStateViewModel = ViewModelProvider(requireActivity()).get(UserStateViewModel::class.java)
         val userViewModel = ViewModelProvider(requireActivity()).get(UserDataViewModel::class.java)
+        val boxStateViewModel = ViewModelProvider(requireActivity()).get(CurrentBoxViewModel::class.java)
+        val boxViewModel = ViewModelProvider(requireActivity()).get(BoxDataViewModel::class.java)
+
+        val userState = Pair(userStateViewModel, userViewModel)
+        val boxState = Pair(boxStateViewModel, boxViewModel)
 
         val signOutBtn = view.findViewById<TextView>(R.id.signOut)
         val rmAccountBtn = view.findViewById<TextView>(R.id.removeUserAccount)
 
-        val signOutOption = SignOutOption(requireContext(), userStateViewModel, userViewModel)
-        val rmAccOption = RemoveAccountOption(requireContext(), userStateViewModel, userViewModel)
+        val signOutOption = SignOutOption(requireContext(), userState, boxState)
+        val rmAccOption = RemoveAccountOption(requireContext(), userState, boxState)
         signOutOption.handleOptionAction(signOutBtn, "Sign out")
         rmAccOption.handleOptionAction(rmAccountBtn, "Remove this account")
 

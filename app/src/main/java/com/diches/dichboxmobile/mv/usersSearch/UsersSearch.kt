@@ -11,6 +11,7 @@ import androidx.core.widget.addTextChangedListener
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.api.user.UserAPI
 import com.diches.dichboxmobile.datatypes.UserContainer
+import com.diches.dichboxmobile.mv.boxesDataManager.CurrentBoxViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 import com.diches.dichboxmobile.view.Search
 import kotlinx.coroutines.CoroutineScope
@@ -34,7 +35,11 @@ class UsersSearch(
         return searched
     }
 
-    fun createListAdapter(view: View, bundle: Bundle?, redirector: Search.Redirector): UsersSearch {
+    fun createListAdapter(
+            view: View,
+            bundle: Bundle?,
+            boxViewModel: CurrentBoxViewModel,
+            redirector: Search.Redirector): UsersSearch {
         val initialList = if (bundle == null) emptyList() else {
             val usersStr = bundle.getString("users")!!
             val usersParsed = UserContainer.parseJSON(usersStr, UserContainer.FoundUsers::class.java)
@@ -42,12 +47,13 @@ class UsersSearch(
         }
         listView.adapter = UsersSearchAdapter(view.context, R.layout.found_user, initialList) {
             visitUserPage(it, redirector)
-            redirectionCleanup(view)
+            redirectionCleanup(view, boxViewModel)
         }
         return this
     }
 
-    private fun redirectionCleanup(view: View) {
+    private fun redirectionCleanup(view: View, boxState: CurrentBoxViewModel) {
+        if (boxState.boxName.value != null) boxState.setCurrentBox(null)
         searchInput.text.clear()
         ContextCompat
                 .getSystemService(view.context, InputMethodManager::class.java)

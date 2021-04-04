@@ -1,20 +1,18 @@
 package com.diches.dichboxmobile.mv.boxesDataManager
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.LifecycleOwner
+import androidx.fragment.app.Fragment
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.api.boxes.BoxesAPI
 import com.diches.dichboxmobile.datatypes.BoxesContainer
-import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
-import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
+import com.diches.dichboxmobile.view.boxesList.box.BoxEntries
 import kotlinx.coroutines.runBlocking
 
 class BoxesListPresenter(
-    private val context: Context,
+    private val fragment: Fragment,
     private val listView: ListView,
     private val typesSpinner: Spinner
 ) {
@@ -44,10 +42,23 @@ class BoxesListPresenter(
         return boxesList
     }
 
-    fun createListAdapter(bundle: Bundle?, names: Pair<String?, String>): BoxesListPresenter {
+    fun createListAdapter(
+            bundle: Bundle?,
+            names: Pair<String?, String>,
+            boxState: CurrentBoxViewModel
+    ): BoxesListPresenter {
         boxes = if (bundle == null) getBoxesByRequest(names) else getSavedList("boxesList", bundle)
         boxesShown = if (bundle == null) boxes.toList() else getSavedList("boxesListShown", bundle)
-        listView.adapter = BoxesListAdapter(context, R.layout.boxes_list_item, boxes.toList(), boxesShown.toList())
+        listView.adapter = BoxesListAdapter(
+                fragment.requireContext(), R.layout.boxes_list_item,
+                boxes.toList(), boxesShown.toList()
+        ) {
+            boxState.setCurrentBox(it)
+            fragment.parentFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.boxesContainer, BoxEntries(), "BOXES_ENTRIES_TAG")
+                    .commit()
+        }
         return this
     }
 
@@ -68,7 +79,7 @@ class BoxesListPresenter(
 
     fun createSpinnerAdapter(bundle: Bundle?, ownPage: Boolean): BoxesListPresenter {
         val boxesTypes = getBoxesType(ownPage)
-        val adapter = TypesSpinnerAdapter(context, boxesTypes)
+        val adapter = TypesSpinnerAdapter(fragment.requireContext(), boxesTypes)
         typesSpinner.adapter = adapter
         typesSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit
