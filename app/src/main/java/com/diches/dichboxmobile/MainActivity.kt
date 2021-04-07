@@ -7,14 +7,15 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
+import com.diches.dichboxmobile.mv.boxesDataManager.CurrentBoxViewModel
 import com.diches.dichboxmobile.mv.userDataManager.UserDataFetcher
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 import com.diches.dichboxmobile.view.*
-import com.diches.dichboxmobile.view.boxesList.AddBox
+import com.diches.dichboxmobile.view.boxData.AddBox
 import com.diches.dichboxmobile.view.boxesList.BoxesInfo
 import com.diches.dichboxmobile.view.boxesList.BoxesList
-import com.diches.dichboxmobile.view.boxesList.box.BoxInfo
+import com.diches.dichboxmobile.view.boxData.BoxInfo
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity :
@@ -120,10 +121,13 @@ class MainActivity :
 
     private fun goToHomePage() {
         homePageIcon = findViewById(R.id.homePageIcon)
+        val boxViewModel = ViewModelProvider(this).get(CurrentBoxViewModel::class.java)
         homePageIcon.setOnClickListener {
             val oldNamesState = viewModel.namesState.value!!
             if (oldNamesState.first != oldNamesState.second)
                 viewModel.setState(oldNamesState.copy(second = oldNamesState.first))
+            val boxState = boxViewModel.boxName.value
+            if (boxState != null) boxViewModel.setCurrentBox(null)
             redirectToUserPage()
         }
     }

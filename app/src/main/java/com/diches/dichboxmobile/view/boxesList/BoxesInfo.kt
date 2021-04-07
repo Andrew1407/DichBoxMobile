@@ -11,9 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.mv.boxesDataManager.BoxesListPresenter
+import com.diches.dichboxmobile.mv.boxesDataManager.BoxesListViewModel
 import com.diches.dichboxmobile.mv.boxesDataManager.CurrentBoxViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
+import com.diches.dichboxmobile.view.boxData.AddBox
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class BoxesInfo : Fragment() {
@@ -34,6 +36,7 @@ class BoxesInfo : Fragment() {
 
         val userViewModel = ViewModelProvider(requireActivity()).get(UserDataViewModel::class.java)
         val stateViewModel = ViewModelProvider(requireActivity()).get(UserStateViewModel::class.java)
+        val boxesListViewModel = ViewModelProvider(requireActivity()).get(BoxesListViewModel::class.java)
         val boxViewModel = ViewModelProvider(requireActivity()).get(CurrentBoxViewModel::class.java)
         val namesState = stateViewModel.namesState.value!!
 
@@ -53,7 +56,7 @@ class BoxesInfo : Fragment() {
         nameArgs = Pair(namesState.first, namesState.second!!)
         listView.emptyView = view.findViewById(R.id.boxesListEmpty)
 
-        listHandler = BoxesListPresenter(this, listView, typesSpinner)
+        listHandler = BoxesListPresenter(this, listView, typesSpinner, boxesListViewModel)
             .createListAdapter(savedInstanceState, nameArgs, boxViewModel)
             .handleSearch(boxesSearch)
             .createSpinnerAdapter(savedInstanceState, ownPage)

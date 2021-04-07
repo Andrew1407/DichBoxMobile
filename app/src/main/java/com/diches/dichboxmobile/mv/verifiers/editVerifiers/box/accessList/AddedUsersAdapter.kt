@@ -1,4 +1,4 @@
-package com.diches.dichboxmobile.mv.usersSearch
+package com.diches.dichboxmobile.mv.verifiers.editVerifiers.box.accessList
 
 import android.content.Context
 import android.graphics.Color
@@ -12,11 +12,10 @@ import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.datatypes.UserContainer
 import com.diches.dichboxmobile.tools.fromBase64ToBitmap
 
-class UsersSearchAdapter(
+class AddedUsersAdapter(
         context: Context,
         private val resource: Int,
-        var items: List<UserContainer.FoundUser>,
-        val visitUserClb: (name: String) -> Unit
+        var items: MutableList<UserContainer.FoundUser>
 ) : ArrayAdapter<UserContainer.FoundUser>(context, resource, items) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -24,33 +23,32 @@ class UsersSearchAdapter(
                 .from(context)
                 .inflate(resource, parent, false)
 
+        val rmIcon = row.findViewById<ImageView>(R.id.removeSubscription)
         val logo = row.findViewById<ImageView>(R.id.subscription_logo)
         val name = row.findViewById<TextView>(R.id.subscription_name)
-        val rmIcon = row.findViewById<ImageView>(R.id.removeSubscription)
-
-        rmIcon.visibility = View.GONE
-
         val user = items[position]
-        onPageVisitHandler(row, user.name)
-        setIcon(logo, user.logo)
+        handleRemove(rmIcon, user.name)
+        fillIcon(logo, user.logo)
         name.text = user.name
         name.setTextColor(Color.parseColor(user.name_color))
 
         return row
     }
 
-    private fun onPageVisitHandler(view: View, name: String) {
-        view.setOnClickListener {
-            visitUserClb(name)
-        }
-    }
-
-    private fun setIcon(logoView: ImageView, logoSrc: String?) {
+    private fun fillIcon(logoView: ImageView, logoSrc: String?) {
         if (logoSrc != null) {
             val decoded = fromBase64ToBitmap(logoSrc)
             logoView.setImageBitmap(decoded)
         } else {
             logoView.setImageResource(R.drawable.default_user_logo)
+        }
+    }
+
+    private fun handleRemove(icon: ImageView, name: String) {
+        icon.setImageResource(R.drawable.trash_bin_round)
+        icon.setOnClickListener {
+            items.removeIf { it.name == name }
+            notifyDataSetChanged()
         }
     }
 

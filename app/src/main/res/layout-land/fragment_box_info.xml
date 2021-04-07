@@ -4,8 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
+    <GridLayout
         android:orientation="vertical"
+        android:rowCount="3"
+        android:columnCount="3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/black"
@@ -13,27 +15,45 @@
 
         <include
             layout="@layout/user_logo"
-            android:id="@+id/boxLogo"/>
-
-        <TextView
-            android:id="@+id/boxName"
-            android:layout_width="match_parent"
+            android:id="@+id/boxLogo"
+            android:layout_column="0"
+            android:layout_row="0"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/times_new_roman400"
-            android:textSize="55sp"
-            android:gravity="center"
-            android:layout_marginBottom="20dp"/>
-
-        <TextView
-            android:id="@+id/boxDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/times_new_roman400"
-            android:textSize="27sp"
-            android:gravity="center"
-            android:layout_marginBottom="25dp"/>
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="25dp"
+            android:layout_marginStart="30sp"/>
 
         <LinearLayout
+            android:orientation="vertical"
+            android:layout_gravity="fill"
+            android:layout_column="1"
+            android:layout_row="0"
+            android:layout_columnSpan="2">
+
+            <TextView
+                android:id="@+id/boxName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/times_new_roman400"
+                android:textSize="55sp"
+                android:gravity="center"
+                android:layout_marginBottom="20dp"/>
+
+            <TextView
+                android:id="@+id/boxDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/times_new_roman400"
+                android:textSize="27sp"
+                android:gravity="center"
+                android:layout_marginBottom="25dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_columnSpan="3"
+            android:layout_column="0"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:paddingTop="15dp"
@@ -84,7 +104,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/top_border_solid"
-            android:paddingTop="35dp">
+            android:paddingTop="35dp"
+            android:layout_columnSpan="3"
+            android:layout_column="0">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/otherBoxesBtn"
@@ -94,6 +116,6 @@
 
         </FrameLayout>
 
-    </LinearLayout>
+    </GridLayout>
 
 </ScrollView>

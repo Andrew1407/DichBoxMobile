@@ -14,14 +14,15 @@ import kotlinx.coroutines.*
 class NotificationsHandler(
         private val username: String,
         private val listView: ListView,
-        private val userViewModel: UserDataViewModel
+        private val userViewModel: UserDataViewModel,
+        private val notificationsViewModel: NotificationsViewModel
 ) {
     private val api = UserAPI()
     private lateinit var cleanBtn: Button
 
     fun createListAdapter(ctx: Context, bundle: Bundle?): NotificationsHandler {
         val nts = if (bundle == null) getNotificationsByRequest()
-            else parseSavedNotifications(bundle)
+            else notificationsViewModel.liveData.value!!.toMutableList()
         listView.adapter = NotificationsAdapter(ctx, R.layout.notification, nts) {
             removeNotifications(listOf(it))
         }
@@ -36,18 +37,9 @@ class NotificationsHandler(
         return notifications.toMutableList()
     }
 
-    private fun parseSavedNotifications(bundle: Bundle): MutableList<UserContainer.NotificationData> {
-        val ntsStr = bundle.getString("notifications")!!
-        val parsed = UserContainer.parseJSON(ntsStr, UserContainer.Notifications::class.java)
-        val (notifications) = parsed as UserContainer.Notifications
-        return notifications.toMutableList()
-    }
-
-    fun saveNotificationsState(bundle: Bundle) {
+    fun saveNotificationsState() {
         val notificationsList = (listView.adapter as NotificationsAdapter).getItems()
-        val ntsWrapped = UserContainer.Notifications(notificationsList)
-        val ntsStr = UserContainer.stringifyJSON(ntsWrapped)
-        bundle.putString("notifications", ntsStr)
+        notificationsViewModel.setNotifications(notificationsList)
     }
 
     private suspend fun removeNotifications(ids: List<Int>) {

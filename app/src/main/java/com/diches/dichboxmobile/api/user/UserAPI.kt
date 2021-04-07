@@ -110,6 +110,14 @@ class UserAPI : ApiParser<UserContainer>() {
         )
     }
 
+    suspend fun getUsernames(findContainer: UserContainer.NameListSearch): Pair<Int, UserContainer> {
+        val reqBody = makeRequest(findContainer)
+        val response = service.findUsernames(reqBody)
+        return getResponseData(
+                response, UserContainer.FoundNamesList::class.java
+        )
+    }
+
     override fun parseJSON(jsonStr: String, container: Class<*>): UserContainer {
         return UserContainer.parseJSON(jsonStr, container)
     }

@@ -42,4 +42,7 @@ interface UserService {
 
     @POST("/users/notifications_remove")
     suspend fun removeNotifications(@Body requestBody: RequestBody): Response<ResponseBody>
+
+    @POST("/users/names_list")
+    suspend fun findUsernames(@Body requestBody: RequestBody): Response<ResponseBody>
 }

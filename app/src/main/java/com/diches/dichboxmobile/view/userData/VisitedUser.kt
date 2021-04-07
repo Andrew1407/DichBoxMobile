@@ -38,7 +38,7 @@ class VisitedUser : Fragment() {
 
         userProfiler = VisitedProfiler(userStateViewModel, subAction)
                 .handleSubscriptionView(followers, userDataViewModel)
-        userProfiler.setUserData(userDataViewModel, savedInstanceState)
+        userProfiler.setUserData(userDataViewModel)
 
         handleInfoFields(view)
 
@@ -49,11 +49,6 @@ class VisitedUser : Fragment() {
             userProfiler.refreshData(userDataViewModel.liveData.value!!)
             handleInfoFields(view)
         }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        userProfiler.saveUserDataState(outState)
     }
 
     private fun handleInfoFields(view: View) {

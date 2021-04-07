@@ -8,13 +8,14 @@ import androidx.fragment.app.Fragment
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.api.boxes.BoxesAPI
 import com.diches.dichboxmobile.datatypes.BoxesContainer
-import com.diches.dichboxmobile.view.boxesList.box.BoxEntries
+import com.diches.dichboxmobile.view.boxData.BoxEntries
 import kotlinx.coroutines.runBlocking
 
 class BoxesListPresenter(
     private val fragment: Fragment,
     private val listView: ListView,
-    private val typesSpinner: Spinner
+    private val typesSpinner: Spinner,
+    private val boxesListViewModel: BoxesListViewModel
 ) {
     private val api = BoxesAPI()
     lateinit var boxes: List<BoxesContainer.BoxDataListItem>
@@ -22,7 +23,8 @@ class BoxesListPresenter(
     lateinit var inputSearch: EditText
 
     fun setBoxesList(bundle: Bundle?, names: Pair<String?, String>): BoxesListPresenter {
-        boxes = if (bundle == null) getBoxesByRequest(names) else getSavedList("boxesList", bundle)
+        boxes = if (bundle == null) getBoxesByRequest(names)
+            else boxesListViewModel.liveData.value!!.first
         return this
     }
 
@@ -47,8 +49,10 @@ class BoxesListPresenter(
             names: Pair<String?, String>,
             boxState: CurrentBoxViewModel
     ): BoxesListPresenter {
-        boxes = if (bundle == null) getBoxesByRequest(names) else getSavedList("boxesList", bundle)
-        boxesShown = if (bundle == null) boxes.toList() else getSavedList("boxesListShown", bundle)
+        boxes = if (bundle == null) getBoxesByRequest(names)
+            else boxesListViewModel.liveData.value!!.first
+        boxesShown = if (bundle == null) boxes.toList() else
+            boxesListViewModel.liveData.value!!.second
         listView.adapter = BoxesListAdapter(
                 fragment.requireContext(), R.layout.boxes_list_item,
                 boxes.toList(), boxesShown.toList()
@@ -99,11 +103,9 @@ class BoxesListPresenter(
 
     fun saveBoxesState(bundle: Bundle) {
         val spinnerPosition = typesSpinner.selectedItemPosition
-        val stringified = listOf(boxes, (listView.adapter as BoxesListAdapter).itemsShown)
-            .map { BoxesContainer.stringifyJSON(BoxesContainer.UserBoxes(it)) }
-        bundle.putString("boxesList", stringified[0])
-        bundle.putString("boxesListShown", stringified[1])
         bundle.putInt("spinnerPosition", spinnerPosition)
+        val boxesState = Pair(boxes, (listView.adapter as BoxesListAdapter).itemsShown)
+        boxesListViewModel.setBoxesList(boxesState)
     }
 
     fun refreshData(ownPage: Boolean): BoxesListPresenter {

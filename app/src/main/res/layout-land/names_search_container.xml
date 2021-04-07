@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="400dp"
+    android:padding="10dp"
+    android:background="@drawable/double_border">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_orange_border">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:weightSum="10"
+            android:gravity="center_horizontal"
+            android:paddingTop="18dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/namesSearch"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                style="@style/inputStyle"
+                android:saveEnabled="false"
+                android:layout_marginStart="0dp"
+                android:hint="username"
+                android:layout_marginEnd="0dp"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/namesCleanBtn"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_marginTop="3dp"
+                android:layout_height="44dp"
+                style="@style/editBtnStyle"
+                android:layout_gravity="start"
+                android:text="clear"
+                android:layout_marginStart="10dp"/>
+
+        </LinearLayout>
+
+            <ListView
+                android:id="@+id/foundUsers"
+
+                android:paddingStart="7dp"
+                android:visibility="gone"
+                android:paddingEnd="7dp"
+                android:layout_width="650dp"
+                android:layout_marginStart="20dp"
+                android:layout_height="150dp"
+                android:layout_marginBottom="25dp"
+                android:background="@drawable/found_names_background"/>
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/addedUsers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/addedUsersEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No users added"
+        style="@style/emptyList"/>
+
+</LinearLayout>

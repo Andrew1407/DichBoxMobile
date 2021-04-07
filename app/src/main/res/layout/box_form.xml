@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dashed_border"
+    android:paddingBottom="50dp">
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="15dp"
+        android:background="@drawable/dashed_border">
+
+        <include
+            layout="@layout/user_logo"
+            android:id="@+id/editBoxLogo"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/changeBoxLogoBtn"
+            android:text="*set logo"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            style="@style/editBtnStyle"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/removeBoxLogoBtn"
+            android:text="remove logo"
+            android:layout_marginBottom="20dp"
+            style="@style/editBtnStyle"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/cancelBoxLogoBtn"
+            android:text="cancel"
+            android:layout_marginBottom="20dp"
+            style="@style/editBtnStyle"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/dashed_border">
+
+        <EditText
+            android:id="@+id/boxNameInput"
+            style="@style/inputStyle"
+            android:saveEnabled="true"
+            android:layout_marginTop="30dp"
+            android:importantForAutofill="no"
+            android:hint="box name"
+            android:layout_width="match_parent"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/boxNameWarning"
+            android:layout_gravity="center"
+            style="@style/warningStyle" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/setBoxNameColor"
+            android:text="box name color"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="45dp"
+            style="@style/editBtnStyle" />
+
+    </LinearLayout>
+
+    <include layout="@layout/description_field" />
+
+    <LinearLayout
+        android:id="@+id/boxPrivacy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical"
+        android:paddingBottom="40dp"
+        android:background="@drawable/dashed_border">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="*box privacy:"
+            android:textColor="@color/yellow"
+            android:textSize="22sp"
+            android:paddingStart="10dp"
+            android:layout_marginBottom="15dp"/>
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp">
+
+            <RadioButton
+                android:id="@+id/radioPublic"
+                android:text="public (everyone can view this box)"
+                style="@style/boxTypesRadio"
+                android:paddingTop="0dp"/>
+
+            <RadioButton
+                android:id="@+id/radioPrivate"
+                android:text="private (you and editors can view this box)"
+                style="@style/boxTypesRadio"/>
+
+            <RadioButton
+                android:id="@+id/radioFollowers"
+                android:text="followers (subscribers can view this box)"
+                style="@style/boxTypesRadio"/>
+
+            <RadioButton
+                android:id="@+id/radioLimited"
+                android:text="limited (add/remove users who can view this box)"
+                style="@style/boxTypesRadio"/>
+
+        </RadioGroup>
+
+        <include
+            android:id="@+id/limitedContainer"
+            android:visibility="gone"
+            layout="@layout/names_search_container" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="*allow users to view/edit/remove/create directories and files:"
+            android:textColor="@color/yellow"
+            android:textSize="22sp"
+            android:paddingStart="10dp"
+            android:layout_marginBottom="20dp"/>
+
+        <include
+            android:id="@+id/editorsContainer"
+            layout="@layout/names_search_container" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

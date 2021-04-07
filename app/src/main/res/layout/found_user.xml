@@ -10,7 +10,7 @@
     android:paddingRight="10dp"
     android:paddingEnd="10dp"
     android:paddingLeft="10dp"
-    android:background="@drawable/subscriptions_separator">
+    android:background="@drawable/bottom_orange_border">
 
     <include
         layout="@layout/user_logo"

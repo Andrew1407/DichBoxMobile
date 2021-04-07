@@ -1,8 +1,6 @@
 package com.diches.dichboxmobile.mv.userDataManager.notifications
 
 import android.content.Context
-import android.graphics.BitmapFactory
-import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +13,6 @@ import com.diches.dichboxmobile.tools.fromBase64ToBitmap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class NotificationsAdapter(
     context: Context,
@@ -62,5 +59,4 @@ class NotificationsAdapter(
             CoroutineScope(Dispatchers.Main).launch { onRemoveNotification(id) }
         }
     }
-
 }

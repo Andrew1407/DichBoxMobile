@@ -1,4 +1,4 @@
-package com.diches.dichboxmobile.view.boxesList.box
+package com.diches.dichboxmobile.view.boxData
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -6,14 +6,17 @@ import android.widget.EditText
 import android.widget.Filterable
 import android.widget.ListView
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.api.user.UserAPI
 import com.diches.dichboxmobile.datatypes.UserContainer
+import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
 import kotlinx.coroutines.runBlocking
 
 class SubscriptionsHandler(
         private val username: String,
-        private val listView: ListView
+        private val listView: ListView,
+        private val subscriptionsState: SubscriptionsViewModel
 ) {
     private val api = UserAPI()
 
@@ -25,7 +28,7 @@ class SubscriptionsHandler(
             items = getSubsByRequest().toMutableList()
             itemsShown = items.toMutableList()
         } else {
-            val (i, ish) = parseSavedSubs(bundle)
+            val (i, ish) = subscriptionsState.liveData.value!!
             items = i.toMutableList()
             itemsShown = ish.toMutableList()
         }
@@ -44,16 +47,6 @@ class SubscriptionsHandler(
         return this
     }
 
-    private fun parseSavedSubs(bundle: Bundle): Pair<List<UserContainer.FoundUser>, List<UserContainer.FoundUser>> {
-        val parse = { key: String ->
-            val subsStr = bundle.getString(key)!!
-            val subsContainer = UserContainer.parseJSON(subsStr, UserContainer.Subscriptions::class.java)
-            (subsContainer as UserContainer.Subscriptions).subs
-        }
-
-        return Pair(parse("items"), parse("itemsShown"))
-    }
-
     private fun getSubsByRequest(): List<UserContainer.FoundUser> {
         val requestContainer = UserContainer.NameContainer(username)
         val (st, res) = runBlocking { api.getSubscriptions(requestContainer) }
@@ -61,15 +54,9 @@ class SubscriptionsHandler(
         return subs
     }
 
-    fun saveSubsList(bundle: Bundle) {
-        val (items, itemsShown) = (listView.adapter as SubscriptionsAdapter).getItems()
-        val stringify = { arr: List<UserContainer.FoundUser> ->
-            val container = UserContainer.Subscriptions(arr)
-            UserContainer.stringifyJSON(container)
-        }
-
-        bundle.putString("items", stringify(items))
-        bundle.putString("itemsShown", stringify(itemsShown))
+    fun saveSubsList() {
+        val subs = (listView.adapter as SubscriptionsAdapter).getItems()
+        subscriptionsState.setSubs(subs)
     }
 
     private suspend fun unsubscribe(name: String): Boolean {

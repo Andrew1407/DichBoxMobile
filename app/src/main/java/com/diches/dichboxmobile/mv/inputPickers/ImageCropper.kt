@@ -52,7 +52,8 @@ class ImageCropper(private val fragment: Fragment) {
             resultCode == Activity.RESULT_OK) {
             val result = CropImage.getActivityResult(data)
             val src = fromUriToBitmap(result.uri, fragment.requireActivity())
-            imageHandler(src)
+            val compressed = Bitmap.createScaledBitmap(src, 350, 350, true)
+            imageHandler(compressed)
         }
     }
 

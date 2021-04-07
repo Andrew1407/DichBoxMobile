@@ -50,8 +50,17 @@ class BoxesList : Fragment() {
             setFragmentVisible(fragment, tag)
         }
         boxViewModel.boxName.observe(viewLifecycleOwner) {
+            val names = stateViewModel.namesState.value!!
+            val signedName = names.first
+            val visitedName = names.second
+            val ownPage = signedName != null && signedName == visitedName
+            val atBoxPage = currentPosition == 2
             if (it != null) {
                 currentPosition = 3
+                return@observe
+            }
+            if (ownPage && atBoxPage) {
+                currentPosition = 2
                 return@observe
             }
             val boxesShown = stateViewModel.namesState.value!!.second != null

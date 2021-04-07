@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/settingsText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Create new box"
+            android:textStyle="bold"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/light_blue"
+            android:textSize="35sp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:background="@drawable/top_border_solid"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp">
+
+            <include layout="@layout/box_form" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="30dp"
+            android:paddingBottom="30dp">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/createBtn"
+                android:layout_marginTop="15dp"
+                style="@style/editBtnStyle"
+                android:text = "create box" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/cancelBtn"
+                android:layout_marginTop="20dp"
+                style="@style/editBtnStyle"
+                android:text = "cancel" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

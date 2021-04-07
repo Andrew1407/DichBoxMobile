@@ -1,4 +1,4 @@
-package com.diches.dichboxmobile.view.boxesList.box
+package com.diches.dichboxmobile.view.boxData
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.diches.dichboxmobile.R
 
-class OpenedFiles : Fragment() {
+class BoxFiles : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.fragment_opened_box_files, container, false)
+    ): View = inflater.inflate(R.layout.fragment_box_files, container, false)
 }

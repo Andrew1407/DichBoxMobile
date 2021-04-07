@@ -1,7 +1,6 @@
 package com.diches.dichboxmobile.mv.userDataManager.profilers
 
 import android.graphics.Color
-import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -21,19 +20,8 @@ open class UserProfiler {
         userData = data
     }
 
-    fun setUserData(viewModel: UserDataViewModel, bundle: Bundle?) {
-        userData = if (bundle != null)
-            UserContainer.parseJSON(
-                bundle.getString("userJSON")!!,
-                UserContainer.UserData::class.java
-            ) as UserContainer.UserData
-        else
-            viewModel.liveData.value!!.copy()
-    }
-
-    fun saveUserDataState(bundle: Bundle) {
-        val dataStr = UserContainer.stringifyJSON(userData)
-        bundle.putString("userJSON", dataStr)
+    fun setUserData(viewModel: UserDataViewModel) {
+        userData = viewModel.liveData.value!!.copy()
     }
 
     private fun fillView(element: TextView, parameters: Pair<String, String>) {

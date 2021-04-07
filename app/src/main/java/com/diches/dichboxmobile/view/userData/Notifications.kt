@@ -12,6 +12,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
 import com.diches.dichboxmobile.mv.userDataManager.notifications.NotificationsHandler
+import com.diches.dichboxmobile.mv.userDataManager.notifications.NotificationsViewModel
+import com.diches.dichboxmobile.mv.userDataManager.subscriptions.SubscriptionsViewModel
 
 class Notifications : Fragment() {
     private lateinit var ntsHandler: NotificationsHandler
@@ -25,18 +27,19 @@ class Notifications : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val userViewModel = ViewModelProvider(requireActivity()).get(UserDataViewModel::class.java)
+        val notificationsViewModel = ViewModelProvider(requireActivity()).get(NotificationsViewModel::class.java)
         val username = userViewModel.liveData.value!!.name
         val cleanBtn = view.findViewById<Button>(R.id.cleanNotificationsList)
         val listView = view.findViewById<ListView>(R.id.notificationsList)
         listView.emptyView = view.findViewById<TextView>(R.id.ntsEmpty)
 
-        ntsHandler = NotificationsHandler(username, listView, userViewModel)
+        ntsHandler = NotificationsHandler(username, listView, userViewModel, notificationsViewModel)
                 .handleCleanAction(cleanBtn)
                 .createListAdapter(requireContext(), savedInstanceState)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        ntsHandler.saveNotificationsState(outState)
+        ntsHandler.saveNotificationsState()
     }
 }

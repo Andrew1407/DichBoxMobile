@@ -40,6 +40,7 @@ sealed class UserContainer {
     data class Subscriptions(val subs: List<FoundUser>) : UserContainer()
 
     data class FoundUsers(val searched: List<FoundUser>) : UserContainer()
+    data class FoundNamesList(val foundUsers: List<FoundUser>) : UserContainer()
 
     data class FoundUser(
         val name: String,
@@ -120,5 +121,10 @@ sealed class UserContainer {
     data class RemovedUser(
             val username: String,
             val confirmation: String
+    ) : UserContainer()
+
+    data class NameListSearch(
+            val username: String,
+            val nameTemplate: String
     ) : UserContainer()
 }

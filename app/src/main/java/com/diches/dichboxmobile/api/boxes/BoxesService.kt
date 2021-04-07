@@ -7,6 +7,12 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface BoxesService {
+    @POST("/boxes/create")
+    suspend fun createBox(@Body requestBody: RequestBody): Response<ResponseBody>
+
     @POST("/boxes/user_boxes")
     suspend fun getUserBoxes(@Body requestBody: RequestBody): Response<ResponseBody>
+
+    @POST("/boxes/verify")
+    suspend fun verify(@Body requestBody: RequestBody): Response<ResponseBody>
 }

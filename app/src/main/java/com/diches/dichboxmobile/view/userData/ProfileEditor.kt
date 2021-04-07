@@ -19,7 +19,7 @@ import com.diches.dichboxmobile.mv.inputPickers.ImageCropper
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.EditedViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
-import com.diches.dichboxmobile.mv.verifiers.editVerifiers.LogoEditor
+import com.diches.dichboxmobile.mv.verifiers.editVerifiers.logoEditors.UserLogoEditor
 import com.diches.dichboxmobile.mv.verifiers.editVerifiers.user.SavedEditState
 import com.diches.dichboxmobile.mv.verifiers.editVerifiers.user.UserEditorVerifier
 import com.diches.dichboxmobile.tools.fromBitmapToBase64
@@ -29,7 +29,7 @@ class ProfileEditor: Fragment() {
     private lateinit var changeDescColorBtn: Button
     private lateinit var changeLogoBtn: Button
     private lateinit var imagePicker: ImageCropper
-    private lateinit var logoEditor: LogoEditor
+    private lateinit var userLogoEditor: UserLogoEditor
     private lateinit var editHandler: UserEditorVerifier
     private lateinit var nameColorBtn: Button
     private lateinit var descriptionColorBtn: Button
@@ -58,6 +58,7 @@ class ProfileEditor: Fragment() {
         setImageEditor(savedState, userData)
         val editColorFields = setUserVerifier(savedState, userDataViewModel, userStateviewModel)
         setColorPickers(editColorFields, savedState, userData)
+        savedInstanceState?.clear()
     }
 
     private fun setImageEditor(savedState: SavedEditState?, userData: UserContainer.UserData) {
@@ -70,7 +71,7 @@ class ProfileEditor: Fragment() {
                 R.id.cancelUserLogoBtn
         ).map { view?.findViewById<Button>(it)!! }
 
-        logoEditor = LogoEditor(userData.logo, logoArgs, logoBtns)
+        userLogoEditor = UserLogoEditor(userData.logo, logoArgs, logoBtns)
     }
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
@@ -107,7 +108,7 @@ class ProfileEditor: Fragment() {
                         Pair(currentPasswd, currentPasswdWarning),
                         Pair(newPasswd, newPasswdWarning)
                 )
-                .addLogoEditor(logoEditor, imagePicker)
+                .addLogoEditor(userLogoEditor, imagePicker)
                 .setSubmitClb { editData ->
                     val editedFields = editData.edited
                     if (editedFields.name != null) {
@@ -177,7 +178,7 @@ class ProfileEditor: Fragment() {
         imagePicker.handleActivityResult(requestCode, resultCode, data)  {
             view?.findViewById<ImageView>(R.id.editUserLogo)?.setImageBitmap(it)
             val imageEncoded = fromBitmapToBase64(it)
-            logoEditor.setLogo(imageEncoded)
+            userLogoEditor.setLogo(imageEncoded)
             editHandler.checkAllAdded()
         }
     }
@@ -187,7 +188,7 @@ class ProfileEditor: Fragment() {
 
         val passwdAreaState = editHandler.getPasswdAreaState()
         outState.putBoolean("passwdArea", passwdAreaState)
-        outState.putString("logo", logoEditor.getLogo().first)
+        outState.putString("logo", userLogoEditor.getLogo().first)
         outState.putInt("nameColor", nameColorBtn.currentTextColor)
         outState.putInt("descriptionColor", descriptionColorBtn.currentTextColor)
     }

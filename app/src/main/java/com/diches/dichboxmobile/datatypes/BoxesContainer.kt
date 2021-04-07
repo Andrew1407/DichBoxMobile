@@ -10,6 +10,8 @@ sealed class BoxesContainer {
         fun stringifyJSON(jsonObj: BoxesContainer): String = com.diches.dichboxmobile.datatypes.stringifyJSON(jsonObj)
     }
 
+    data class NameContainer(val name: String) : BoxesContainer()
+
     data class BoxDataListItem(
         val name: String,
         val name_color: String,
@@ -36,4 +38,27 @@ sealed class BoxesContainer {
     ) : BoxesContainer()
 
     data class UserBoxes(val boxesList: List<BoxDataListItem>): BoxesContainer()
+
+    data class EditedFields(
+            var name: String?,
+            var name_color: String?,
+            var description: String?,
+            var description_color: String?,
+            var access_level: String?
+    ) : BoxesContainer()
+
+    data class EditedBoxData(
+            val username: String,
+            val logo: String?,
+            val boxData: EditedFields?,
+            val editors: List<String>?,
+            val limitedUsers: List<String>?
+    ) : BoxesContainer()
+
+    data class VerifyBody(
+            val username: String,
+            val boxName: String
+    ) : BoxesContainer()
+
+    data class VerifyRes(val foundValue: String?) : BoxesContainer()
 }

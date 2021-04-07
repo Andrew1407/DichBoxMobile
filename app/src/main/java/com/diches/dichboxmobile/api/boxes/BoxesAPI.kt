@@ -14,6 +14,22 @@ class BoxesAPI : ApiParser<BoxesContainer>() {
         )
     }
 
+    suspend fun verify(verContainer: BoxesContainer.VerifyBody): Pair<Int, BoxesContainer> {
+        val reqBody = makeRequest(verContainer)
+        val response = service.verify(reqBody)
+        return getResponseData(
+                response, BoxesContainer.VerifyRes::class.java
+        )
+    }
+
+    suspend fun createBox(addContainer: BoxesContainer.EditedBoxData): Pair<Int, BoxesContainer> {
+        val reqBody = makeRequest(addContainer)
+        val response = service.createBox(reqBody)
+        return getResponseData(
+                response, BoxesContainer.NameContainer::class.java
+        )
+    }
+
     override fun parseJSON(jsonStr: String, container: Class<*>): BoxesContainer {
         return BoxesContainer.parseJSON(jsonStr, container)
     }

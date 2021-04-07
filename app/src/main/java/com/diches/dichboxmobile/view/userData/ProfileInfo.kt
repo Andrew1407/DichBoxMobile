@@ -24,17 +24,12 @@ class ProfileInfo: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val viewModel = ViewModelProvider(requireActivity()).get(UserDataViewModel::class.java)
-        userProfiler.setUserData(viewModel, savedInstanceState)
+        userProfiler.setUserData(viewModel)
         viewModel.liveData.observe(viewLifecycleOwner) {
             if (it == null || !it.ownPage) return@observe
             userProfiler.refreshData(it)
             handleInfoFields(view)
         }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        userProfiler.saveUserDataState(outState)
     }
 
     private fun handleInfoFields(view: View) {

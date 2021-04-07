@@ -22,6 +22,7 @@ import kotlinx.coroutines.withContext
 class UsersSearch(
         private val listView: ListView,
         private val userStateViewModel: UserStateViewModel,
+        private val usersSearchViewModel: UsersSearchViewModel,
         private var rotated: Boolean
 ) {
     private val api = UserAPI()
@@ -40,11 +41,7 @@ class UsersSearch(
             bundle: Bundle?,
             boxViewModel: CurrentBoxViewModel,
             redirector: Search.Redirector): UsersSearch {
-        val initialList = if (bundle == null) emptyList() else {
-            val usersStr = bundle.getString("users")!!
-            val usersParsed = UserContainer.parseJSON(usersStr, UserContainer.FoundUsers::class.java)
-            (usersParsed as UserContainer.FoundUsers).searched
-        }
+        val initialList = if (bundle == null) emptyList() else usersSearchViewModel.liveData.value!!
         listView.adapter = UsersSearchAdapter(view.context, R.layout.found_user, initialList) {
             visitUserPage(it, redirector)
             redirectionCleanup(view, boxViewModel)
@@ -54,6 +51,7 @@ class UsersSearch(
 
     private fun redirectionCleanup(view: View, boxState: CurrentBoxViewModel) {
         if (boxState.boxName.value != null) boxState.setCurrentBox(null)
+        usersSearchViewModel.setUsers(emptyList())
         searchInput.text.clear()
         ContextCompat
                 .getSystemService(view.context, InputMethodManager::class.java)
@@ -66,11 +64,9 @@ class UsersSearch(
         redirector.handleRedirection()
     }
 
-    fun saveFoundState(bundle: Bundle) {
+    fun saveFoundState() {
         val users = (listView.adapter as UsersSearchAdapter).items
-        val foundContainer = UserContainer.FoundUsers(users)
-        val foundStr = UserContainer.stringifyJSON(foundContainer)
-        bundle.putString("users", foundStr)
+        usersSearchViewModel.setUsers(users)
     }
 
     fun handleInputSearch(inputField: EditText): UsersSearch {

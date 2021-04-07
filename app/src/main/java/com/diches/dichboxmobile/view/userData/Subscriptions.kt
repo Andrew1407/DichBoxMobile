@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.mv.userDataManager.subscriptions.SubscriptionsHandler
+import com.diches.dichboxmobile.mv.userDataManager.subscriptions.SubscriptionsViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
 
 class Subscriptions : Fragment() {
@@ -25,6 +26,7 @@ class Subscriptions : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val userViewModel = ViewModelProvider(requireActivity()).get(UserDataViewModel::class.java)
+        val subscriptionsViewModel = ViewModelProvider(requireActivity()).get(SubscriptionsViewModel::class.java)
         val username = userViewModel.liveData.value!!.name
 
         val listView = view.findViewById<ListView>(R.id.subscriptionsList)
@@ -32,13 +34,13 @@ class Subscriptions : Fragment() {
 
         val search = view.findViewById<EditText>(R.id.subscriptionsSearch)
 
-        subsHandler = SubscriptionsHandler(username, listView)
+        subsHandler = SubscriptionsHandler(username, listView, subscriptionsViewModel)
                 .createListAdapter(requireContext(), savedInstanceState)
                 .handleSearch(search)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        subsHandler.saveSubsList(outState)
+        subsHandler.saveSubsList()
     }
 }

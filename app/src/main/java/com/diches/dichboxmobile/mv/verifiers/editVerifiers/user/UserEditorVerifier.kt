@@ -19,7 +19,7 @@ import com.diches.dichboxmobile.datatypes.UserContainer
 import com.diches.dichboxmobile.mv.inputPickers.ImageCropper
 import com.diches.dichboxmobile.mv.verifiers.FieldsTemplates
 import com.diches.dichboxmobile.mv.verifiers.FieldsWarnings
-import com.diches.dichboxmobile.mv.verifiers.editVerifiers.LogoEditor
+import com.diches.dichboxmobile.mv.verifiers.editVerifiers.logoEditors.UserLogoEditor
 import com.diches.dichboxmobile.mv.verifiers.editVerifiers.MutableInputVerifier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -35,7 +35,7 @@ class UserEditorVerifier (
     private val api = UserAPI()
     private lateinit var onSubmitClb: (name: UserContainer.EditData) -> Unit
     private lateinit var passwdVerifier: PasswordsVerifier
-    private lateinit var logoEditor: LogoEditor
+    private lateinit var userLogoEditor: UserLogoEditor
     private lateinit var nameInput: EditText
     private lateinit var descriptionInput: EditText
     private lateinit var nameColorBtn: Button
@@ -94,9 +94,9 @@ class UserEditorVerifier (
             val nameColor = state.nameColor
             val descriptionColor = state.descriptionColor
             nameInput.setTextColor(nameColor)
-            changeBthColor(nameColorBtn, nameColor)
+            changeBtnColor(nameColorBtn, nameColor)
             descriptionInput.setTextColor(descriptionColor)
-            changeBthColor(descriptionColorBtn, descriptionColor)
+            changeBtnColor(descriptionColorBtn, descriptionColor)
             passwdAreaVisible = state.passwdAreaVisible
             edited.name_color = colorToHex(nameColor)
             edited.description_color = colorToHex(descriptionColor)
@@ -111,7 +111,7 @@ class UserEditorVerifier (
     ): UserEditorVerifier {
         nameInput = nameContainer
         nameColorBtn = colorBtn
-        changeBthColor(nameColorBtn, Color.parseColor(edited.name_color))
+        changeBtnColor(nameColorBtn, Color.parseColor(edited.name_color))
         nameInput.setText(edited.name)
         nameInput.setTextColor(Color.parseColor(edited.name_color))
         onTextChange(nameInput) {
@@ -132,7 +132,7 @@ class UserEditorVerifier (
     fun addDescriptionCheck(description: EditText, colorBtn: Button): UserEditorVerifier {
         descriptionInput = description
         descriptionColorBtn = colorBtn
-        changeBthColor(descriptionColorBtn, Color.parseColor(edited.description_color))
+        changeBtnColor(descriptionColorBtn, Color.parseColor(edited.description_color))
         descriptionInput.setText(edited.description)
         descriptionInput.setTextColor(Color.parseColor(edited.description_color))
         onTextChange(descriptionInput) {
@@ -166,15 +166,15 @@ class UserEditorVerifier (
 
     fun changeNameColor(name: EditText, color: Int, btn: Button) {
         name.setTextColor(color)
-        edited.name_color = "#${color.toString(16)}"
-        changeBthColor(btn, color)
+        edited.name_color = colorToHex(color)
+        changeBtnColor(btn, color)
         checkAllAdded()
     }
 
     fun changeDescriptionColor(description: EditText, color: Int, btn: Button) {
         description.setTextColor(color)
-        edited.description_color = "#${color.toString(16)}"
-        changeBthColor(btn, color)
+        edited.description_color = colorToHex(color)
+        changeBtnColor(btn, color)
         checkAllAdded()
     }
 
@@ -197,8 +197,8 @@ class UserEditorVerifier (
     fun getPasswdAreaState(): Boolean = passwdVerifier.getAreaState()
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
-    fun addLogoEditor(le: LogoEditor, picker: ImageCropper): UserEditorVerifier {
-        logoEditor = le
+    fun addLogoEditor(le: UserLogoEditor, picker: ImageCropper): UserEditorVerifier {
+        userLogoEditor = le
                 .setCheckClb { checkAllAdded() }
                 .handleChangeBtn(picker)
                 .handleDefaultBtn()
@@ -208,7 +208,7 @@ class UserEditorVerifier (
         return this
     }
 
-    private fun changeBthColor(btn: Button, color: Int) {
+    private fun changeBtnColor(btn: Button, color: Int) {
         val shapeDrawable = ShapeDrawable()
 
         shapeDrawable.shape = RectShape()
@@ -258,7 +258,7 @@ class UserEditorVerifier (
                 defaultData.description_color != edited.description_color
 
         val isValid = inputVerifier.checkAll() && textChanged || colorsChanged ||
-                passwdVerifier.getChecked().first || logoEditor.getLogo().second
+                passwdVerifier.getChecked().first || userLogoEditor.getLogo().second
 
         submitter.isEnabled = isValid
         val btnColor = if (isValid) AppColors.GREEN else AppColors.BLUE
@@ -278,10 +278,10 @@ class UserEditorVerifier (
             CoroutineScope(Dispatchers.Main).launch {
                 val (passwdModified, passwdStr) = passwdVerifier.getChecked()
                 val passwd = if (passwdModified) passwdStr else null
-                val (logoSrc, logoModified) = logoEditor.getLogo()
+                val (logoSrc, logoModified) = userLogoEditor.getLogo()
                 val editedLogo = if (logoModified) logoSrc else null
-                edited.name_color = colorToHex(nameInput.currentTextColor)
-                edited.description_color = colorToHex(descriptionInput.currentTextColor)
+                edited.name_color = edited.name_color
+                edited.description_color = edited.description_color
                 val container = UserContainer.EditData(
                         username = defaultData.name,
                         logo = editedLogo,

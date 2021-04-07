@@ -1,22 +1,17 @@
-package com.diches.dichboxmobile.mv.verifiers.editVerifiers
+package com.diches.dichboxmobile.mv.verifiers.editVerifiers.logoEditors
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.os.Build
-import android.util.Base64
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
-import androidx.annotation.RequiresApi
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.mv.inputPickers.ImageCropper
 import com.diches.dichboxmobile.tools.fromBase64ToBitmap
 
-class LogoEditor(
+class UserLogoEditor (
         private val initialLogo: String?,
         logoParams: Pair<ImageView, String?>,
         buttons: List<Button>
-) {
+): LogoEditor {
     private val changeBtn: Button = buttons[0]
     private val setDefaultBtn: Button = buttons[1]
     private val cancelBtn: Button = buttons[2]
@@ -27,16 +22,16 @@ class LogoEditor(
     init {
         if (initialLogo == logo) {
             cancelBtn.visibility = View.GONE
-            if (initialLogo === null) {
+            if (initialLogo == null) {
                 setDefaultBtn.visibility = View.GONE
                 logoContainer.setImageResource(R.drawable.default_user_logo)
             } else {
                 logoContainer.setImageBitmap(fromBase64ToBitmap(initialLogo))
             }
         } else {
-            if (logo === "removed" || initialLogo === null)
+            if (logo == "removed" || initialLogo == null)
                 setDefaultBtn.visibility = View.GONE
-            if (logo === null || logo === "removed")
+            if (logo == null || logo == "removed")
                 logoContainer.setImageResource(R.drawable.default_user_logo)
             else
                 logoContainer.setImageBitmap(fromBase64ToBitmap(logo!!))
@@ -44,15 +39,15 @@ class LogoEditor(
     }
 
     private fun setCancelVisibility() {
-        cancelBtn.visibility = if (logo === initialLogo) View.GONE else View.VISIBLE
+        cancelBtn.visibility = if (logo == initialLogo) View.GONE else View.VISIBLE
     }
 
-    fun setCheckClb(clb: () -> Unit): LogoEditor {
+    fun setCheckClb(clb: () -> Unit): UserLogoEditor {
         checkAllClb = clb
         return this
     }
 
-    fun getLogo(): Pair<String?, Boolean> {
+    override fun getLogo(): Pair<String?, Boolean> {
         val modified = logo != initialLogo
         return Pair(logo, modified)
     }
@@ -64,23 +59,22 @@ class LogoEditor(
             logoContainer.setImageBitmap(fromBase64ToBitmap(logo!!))
     }
 
-    fun setLogo(src: String) {
+    override fun setLogo(src: String?) {
         logo = src
-        setDefaultBtn.visibility = if (initialLogo === null) View.GONE else View.VISIBLE
+        setDefaultBtn.visibility = if (initialLogo == null) View.GONE else View.VISIBLE
         setCancelVisibility()
         setLogoView()
     }
 
-    @RequiresApi(Build.VERSION_CODES.KITKAT)
-    fun handleChangeBtn(picker: ImageCropper): LogoEditor {
+    override fun handleChangeBtn(picker: ImageCropper): UserLogoEditor {
         picker.handlePickOnClick(changeBtn)
         return this
     }
 
-    fun handleCancelBtn(): LogoEditor {
+    override fun handleCancelBtn(): UserLogoEditor {
         cancelBtn.setOnClickListener {
             logo = initialLogo
-            setDefaultBtn.visibility = if (initialLogo === null) View.GONE else View.VISIBLE
+            setDefaultBtn.visibility = if (initialLogo == null) View.GONE else View.VISIBLE
             setCancelVisibility()
             setLogoView()
             checkAllClb()
@@ -88,7 +82,7 @@ class LogoEditor(
         return this
     }
 
-    fun handleDefaultBtn(): LogoEditor {
+    override fun handleDefaultBtn(): UserLogoEditor {
         setDefaultBtn.setOnClickListener {
             logo = "removed"
             setDefaultBtn.visibility = View.GONE
