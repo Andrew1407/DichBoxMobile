@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
-import com.diches.dichboxmobile.mv.boxesDataManager.CurrentBoxViewModel
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.CurrentBoxViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 
 class BoxesList : Fragment() {

@@ -15,4 +15,13 @@ interface BoxesService {
 
     @POST("/boxes/verify")
     suspend fun verify(@Body requestBody: RequestBody): Response<ResponseBody>
+
+    @POST("/boxes/details")
+    suspend fun getBoxDetails(@Body requestBody: RequestBody): Response<ResponseBody>
+
+    @POST("/boxes/remove")
+    suspend fun removeBox(@Body requestBody: RequestBody): Response<ResponseBody>
+
+    @POST("/boxes/edit")
+    suspend fun editBox(@Body requestBody: RequestBody): Response<ResponseBody>
 }

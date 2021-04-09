@@ -11,7 +11,7 @@ import androidx.core.widget.addTextChangedListener
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.api.user.UserAPI
 import com.diches.dichboxmobile.datatypes.UserContainer
-import com.diches.dichboxmobile.mv.boxesDataManager.CurrentBoxViewModel
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.CurrentBoxViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 import com.diches.dichboxmobile.view.Search
 import kotlinx.coroutines.CoroutineScope

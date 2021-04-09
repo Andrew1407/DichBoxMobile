@@ -118,6 +118,14 @@ class UserAPI : ApiParser<UserContainer>() {
         )
     }
 
+    suspend fun getAccessLists(findContainer: UserContainer.AccessListsReq): Pair<Int, UserContainer> {
+        val reqBody = makeRequest(findContainer)
+        val response = service.getAccessLists(reqBody)
+        return getResponseData(
+                response, UserContainer.AccessLists::class.java
+        )
+    }
+
     override fun parseJSON(jsonStr: String, container: Class<*>): UserContainer {
         return UserContainer.parseJSON(jsonStr, container)
     }

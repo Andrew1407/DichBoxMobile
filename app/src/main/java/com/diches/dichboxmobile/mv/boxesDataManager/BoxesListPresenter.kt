@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.api.boxes.BoxesAPI
 import com.diches.dichboxmobile.datatypes.BoxesContainer
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxesListViewModel
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.CurrentBoxViewModel
 import com.diches.dichboxmobile.view.boxData.BoxEntries
 import kotlinx.coroutines.runBlocking
 

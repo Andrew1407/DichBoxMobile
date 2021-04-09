@@ -1,9 +1,5 @@
 package com.diches.dichboxmobile.mv.userDataManager.profilers
 
-import android.graphics.Color
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -11,6 +7,8 @@ import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.tools.AppColors
 import com.diches.dichboxmobile.datatypes.UserContainer
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
+import com.diches.dichboxmobile.tools.decorateView
+import com.diches.dichboxmobile.tools.fillView
 import com.diches.dichboxmobile.tools.fromBase64ToBitmap
 
 open class UserProfiler {
@@ -22,28 +20,6 @@ open class UserProfiler {
 
     fun setUserData(viewModel: UserDataViewModel) {
         userData = viewModel.liveData.value!!.copy()
-    }
-
-    private fun fillView(element: TextView, parameters: Pair<String, String>) {
-        val (text, color) = parameters
-        element.text = text
-        element.setTextColor(Color.parseColor(color))
-    }
-
-    protected fun decorateView(
-            element: TextView,
-            prefix: String,
-            parameters: Pair<String, Int>
-    ) {
-        val (value, color) = parameters
-        val text = prefix + value
-        val spannable = SpannableString(text)
-        spannable.setSpan(
-                ForegroundColorSpan(color),
-                prefix.length, text.length,
-                Spannable.SPAN_INCLUSIVE_INCLUSIVE
-        )
-        element.text = spannable
     }
 
     fun fillUsername(name: TextView): UserProfiler {

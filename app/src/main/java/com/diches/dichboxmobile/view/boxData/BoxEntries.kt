@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.diches.dichboxmobile.R
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxEditedViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 import com.diches.dichboxmobile.view.userData.*
@@ -47,5 +48,12 @@ class BoxEntries : Fragment() {
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = tabOptions.map { it.first }[position]
         }.attach()
+
+        val editedViewModel = ViewModelProvider(requireActivity()).get(BoxEditedViewModel::class.java)
+        editedViewModel.isEdited.observe(viewLifecycleOwner) {
+            if (!it) return@observe
+            viewPager.currentItem = 0
+            editedViewModel.setEdited(false)
+        }
     }
 }

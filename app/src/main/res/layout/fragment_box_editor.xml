@@ -24,7 +24,16 @@
                 android:id="@+id/editBoxBtn"
                 android:layout_marginTop="15dp"
                 style="@style/editBtnStyle"
-                android:text = "edit box" />
+                android:text = "edit box"
+                android:layout_marginBottom="10dp"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/removeBoxBtn"
+                android:layout_marginTop="15dp"
+                style="@style/editBtnStyle"
+                android:textColor="@color/crimson"
+                android:background="@drawable/remove_btn_border"
+                android:text = "remove box" />
 
         </LinearLayout>
 

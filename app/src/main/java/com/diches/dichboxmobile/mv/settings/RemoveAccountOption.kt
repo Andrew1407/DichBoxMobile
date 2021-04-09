@@ -3,8 +3,8 @@ package com.diches.dichboxmobile.mv.settings
 import android.content.Context
 import com.diches.dichboxmobile.api.user.UserAPI
 import com.diches.dichboxmobile.datatypes.UserContainer
-import com.diches.dichboxmobile.mv.boxesDataManager.BoxDataViewModel
-import com.diches.dichboxmobile.mv.boxesDataManager.CurrentBoxViewModel
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxDataViewModel
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.CurrentBoxViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 import kotlinx.coroutines.*

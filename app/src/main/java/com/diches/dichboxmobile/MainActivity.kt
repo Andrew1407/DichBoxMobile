@@ -7,12 +7,13 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
-import com.diches.dichboxmobile.mv.boxesDataManager.CurrentBoxViewModel
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.CurrentBoxViewModel
 import com.diches.dichboxmobile.mv.userDataManager.UserDataFetcher
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 import com.diches.dichboxmobile.view.*
 import com.diches.dichboxmobile.view.boxData.AddBox
+import com.diches.dichboxmobile.view.boxData.BoxEditor
 import com.diches.dichboxmobile.view.boxesList.BoxesInfo
 import com.diches.dichboxmobile.view.boxesList.BoxesList
 import com.diches.dichboxmobile.view.boxData.BoxInfo

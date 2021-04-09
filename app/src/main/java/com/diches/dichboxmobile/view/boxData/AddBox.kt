@@ -15,12 +15,12 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
-import com.diches.dichboxmobile.mv.boxesDataManager.CurrentBoxViewModel
+import com.diches.dichboxmobile.datatypes.BoxesContainer
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.CurrentBoxViewModel
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.EditorsViewModel
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.ViewersViewModel
 import com.diches.dichboxmobile.mv.inputPickers.ColorPicker
 import com.diches.dichboxmobile.mv.inputPickers.ImageCropper
-import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 import com.diches.dichboxmobile.mv.verifiers.editVerifiers.box.BoxFormGenerator
 import com.diches.dichboxmobile.mv.verifiers.editVerifiers.box.BoxPrivacyHandler
@@ -28,7 +28,6 @@ import com.diches.dichboxmobile.mv.verifiers.editVerifiers.box.accessList.Access
 import com.diches.dichboxmobile.mv.verifiers.editVerifiers.logoEditors.BoxLogoEditor
 import com.diches.dichboxmobile.tools.fromBitmapToBase64
 import com.diches.dichboxmobile.view.boxesList.BoxesInfo
-import com.skydoves.colorpickerview.ColorEnvelope
 
 class AddBox: Fragment() {
     private lateinit var editorsHandler: AccessList
@@ -101,7 +100,8 @@ class AddBox: Fragment() {
                 .addEditorList(editorsHandler)
                 .verifyNameInput(boxNameInput, boxNameWarning)
                 .afterSubmit {
-                    currentBoxViewModel.setCurrentBox(it)
+                    val (boxName) = it as BoxesContainer.NameContainer
+                    currentBoxViewModel.setCurrentBox(boxName)
                     parentFragmentManager
                             .beginTransaction()
                             .replace(R.id.boxesContainer, BoxEntries(), "BOXES_ENTRIES_TAG")
@@ -117,8 +117,6 @@ class AddBox: Fragment() {
         }
 
         setUpRedirector(cancelBtn)
-        savedInstanceState?.clear()
-
         savedInstanceState?.clear()
     }
 
@@ -174,6 +172,7 @@ class AddBox: Fragment() {
             view?.findViewById<ImageView>(R.id.editUserLogo)?.setImageBitmap(it)
             val imageEncoded = fromBitmapToBase64(it)
             boxLogoEditor.setLogo(imageEncoded)
+
         }
     }
 

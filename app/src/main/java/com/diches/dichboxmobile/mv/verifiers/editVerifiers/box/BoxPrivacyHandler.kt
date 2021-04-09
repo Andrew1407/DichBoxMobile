@@ -21,7 +21,7 @@ class BoxPrivacyHandler(
     private val limitedListView = privacyView.findViewById<LinearLayout>(R.id.limitedContainer)
     private val limitedContainer = AccessList(limitedListView, listsState, "privacy", initialLimitedList)
             .setSavedInput(bundle)
-    private var privacy: String = if (bundle != null) bundle.getString("privacy")!! else initialPrivacy
+    private var privacy: String =  bundle?.getString("privacy") ?: initialPrivacy
     private val radios: List<RadioButton>
 
     init {
@@ -37,6 +37,10 @@ class BoxPrivacyHandler(
         }
     }
 
+    fun setViewersChangeClb(clb: () -> Unit) {
+        limitedContainer.onListModified(clb)
+    }
+
     fun handleLimitedView(ctx: Context, username: String): BoxPrivacyHandler {
         limitedContainer
                 .addListAdapters(ctx)
@@ -45,12 +49,13 @@ class BoxPrivacyHandler(
         return this
     }
 
-    fun handleRadioChoice(): BoxPrivacyHandler {
+    fun handleRadioChoice(pickClb: (() -> Unit)? = null): BoxPrivacyHandler {
         radios.forEach {
             it.setOnClickListener { _ ->
                 privacy = it.text.toString().split(" ")[0]
                 if (privacy == "limited") limitedListView.visibility = View.VISIBLE
                 else if (limitedListView.isVisible) limitedListView.visibility = View.GONE
+                pickClb?.invoke()
             }
         }
 

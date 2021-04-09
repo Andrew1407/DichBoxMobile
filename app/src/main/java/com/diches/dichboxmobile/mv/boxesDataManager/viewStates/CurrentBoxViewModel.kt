@@ -1,4 +1,4 @@
-package com.diches.dichboxmobile.mv.boxesDataManager
+package com.diches.dichboxmobile.mv.boxesDataManager.viewStates
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

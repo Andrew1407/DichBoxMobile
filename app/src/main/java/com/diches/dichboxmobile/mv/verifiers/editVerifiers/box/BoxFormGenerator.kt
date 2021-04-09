@@ -21,23 +21,23 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
 
-class BoxFormGenerator(
+open class BoxFormGenerator(
         private val username: String,
         bundle: Bundle?,
         private val submitter: Button
 ) {
-    private val api = BoxesAPI()
-    private lateinit var nameInput: EditText
+    protected val api = BoxesAPI()
+    protected lateinit var nameInput: EditText
     private lateinit var nameWarning: TextView
-    private lateinit var descriptionInput: EditText
-    private lateinit var privacyOptions: BoxPrivacyHandler
-    private lateinit var editorsContainer: AccessList
-    private lateinit var logoEditor: BoxLogoEditor
+    protected lateinit var descriptionInput: EditText
+    protected lateinit var privacyOptions: BoxPrivacyHandler
+    protected lateinit var editorsContainer: AccessList
+    protected lateinit var logoEditor: BoxLogoEditor
     private val defaultColor = "#00d9ff"
-    private var nameColor: String = bundle?.getString("nameColor") ?: defaultColor
-    private var descriptionColor: String = bundle?.getString("descriptionColor") ?: defaultColor
-    private var nameCorrect: Boolean = false
-    private lateinit var submitClb: (name: String) -> Unit
+    protected var nameColor: String = bundle?.getString("nameColor") ?: defaultColor
+    protected var descriptionColor: String = bundle?.getString("descriptionColor") ?: defaultColor
+    protected var nameCorrect: Boolean = false
+    protected lateinit var submitClb: (container: BoxesContainer) -> Unit
 
     init {
         submitter.isEnabled = false
@@ -48,12 +48,12 @@ class BoxFormGenerator(
         }
     }
 
-    fun afterSubmit(clb: (name: String) -> Unit): BoxFormGenerator {
+    fun afterSubmit(clb: (container: BoxesContainer) -> Unit): BoxFormGenerator {
         submitClb = clb
         return this
     }
 
-    fun verifyNameInput(name: EditText, warning: TextView): BoxFormGenerator {
+    open fun verifyNameInput(name: EditText, warning: TextView): BoxFormGenerator {
         nameWarning = warning
         nameInput = name
         nameInput.setTextColor(Color.parseColor(nameColor))
@@ -67,17 +67,17 @@ class BoxFormGenerator(
                 val input = nameInput.text.toString()
                 nameCorrect = when {
                     input.isEmpty() -> {
-                        DrawableCompat.setTint(nameInput.background, AppColors.BLUE.raw)
+                        handleWarning(input, "")
                         false
                     }
                     !validName.matches(input) -> {
-                        handleWarning(nameInvalid)
+                        handleWarning(input, nameInvalid)
                         false
                     }
                     else -> {
-                        val nameFree = withContext(Dispatchers.IO) { checkBoxNameTaken(input) }
-                        handleWarning(if (nameFree) ""  else nameTaken)
-                        nameFree
+                        val nameIsTaken = withContext(Dispatchers.IO) { checkBoxNameTaken(input) }
+                        handleWarning(input, if (nameIsTaken) nameTaken else "")
+                        !nameIsTaken
                     }
                 }
                 checkAll()
@@ -87,7 +87,7 @@ class BoxFormGenerator(
         return this
     }
 
-    fun addDescriptionInput(description: EditText): BoxFormGenerator {
+    open fun addDescriptionInput(description: EditText): BoxFormGenerator {
         descriptionInput = description
         descriptionInput.setTextColor(Color.parseColor(descriptionColor))
         return this
@@ -101,12 +101,12 @@ class BoxFormGenerator(
         nameColor = colorToHex(color)
     }
 
-    fun addBoxPrivacyOptions(handler: BoxPrivacyHandler): BoxFormGenerator {
+    open fun addBoxPrivacyOptions(handler: BoxPrivacyHandler): BoxFormGenerator {
         privacyOptions = handler
         return this
     }
 
-    fun addEditorList(handler: AccessList): BoxFormGenerator {
+    open fun addEditorList(handler: AccessList): BoxFormGenerator {
         editorsContainer = handler
         return this
     }
@@ -124,7 +124,12 @@ class BoxFormGenerator(
         editorsContainer.saveState(bundle)
     }
 
-    private fun handleWarning(warning: String) {
+    protected open fun handleWarning(input: String, warning: String) {
+        if (input.isEmpty()) {
+            DrawableCompat.setTint(nameInput.background, AppColors.BLUE.raw)
+            nameWarning.text = ""
+            return
+        }
         nameWarning.text = warning
         val nameInputColor = if (warning.isEmpty()) AppColors.GREEN else AppColors.CRIMSON
         DrawableCompat.setTint(nameInput.background, nameInputColor.raw)
@@ -134,14 +139,14 @@ class BoxFormGenerator(
         val verifyContainer = BoxesContainer.VerifyBody(username, input)
         val (st, res) = api.verify(verifyContainer)
         val (foundValue) = res as BoxesContainer.VerifyRes
-        return foundValue == null
+        return foundValue != null
     }
 
-    fun checkAll() {
+    open fun checkAll() {
         decorateSubmitter(nameCorrect)
     }
 
-    private fun decorateSubmitter(validState: Boolean) {
+    protected fun decorateSubmitter(validState: Boolean) {
         submitter.isEnabled = validState
         val btnColor = if (validState) AppColors.GREEN.raw else AppColors.BLUE.raw
         val shapeDrawable = ShapeDrawable()
@@ -156,7 +161,7 @@ class BoxFormGenerator(
 
     private fun colorToHex(color: Int): String = String.format("#%06X", color and 0xFFFFFF).toLowerCase(Locale.ROOT)
 
-    private suspend fun handleSubmit() {
+    protected open suspend fun handleSubmit() {
         val editorsList = editorsContainer.getAddedUsers()
         val (privacy, limitedList) = privacyOptions.getPrivacy()
         val createdBody = BoxesContainer.EditedBoxData(
@@ -174,9 +179,6 @@ class BoxFormGenerator(
         )
 
         val (st, res) = withContext(Dispatchers.IO) { api.createBox(createdBody) }
-        if (st == 201) {
-            val (createdBoxName) = res as BoxesContainer.NameContainer
-            submitClb(createdBoxName)
-        }
+        if (st == 201) submitClb(res)
     }
 }

@@ -9,8 +9,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
-import com.diches.dichboxmobile.mv.boxesDataManager.BoxDataViewModel
-import com.diches.dichboxmobile.mv.boxesDataManager.CurrentBoxViewModel
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxDataViewModel
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.CurrentBoxViewModel
 import com.diches.dichboxmobile.mv.settings.RemoveAccountOption
 import com.diches.dichboxmobile.mv.settings.SignOutOption
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel

@@ -10,8 +10,7 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
-import com.diches.dichboxmobile.mv.boxesDataManager.BoxesListViewModel
-import com.diches.dichboxmobile.mv.boxesDataManager.CurrentBoxViewModel
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.CurrentBoxViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 import com.diches.dichboxmobile.mv.usersSearch.UsersSearch
 import com.diches.dichboxmobile.mv.usersSearch.UsersSearchViewModel

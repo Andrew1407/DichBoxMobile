@@ -15,7 +15,8 @@ import com.diches.dichboxmobile.tools.fromBase64ToBitmap
 class AddedUsersAdapter(
         context: Context,
         private val resource: Int,
-        var items: MutableList<UserContainer.FoundUser>
+        var items: MutableList<UserContainer.FoundUser>,
+        private val okClb: (() -> Unit)? = null
 ) : ArrayAdapter<UserContainer.FoundUser>(context, resource, items) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -49,6 +50,7 @@ class AddedUsersAdapter(
         icon.setOnClickListener {
             items.removeIf { it.name == name }
             notifyDataSetChanged()
+            okClb?.invoke()
         }
     }
 

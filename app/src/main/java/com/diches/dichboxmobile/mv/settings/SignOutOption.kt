@@ -2,8 +2,8 @@ package com.diches.dichboxmobile.mv.settings
 
 import android.content.Context
 import android.widget.TextView
-import com.diches.dichboxmobile.mv.boxesDataManager.BoxDataViewModel
-import com.diches.dichboxmobile.mv.boxesDataManager.CurrentBoxViewModel
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxDataViewModel
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.CurrentBoxViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 

@@ -20,7 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/times_new_roman400"
-            android:textSize="55sp"
+            android:textSize="50sp"
+            android:layout_marginTop="10dp"
             android:gravity="center"
             android:layout_marginBottom="20dp"/>
 
@@ -48,7 +49,6 @@
                 android:layout_height="wrap_content"
                 android:textSize="30sp"
                 android:textColor="@color/light_blue"
-                android:text="Creator: RuzuЯ"
                 android:layout_marginTop="15dp" />
 
             <TextView
@@ -57,7 +57,6 @@
                 android:layout_height="wrap_content"
                 android:textSize="25sp"
                 android:textColor="@color/light_blue"
-                android:text="Type: public"
                 android:layout_marginTop="15dp" />
 
             <TextView
@@ -66,7 +65,6 @@
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:textColor="@color/light_blue"
-                android:text="Created: 03.24.2021, 03:36:30 PM"
                 android:layout_marginTop="15dp" />
 
             <TextView
@@ -75,7 +73,6 @@
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:textColor="@color/light_blue"
-                android:text="Last edited: 04.04.2021, 05:35:13 PM"
                 android:layout_marginTop="15dp" />
 
         </LinearLayout>
@@ -84,13 +81,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/top_border_solid"
-            android:paddingTop="35dp">
+            android:paddingTop="45dp">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/otherBoxesBtn"
                 style="@style/editBtnStyle"
-                android:layout_gravity="center"
-                android:text = "view other boxes" />
+                android:text="view other boxes"
+                android:layout_gravity="center"/>
 
         </FrameLayout>
 

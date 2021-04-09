@@ -30,6 +30,30 @@ class BoxesAPI : ApiParser<BoxesContainer>() {
         )
     }
 
+    suspend fun getBoxDetails(infoContainer: BoxesContainer.BoxDetailsReq): Pair<Int, BoxesContainer> {
+        val reqBody = makeRequest(infoContainer)
+        val response = service.getBoxDetails(reqBody)
+        return getResponseData(
+                response, BoxesContainer.BoxData::class.java
+        )
+    }
+
+    suspend fun removeBox(rmContainer: BoxesContainer.RemoveBoxReq): Pair<Int, BoxesContainer> {
+        val reqBody = makeRequest(rmContainer)
+        val response = service.removeBox(reqBody)
+        return getResponseData(
+                response, BoxesContainer.Removed::class.java
+        )
+    }
+
+    suspend fun editBox(editedContainer: BoxesContainer.EditedBoxData): Pair<Int, BoxesContainer> {
+        val reqBody = makeRequest(editedContainer)
+        val response = service.editBox(reqBody)
+        return getResponseData(
+                response, BoxesContainer.EditedFields::class.java
+        )
+    }
+
     override fun parseJSON(jsonStr: String, container: Class<*>): BoxesContainer {
         return BoxesContainer.parseJSON(jsonStr, container)
     }

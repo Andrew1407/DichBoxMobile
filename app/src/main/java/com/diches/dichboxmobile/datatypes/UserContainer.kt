@@ -127,4 +127,14 @@ sealed class UserContainer {
             val username: String,
             val nameTemplate: String
     ) : UserContainer()
+
+    data class AccessListsReq(
+            val username: String,
+            val boxName: String
+    ) : UserContainer()
+
+    data class AccessLists(
+            val limitedUsers: List<FoundUser>,
+            val editors: List<FoundUser>
+    ) : UserContainer()
 }

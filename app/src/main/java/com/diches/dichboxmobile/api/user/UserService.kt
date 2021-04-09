@@ -45,4 +45,7 @@ interface UserService {
 
     @POST("/users/names_list")
     suspend fun findUsernames(@Body requestBody: RequestBody): Response<ResponseBody>
+
+    @POST("/users/access_lists")
+    suspend fun getAccessLists(@Body requestBody: RequestBody): Response<ResponseBody>
 }

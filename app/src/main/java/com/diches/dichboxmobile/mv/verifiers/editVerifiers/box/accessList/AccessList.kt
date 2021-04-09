@@ -32,6 +32,7 @@ class AccessList(
     private val foundUsers: List<UserContainer.FoundUser> = listsState.found.value ?: defaultFound
     private val addedUsers: List<UserContainer.FoundUser> = listsState.added.value ?: emptyList()
     private var savedInput = ""
+    private lateinit var onListModifiedClb: () -> Unit
 
     init {
         if (addedUsers.isEmpty())
@@ -43,6 +44,10 @@ class AccessList(
         return this
     }
 
+    fun onListModified(clb: () -> Unit) {
+        onListModifiedClb = clb
+    }
+
     fun saveState(bundle: Bundle) {
         val found = (foundUsersView.adapter as FoundUsersAdapter).items
         val added = (addedUsersView.adapter as AddedUsersAdapter).items
@@ -52,9 +57,12 @@ class AccessList(
     }
 
     fun addListAdapters(ctx: Context): AccessList {
-        addedUsersView.adapter = AddedUsersAdapter(ctx, R.layout.found_user, addedUsers.toMutableList())
+        addedUsersView.adapter = AddedUsersAdapter(ctx, R.layout.found_user, addedUsers.toMutableList()) {
+            if (this::onListModifiedClb.isInitialized) onListModifiedClb()
+        }
         foundUsersView.adapter = FoundUsersAdapter(ctx, R.layout.found_user, foundUsers) {
             addFoundUser(it)
+            if (this::onListModifiedClb.isInitialized) onListModifiedClb()
         }
 
         return this

@@ -6,6 +6,7 @@ import com.diches.dichboxmobile.tools.AppColors
 import com.diches.dichboxmobile.datatypes.UserContainer
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
+import com.diches.dichboxmobile.tools.decorateView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
