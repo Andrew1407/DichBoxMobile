@@ -10,6 +10,7 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxDataViewModel
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.CurrentBoxViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 import com.diches.dichboxmobile.mv.usersSearch.UsersSearch
@@ -36,11 +37,14 @@ class Search : Fragment() {
         val usersList = view.findViewById<ListView>(R.id.usersList)
         redirector = requireActivity() as Redirector
         val visitorViewModel = ViewModelProvider(requireActivity()).get(UserStateViewModel::class.java)
-        val boxViewModel = ViewModelProvider(requireActivity()).get(CurrentBoxViewModel::class.java)
         val usersSearchViewModel = ViewModelProvider(requireActivity()).get(UsersSearchViewModel::class.java)
+        val boxViewModel = ViewModelProvider(requireActivity()).get(CurrentBoxViewModel::class.java)
+        val boxDetailsViewModel = ViewModelProvider(requireActivity()).get(BoxDataViewModel::class.java)
+        val adaptedViews = Pair(boxViewModel, boxDetailsViewModel)
+
         usersList.emptyView = searchMsg
         userSearch = UsersSearch(usersList, visitorViewModel, usersSearchViewModel, savedInstanceState != null)
-                .createListAdapter(view, savedInstanceState, boxViewModel, redirector)
+                .createListAdapter(view, savedInstanceState, adaptedViews, redirector)
                 .addOnEmptyMsg(searchMsg)
                 .handleInputSearch(inputField)
     }

@@ -38,14 +38,6 @@ class BoxesListPresenter(
         return boxesList
     }
 
-    private fun getSavedList(key: String, bundle: Bundle): List<BoxesContainer.BoxDataListItem> {
-        val boxesStringified = bundle.getString(key)!!
-        val boxesContainer = BoxesContainer
-            .parseJSON(boxesStringified, BoxesContainer.UserBoxes::class.java)
-        val (boxesList) = (boxesContainer as BoxesContainer.UserBoxes)
-        return boxesList
-    }
-
     fun createListAdapter(
             bundle: Bundle?,
             names: Pair<String?, String>,

@@ -49,6 +49,7 @@ class BoxesList : Fragment() {
             val fragment = initialFragment ?: if (boxesShown) BoxesInfo() else BoxesNone()
             setFragmentVisible(fragment, tag)
         }
+
         boxViewModel.boxName.observe(viewLifecycleOwner) {
             val names = stateViewModel.namesState.value!!
             val signedName = names.first

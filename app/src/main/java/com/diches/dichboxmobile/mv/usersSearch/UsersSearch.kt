@@ -8,9 +8,11 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.ViewModel
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.api.user.UserAPI
 import com.diches.dichboxmobile.datatypes.UserContainer
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxDataViewModel
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.CurrentBoxViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 import com.diches.dichboxmobile.view.Search
@@ -39,18 +41,21 @@ class UsersSearch(
     fun createListAdapter(
             view: View,
             bundle: Bundle?,
-            boxViewModel: CurrentBoxViewModel,
+            viewStates: Pair<ViewModel, ViewModel>,
             redirector: Search.Redirector): UsersSearch {
         val initialList = if (bundle == null) emptyList() else usersSearchViewModel.liveData.value!!
         listView.adapter = UsersSearchAdapter(view.context, R.layout.found_user, initialList) {
             visitUserPage(it, redirector)
-            redirectionCleanup(view, boxViewModel)
+            redirectionCleanup(view, viewStates)
         }
         return this
     }
 
-    private fun redirectionCleanup(view: View, boxState: CurrentBoxViewModel) {
-        if (boxState.boxName.value != null) boxState.setCurrentBox(null)
+    private fun redirectionCleanup(view: View, viewStates: Pair<ViewModel, ViewModel>) {
+        val boxNameState = viewStates.first as CurrentBoxViewModel
+        val boxDataState = viewStates.second as BoxDataViewModel
+        if (boxNameState.boxName.value != null) boxNameState.setCurrentBox(null)
+        if (boxDataState.liveData.value != null) boxDataState.setBoxData(null)
         usersSearchViewModel.setUsers(emptyList())
         searchInput.text.clear()
         ContextCompat

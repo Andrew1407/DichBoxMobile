@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxDataViewModel
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.CurrentBoxViewModel
 import com.diches.dichboxmobile.mv.userDataManager.UserDataFetcher
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
@@ -123,12 +124,15 @@ class MainActivity :
     private fun goToHomePage() {
         homePageIcon = findViewById(R.id.homePageIcon)
         val boxViewModel = ViewModelProvider(this).get(CurrentBoxViewModel::class.java)
+        val boxDataViewModel = ViewModelProvider(this).get(BoxDataViewModel::class.java)
         homePageIcon.setOnClickListener {
             val oldNamesState = viewModel.namesState.value!!
             if (oldNamesState.first != oldNamesState.second)
                 viewModel.setState(oldNamesState.copy(second = oldNamesState.first))
             val boxState = boxViewModel.boxName.value
+            val boxDataState = boxDataViewModel.liveData.value
             if (boxState != null) boxViewModel.setCurrentBox(null)
+            if (boxDataState != null) boxDataViewModel.setBoxData(null)
             redirectToUserPage()
         }
     }
