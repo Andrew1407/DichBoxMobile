@@ -9,23 +9,15 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxDataViewModel
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.CurrentBoxViewModel
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.FilesListViewModel
 import com.diches.dichboxmobile.mv.userDataManager.UserDataFetcher
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 import com.diches.dichboxmobile.view.*
-import com.diches.dichboxmobile.view.boxData.AddBox
-import com.diches.dichboxmobile.view.boxData.BoxEditor
-import com.diches.dichboxmobile.view.boxesList.BoxesInfo
 import com.diches.dichboxmobile.view.boxesList.BoxesList
-import com.diches.dichboxmobile.view.boxData.BoxInfo
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class MainActivity :
-        AppCompatActivity(),
-        Search.Redirector,
-        BoxesInfo.BoxesInfoRedirect,
-        AddBox.AddBoxRedirect,
-        BoxInfo.BoxInfoRedirect {
+class MainActivity : AppCompatActivity(), FragmentsRedirector {
     private lateinit var toolbar: Toolbar
     private lateinit var bottomNav: BottomNavigationView
     private lateinit var navFragments: List<Fragment>
@@ -123,16 +115,17 @@ class MainActivity :
 
     private fun goToHomePage() {
         homePageIcon = findViewById(R.id.homePageIcon)
-        val boxViewModel = ViewModelProvider(this).get(CurrentBoxViewModel::class.java)
-        val boxDataViewModel = ViewModelProvider(this).get(BoxDataViewModel::class.java)
+        val viewStates = listOf(
+            CurrentBoxViewModel::class.java,
+            BoxDataViewModel::class.java,
+            FilesListViewModel::class.java
+        ).map { ViewModelProvider(this).get(it) }
+
         homePageIcon.setOnClickListener {
             val oldNamesState = viewModel.namesState.value!!
             if (oldNamesState.first != oldNamesState.second)
                 viewModel.setState(oldNamesState.copy(second = oldNamesState.first))
-            val boxState = boxViewModel.boxName.value
-            val boxDataState = boxDataViewModel.liveData.value
-            if (boxState != null) boxViewModel.setCurrentBox(null)
-            if (boxDataState != null) boxDataViewModel.setBoxData(null)
+            viewStates.forEach { it.clear() }
             redirectToUserPage()
         }
     }
@@ -147,19 +140,19 @@ class MainActivity :
         }
     }
 
-    override fun handleRedirection() {
+    override fun redirectSearched() {
         redirectToUserPage()
     }
 
-    override fun changeFragmentToBoxAdd() {
+    override fun redirectToBoxAdd() {
         (navFragments[1] as BoxesList).setCurrentPosition(2)
     }
 
-    override fun changeFragmentToBoxInfo() {
+    override fun redirectToBoxInfo() {
         (navFragments[1] as BoxesList).setCurrentPosition(1)
     }
 
-    override fun changeFragmentToBoxesList() {
+    override fun redirectToBoxesList() {
         (navFragments[1] as BoxesList).redirectToBoxesList()
     }
 

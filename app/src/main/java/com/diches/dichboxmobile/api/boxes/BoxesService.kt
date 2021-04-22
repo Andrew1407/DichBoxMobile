@@ -24,4 +24,16 @@ interface BoxesService {
 
     @POST("/boxes/edit")
     suspend fun editBox(@Body requestBody: RequestBody): Response<ResponseBody>
+
+    @POST("/boxes/files/list")
+    suspend fun getPathFiles(@Body requestBody: RequestBody): Response<ResponseBody>
+
+    @POST("/boxes/files/remove")
+    suspend fun removeFile(@Body requestBody: RequestBody): Response<ResponseBody>
+
+    @POST("/boxes/files/rename")
+    suspend fun renameFile(@Body requestBody: RequestBody): Response<ResponseBody>
+
+    @POST("/boxes/files/create")
+    suspend fun createFile(@Body requestBody: RequestBody): Response<ResponseBody>
 }

@@ -10,6 +10,7 @@ import com.diches.dichboxmobile.api.boxes.BoxesAPI
 import com.diches.dichboxmobile.datatypes.BoxesContainer
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxesListViewModel
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.CurrentBoxViewModel
+import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 import com.diches.dichboxmobile.view.boxData.BoxEntries
 import kotlinx.coroutines.runBlocking
 
@@ -41,7 +42,8 @@ class BoxesListPresenter(
     fun createListAdapter(
             bundle: Bundle?,
             names: Pair<String?, String>,
-            boxState: CurrentBoxViewModel
+            boxState: CurrentBoxViewModel,
+            userState: UserStateViewModel
     ): BoxesListPresenter {
         boxes = if (bundle == null) getBoxesByRequest(names)
             else boxesListViewModel.liveData.value!!.first
@@ -50,8 +52,11 @@ class BoxesListPresenter(
         listView.adapter = BoxesListAdapter(
                 fragment.requireContext(), R.layout.boxes_list_item,
                 boxes.toList(), boxesShown.toList()
-        ) {
-            boxState.setCurrentBox(it)
+        ) { boxName, ownerName ->
+            val oldNames = userState.namesState.value!!
+            if (oldNames.first != ownerName)
+                userState.setState(oldNames.copy(second = ownerName))
+            boxState.setCurrentBox(boxName)
             fragment.parentFragmentManager
                     .beginTransaction()
                     .replace(R.id.boxesContainer, BoxEntries(), "BOXES_ENTRIES_TAG")

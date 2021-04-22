@@ -9,18 +9,16 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.diches.dichboxmobile.FragmentsRedirector
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.mv.boxesDataManager.BoxProfiler
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxDataViewModel
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.CurrentBoxViewModel
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.FilesListViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 
 class BoxInfo : Fragment() {
     private lateinit var boxProfiler: BoxProfiler
-
-    interface BoxInfoRedirect {
-        fun changeFragmentToBoxesList()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,9 +30,14 @@ class BoxInfo : Fragment() {
 
         val otherBoxesBtn = view.findViewById<Button>(R.id.otherBoxesBtn)
 
-        val currentBoxViewModel = ViewModelProvider(requireActivity()).get(CurrentBoxViewModel::class.java)
-        val boxDataViewModel = ViewModelProvider(requireActivity()).get(BoxDataViewModel::class.java)
         val namesViewModel = ViewModelProvider(requireActivity()).get(UserStateViewModel::class.java)
+        val viewStates = listOf(
+            BoxDataViewModel::class.java,
+            CurrentBoxViewModel::class.java,
+            FilesListViewModel::class.java
+        ).map { ViewModelProvider(requireActivity()).get(it) }
+        val boxDataViewModel = viewStates[0] as BoxDataViewModel
+        val currentBoxViewModel = viewStates[1] as CurrentBoxViewModel
 
         val boxName = currentBoxViewModel.boxName.value!!
         val usernames = namesViewModel.namesState.value!!
@@ -47,13 +50,11 @@ class BoxInfo : Fragment() {
             handleInfoFields(view)
         }
 
-        val redirector = requireActivity() as BoxInfoRedirect
+        val redirector = requireActivity() as FragmentsRedirector
 
         otherBoxesBtn.setOnClickListener {
-            val boxViewModel = ViewModelProvider(requireActivity()).get(CurrentBoxViewModel::class.java)
-            boxViewModel.setCurrentBox(null)
-            boxDataViewModel.setBoxData(null)
-            redirector.changeFragmentToBoxesList()
+            viewStates.forEach { it.clear() }
+            redirector.redirectToBoxesList()
         }
     }
 

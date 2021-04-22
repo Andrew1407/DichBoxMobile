@@ -9,6 +9,7 @@ import android.widget.ListView
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.diches.dichboxmobile.FragmentsRedirector
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.mv.boxesDataManager.BoxesListPresenter
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxesListViewModel
@@ -21,10 +22,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 class BoxesInfo : Fragment() {
     private lateinit var listHandler: BoxesListPresenter
     private lateinit var nameArgs: Pair<String?, String>
-
-    interface BoxesInfoRedirect {
-        fun changeFragmentToBoxAdd()
-    }
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -57,18 +54,18 @@ class BoxesInfo : Fragment() {
         listView.emptyView = view.findViewById(R.id.boxesListEmpty)
 
         listHandler = BoxesListPresenter(this, listView, typesSpinner, boxesListViewModel)
-            .createListAdapter(savedInstanceState, nameArgs, boxViewModel)
+            .createListAdapter(savedInstanceState, nameArgs, boxViewModel, stateViewModel)
             .handleSearch(boxesSearch)
             .createSpinnerAdapter(savedInstanceState, ownPage)
 
-        val redirector = requireActivity() as BoxesInfoRedirect
+        val redirector = requireActivity() as FragmentsRedirector
 
         addBoxBtn.setOnClickListener {
             parentFragmentManager
                     .beginTransaction()
                     .replace(R.id.boxesContainer, AddBox(), "BOXES_ADD_TAG")
                     .commit()
-            redirector.changeFragmentToBoxAdd()
+            redirector.redirectToBoxAdd()
         }
 
         userViewModel.liveData.observe(viewLifecycleOwner) {

@@ -24,14 +24,13 @@ class BoxEntries : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val userViewModel = ViewModelProvider(requireActivity()).get(UserDataViewModel::class.java)
         val stateViewModel = ViewModelProvider(requireActivity()).get(UserStateViewModel::class.java)
 
         val viewPager = view.findViewById<ViewPager2>(R.id.boxViewPager)
         val tabLayout = view.findViewById<TabLayout>(R.id.boxTabLayout)
 
-        val signedName = stateViewModel.namesState.value!!.first
-        val ownPage = if (signedName == null ) false else userViewModel.liveData.value!!.ownPage
+        val names = stateViewModel.namesState.value!!
+        val ownPage = names.first == names.second
 
         val allOptions = listOf(
             Pair("info", BoxInfo()),

@@ -79,5 +79,61 @@ sealed class BoxesContainer {
             val ownPage: Boolean
     ) : BoxesContainer()
 
+    data class PathEntriesReq(
+           val boxPath: List<String>,
+           val viewerName: String?,
+           val initial: Boolean
+    ) : BoxesContainer()
+
+    data class PathEntries(
+            val entries: Entries
+    ) : BoxesContainer()
+
+    data class Entries(
+            val type: String,
+            val file: Dir? = null,
+            val dir: Dir? = null
+    ) : BoxesContainer()
+
+    data class Dir(
+            val src: List<TypeDir>,
+            val name: String
+    ) : BoxesContainer()
+
+    data class TypeDir(
+            val type: String,
+            val name: String
+    ) : BoxesContainer()
+
+    data class FilePropertiesReq(
+            val boxPath: List<String>,
+            val viewerName: String,
+            val fileName: String,
+            val type: String,
+            val src: String? = null
+    ) : BoxesContainer()
+
+    data class RemoveFileRes(
+            val removed: Boolean,
+            val last_edited: String
+    ) : BoxesContainer()
+
+    data class RenameFileReq(
+            val boxPath: List<String>,
+            val viewerName: String,
+            val fileName: String,
+            val newName: String
+    ) : BoxesContainer()
+
+    data class RenameFileRes(
+            val renamed: Boolean,
+            val last_edited: String
+    ) : BoxesContainer()
+
+    data class CreateFileRes(
+            val created: Entries,
+            val last_edited: String
+    ) : BoxesContainer()
+
     data class Removed(val removed: Boolean) : BoxesContainer()
 }

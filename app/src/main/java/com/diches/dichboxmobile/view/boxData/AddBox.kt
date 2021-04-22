@@ -14,6 +14,7 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.diches.dichboxmobile.FragmentsRedirector
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.datatypes.BoxesContainer
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.CurrentBoxViewModel
@@ -35,10 +36,6 @@ class AddBox: Fragment() {
     private lateinit var imagePicker: ImageCropper
     private lateinit var boxLogoEditor: BoxLogoEditor
     private lateinit var formHandler: BoxFormGenerator
-
-    interface AddBoxRedirect {
-        fun changeFragmentToBoxInfo()
-    }
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -121,13 +118,13 @@ class AddBox: Fragment() {
     }
 
     private fun setUpRedirector(cancelBtn: Button) {
-        val redirector = requireActivity() as AddBoxRedirect
+        val redirector = requireActivity() as FragmentsRedirector
         cancelBtn.setOnClickListener {
             parentFragmentManager
                     .beginTransaction()
                     .replace(R.id.boxesContainer, BoxesInfo(), "BOXES_LIST_TAG")
                     .commit()
-            redirector.changeFragmentToBoxInfo()
+            redirector.redirectToBoxInfo()
         }
     }
 
@@ -172,7 +169,6 @@ class AddBox: Fragment() {
             view?.findViewById<ImageView>(R.id.editUserLogo)?.setImageBitmap(it)
             val imageEncoded = fromBitmapToBase64(it)
             boxLogoEditor.setLogo(imageEncoded)
-
         }
     }
 

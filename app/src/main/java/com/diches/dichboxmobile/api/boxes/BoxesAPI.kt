@@ -54,6 +54,38 @@ class BoxesAPI : ApiParser<BoxesContainer>() {
         )
     }
 
+    suspend fun getPathFiles(pathContainer: BoxesContainer.PathEntriesReq): Pair<Int, BoxesContainer> {
+        val reqBody = makeRequest(pathContainer)
+        val response = service.getPathFiles(reqBody)
+        return getResponseData(
+                response, BoxesContainer.PathEntries::class.java
+        )
+    }
+
+    suspend fun removeFile(rmContainer: BoxesContainer.FilePropertiesReq): Pair<Int, BoxesContainer> {
+        val reqBody = makeRequest(rmContainer)
+        val response = service.removeFile(reqBody)
+        return getResponseData(
+                response, BoxesContainer.RemoveFileRes::class.java
+        )
+    }
+
+    suspend fun renameFile(renameContainer: BoxesContainer.RenameFileReq): Pair<Int, BoxesContainer> {
+        val reqBody = makeRequest(renameContainer)
+        val response = service.renameFile(reqBody)
+        return getResponseData(
+                response, BoxesContainer.RenameFileRes::class.java
+        )
+    }
+
+    suspend fun createFile(createContainer: BoxesContainer.FilePropertiesReq): Pair<Int, BoxesContainer> {
+        val reqBody = makeRequest(createContainer)
+        val response = service.createFile(reqBody)
+        return getResponseData(
+                response, BoxesContainer.CreateFileRes::class.java
+        )
+    }
+
     override fun parseJSON(jsonStr: String, container: Class<*>): BoxesContainer {
         return BoxesContainer.parseJSON(jsonStr, container)
     }

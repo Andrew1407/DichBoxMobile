@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="650dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/boxesFilesSearch"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/inputStyle"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="20dp"
+                    android:hint="search" />
+
+                <TextView
+                    android:id="@+id/boxFilesPath"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/light_blue"
+                    android:textSize="26sp"
+                    android:gravity="center_horizontal"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:layout_marginBottom="15dp"/>
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:id="@+id/addBoxFiles"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:layout_marginEnd="15dp"
+                android:paddingTop="10dp">
+
+                <ImageView
+                    android:id="@+id/addImgIcon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/add_image"/>
+
+                <ImageView
+                    android:id="@+id/addFileIcon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/add_file"/>
+
+                <ImageView
+                    android:id="@+id/addDirIcon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/add_folder"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/top_orange_stroke"
+            android:paddingTop="20dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/goBackOption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="5dp"
+                android:paddingEnd="7dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/goBackIcon"
+                    android:src="@drawable/folder_icon"
+                    android:layout_marginEnd="3dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"/>
+
+                <TextView
+                    android:id="@+id/goBackText"
+                    android:text="..."
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/light_blue"
+                    android:textSize="22sp"/>
+
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/boxFilesList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:divider="@null"
+                android:paddingBottom="15dp"
+                android:nestedScrollingEnabled="true"/>
+
+            <TextView
+                android:id="@+id/emptyFilesList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/emptyList"
+                android:layout_gravity="center_horizontal"
+                android:text="This directory is empty"
+                android:layout_marginBottom="30dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

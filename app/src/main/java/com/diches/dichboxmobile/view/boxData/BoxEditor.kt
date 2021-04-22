@@ -14,6 +14,7 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.diches.dichboxmobile.FragmentsRedirector
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.datatypes.BoxesContainer
 import com.diches.dichboxmobile.mv.boxesDataManager.RemoveBoxDialog
@@ -48,12 +49,13 @@ class BoxEditor : Fragment() {
 
         val boxDataViewModel = ViewModelProvider(requireActivity()).get(BoxDataViewModel::class.java)
         val boxViewModel = ViewModelProvider(requireActivity()).get(CurrentBoxViewModel::class.java)
+        val filesListVM = ViewModelProvider(requireActivity()).get(FilesListViewModel::class.java)
         editorsCopyVM = ViewModelProvider(requireActivity()).get(EditorsCopyViewModel::class.java)
         viewersCopyVM = ViewModelProvider(requireActivity()).get(ViewersCopyViewModel::class.java)
         editorsVM = ViewModelProvider(requireActivity()).get(EditorsViewModel::class.java)
         viewersVM = ViewModelProvider(requireActivity()).get(ViewersViewModel::class.java)
 
-        val redirector = requireActivity() as BoxInfo.BoxInfoRedirect
+        val redirector = requireActivity() as FragmentsRedirector
 
         val removeBoxBtn = view.findViewById<Button>(R.id.removeBoxBtn)
         val submitBtn = view.findViewById<Button>(R.id.editBoxBtn)
@@ -138,7 +140,8 @@ class BoxEditor : Fragment() {
                             .commit()
                 }
 
-        val removeBoxDialog = RemoveBoxDialog(requireContext(), boxViewModel, boxDataViewModel, redirector)
+        val statesList = listOf(boxViewModel, boxDataViewModel, filesListVM)
+        val removeBoxDialog = RemoveBoxDialog(requireContext(), statesList, redirector)
         removeBoxDialog.handleOptionAction(removeBoxBtn)
 
         setColorPickerDialog(

@@ -8,14 +8,12 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.ViewModel
+import com.diches.dichboxmobile.FragmentsRedirector
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.api.user.UserAPI
 import com.diches.dichboxmobile.datatypes.UserContainer
-import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxDataViewModel
-import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.CurrentBoxViewModel
+import com.diches.dichboxmobile.mv.Cleanable
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
-import com.diches.dichboxmobile.view.Search
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,8 +39,8 @@ class UsersSearch(
     fun createListAdapter(
             view: View,
             bundle: Bundle?,
-            viewStates: Pair<ViewModel, ViewModel>,
-            redirector: Search.Redirector): UsersSearch {
+            viewStates: List<Cleanable>,
+            redirector: FragmentsRedirector): UsersSearch {
         val initialList = if (bundle == null) emptyList() else usersSearchViewModel.liveData.value!!
         listView.adapter = UsersSearchAdapter(view.context, R.layout.found_user, initialList) {
             visitUserPage(it, redirector)
@@ -51,11 +49,8 @@ class UsersSearch(
         return this
     }
 
-    private fun redirectionCleanup(view: View, viewStates: Pair<ViewModel, ViewModel>) {
-        val boxNameState = viewStates.first as CurrentBoxViewModel
-        val boxDataState = viewStates.second as BoxDataViewModel
-        if (boxNameState.boxName.value != null) boxNameState.setCurrentBox(null)
-        if (boxDataState.liveData.value != null) boxDataState.setBoxData(null)
+    private fun redirectionCleanup(view: View, viewStates: List<Cleanable>) {
+        viewStates.forEach { it.clear() }
         usersSearchViewModel.setUsers(emptyList())
         searchInput.text.clear()
         ContextCompat
@@ -63,10 +58,10 @@ class UsersSearch(
                 ?.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
-    private fun visitUserPage(name: String, redirector: Search.Redirector) {
+    private fun visitUserPage(name: String, redirector: FragmentsRedirector) {
         val oldState = userStateViewModel.namesState.value!!
         userStateViewModel.setState(oldState.copy(second = name))
-        redirector.handleRedirection()
+        redirector.redirectSearched()
     }
 
     fun saveFoundState() {

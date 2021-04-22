@@ -12,21 +12,13 @@ import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.diches.dichboxmobile.tools.fromUriToBitmap
+import com.diches.dichboxmobile.tools.pickFromGallery
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import java.io.ByteArrayOutputStream
 
 class ImageCropper(private val fragment: Fragment) {
     private val resultCode = 100
-
-    private fun pickFromGallery() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        intent.type = "image/*"
-        val mimeTypes = arrayOf("image/jpeg", "image/png", "image/jpg")
-        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
-        intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-        fragment.startActivityForResult(intent, resultCode)
-    }
 
     private fun launchImageCrop(uri: Uri){
         CropImage.activity(uri)
@@ -42,11 +34,8 @@ class ImageCropper(private val fragment: Fragment) {
         data: Intent?,
         imageHandler: (src: Bitmap) -> Unit
     ) {
-        if (requestCode == this.resultCode && resultCode == Activity.RESULT_OK) {
-            data?.data?.let { uri ->
-                launchImageCrop(uri)
-            }
-        }
+        if (requestCode == this.resultCode && resultCode == Activity.RESULT_OK)
+            data?.data?.let { launchImageCrop(it) }
 
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE &&
             resultCode == Activity.RESULT_OK) {
@@ -58,6 +47,6 @@ class ImageCropper(private val fragment: Fragment) {
     }
 
     fun handlePickOnClick(btn: Button) {
-        btn.setOnClickListener { pickFromGallery() }
+        btn.setOnClickListener { pickFromGallery(fragment, resultCode) }
     }
 }
