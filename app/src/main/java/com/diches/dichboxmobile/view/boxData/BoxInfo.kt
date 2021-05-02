@@ -15,6 +15,7 @@ import com.diches.dichboxmobile.mv.boxesDataManager.BoxProfiler
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxDataViewModel
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.CurrentBoxViewModel
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.FilesListViewModel
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.OpenedFilesViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 
 class BoxInfo : Fragment() {
@@ -32,9 +33,10 @@ class BoxInfo : Fragment() {
 
         val namesViewModel = ViewModelProvider(requireActivity()).get(UserStateViewModel::class.java)
         val viewStates = listOf(
-            BoxDataViewModel::class.java,
-            CurrentBoxViewModel::class.java,
-            FilesListViewModel::class.java
+                BoxDataViewModel::class.java,
+                CurrentBoxViewModel::class.java,
+                FilesListViewModel::class.java,
+                OpenedFilesViewModel::class.java
         ).map { ViewModelProvider(requireActivity()).get(it) }
         val boxDataViewModel = viewStates[0] as BoxDataViewModel
         val currentBoxViewModel = viewStates[1] as CurrentBoxViewModel

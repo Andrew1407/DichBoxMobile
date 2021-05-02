@@ -14,6 +14,7 @@ import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxDataViewModel
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.CurrentBoxViewModel
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.FilesListViewModel
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.OpenedFilesViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 import com.diches.dichboxmobile.mv.usersSearch.UsersSearch
 import com.diches.dichboxmobile.mv.usersSearch.UsersSearchViewModel
@@ -41,7 +42,8 @@ class Search : Fragment() {
         val boxViewModel = ViewModelProvider(requireActivity()).get(CurrentBoxViewModel::class.java)
         val boxDetailsViewModel = ViewModelProvider(requireActivity()).get(BoxDataViewModel::class.java)
         val filesListViewModel = ViewModelProvider(requireActivity()).get(FilesListViewModel::class.java)
-        val adaptedViews = listOf(boxViewModel, boxDetailsViewModel, filesListViewModel)
+        val openedFilesViewModel = ViewModelProvider(requireActivity()).get(OpenedFilesViewModel::class.java)
+        val adaptedViews = listOf(boxViewModel, boxDetailsViewModel, filesListViewModel, openedFilesViewModel)
 
         usersList.emptyView = searchMsg
         userSearch = UsersSearch(usersList, visitorViewModel, usersSearchViewModel, savedInstanceState != null)

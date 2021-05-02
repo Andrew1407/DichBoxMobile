@@ -2,10 +2,12 @@ package com.diches.dichboxmobile.mv.boxesDataManager.filesManipulator.dialogs
 
 import android.content.Context
 import android.view.View
+import androidx.lifecycle.ViewModel
 import com.diches.dichboxmobile.api.boxes.BoxesAPI
 import com.diches.dichboxmobile.datatypes.BoxesContainer
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxDataViewModel
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.FilesListViewModel
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.OpenedFilesViewModel
 import com.diches.dichboxmobile.mv.settings.ConfirmDialog
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -15,10 +17,12 @@ import kotlinx.coroutines.withContext
 
 class RemoveFileDialog(
         private val context: Context,
-        private val filesListVM: FilesListViewModel,
-        private val userStateVM: UserStateViewModel,
-        private val boxDataVM: BoxDataViewModel
+        states: List<ViewModel>
 ) {
+    private val filesListVM = states[0] as FilesListViewModel
+    private val userStateVM = states[1] as UserStateViewModel
+    private val boxDataVM = states[2] as BoxDataViewModel
+    private val openedFilesVM = states[3] as OpenedFilesViewModel
     private val api = BoxesAPI()
     private val dialog = ConfirmDialog()
     private var fullPath = ""
@@ -60,6 +64,12 @@ class RemoveFileDialog(
             val filesEdited = currentFiles.src.filter { it.name != name }
             val entriesEdited = currentEntries.copy(dir = currentFiles.copy(src = filesEdited))
             filesListVM.setFilesList(BoxesContainer.PathEntries(entriesEdited))
+
+            if (openedFilesVM.liveData.value != null) {
+                path.add(name)
+                val fullPath = path.joinToString("/")
+                openedFilesVM.closeByPath(fullPath)
+            }
         }
     }
 }

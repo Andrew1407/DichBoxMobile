@@ -1,7 +1,6 @@
 package com.diches.dichboxmobile.view.boxData
 
 import android.content.Intent
-import android.media.Image
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,19 +9,16 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
-import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.mv.boxesDataManager.filesManipulator.EditorTools
 import com.diches.dichboxmobile.mv.boxesDataManager.filesManipulator.EntriesManipulator
-import com.diches.dichboxmobile.mv.boxesDataManager.filesManipulator.dialogs.InputDialog
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxDataViewModel
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.FileRedirectorViewModel
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.FilesListViewModel
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.OpenedFilesViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
-import com.diches.dichboxmobile.tools.fromBitmapToBase64
-import com.diches.dichboxmobile.tools.fromUriToBitmap
-import java.io.File
 
 class BoxFiles : Fragment() {
     private lateinit var entriesManipulator: EntriesManipulator
@@ -40,6 +36,8 @@ class BoxFiles : Fragment() {
         val usernamesVM = ViewModelProvider(requireActivity()).get(UserStateViewModel::class.java)
         val boxDataVM = ViewModelProvider(requireActivity()).get(BoxDataViewModel::class.java)
         val filesListVM = ViewModelProvider(requireActivity()).get(FilesListViewModel::class.java)
+        val openedFilesVM = ViewModelProvider(requireActivity()).get(OpenedFilesViewModel::class.java)
+        val redirectorVM = ViewModelProvider(requireActivity()).get(FileRedirectorViewModel::class.java)
 
         val pathDepth = view.findViewById<TextView>(R.id.boxFilesPath)
         val goBackView = view.findViewById<LinearLayout>(R.id.goBackOption)
@@ -58,7 +56,7 @@ class BoxFiles : Fragment() {
         val names = usernamesVM.namesState.value!!
         val viewerName = names.first
 
-        val states = listOf(filesListVM, boxDataVM, usernamesVM)
+        val states = listOf(filesListVM, boxDataVM, usernamesVM, openedFilesVM, redirectorVM)
         entriesManipulator = EntriesManipulator(this, states, viewerName!!)
                 .fillFilesState()
                 .setPathDepth(pathDepth, savedInstanceState)

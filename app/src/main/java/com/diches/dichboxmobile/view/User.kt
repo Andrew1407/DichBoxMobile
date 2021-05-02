@@ -30,6 +30,7 @@ class User : Fragment() {
         val curTag = tags[currentPosition]
         setFragmentVisible(currentFragment, curTag)
         handleSignedStateObserver()
+        savedInstanceState?.clear()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

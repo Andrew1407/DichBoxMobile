@@ -86,6 +86,22 @@ class BoxesAPI : ApiParser<BoxesContainer>() {
         )
     }
 
+    suspend fun getFileEntries(getContainer: BoxesContainer.FilePropertiesReq): Pair<Int, BoxesContainer> {
+        val reqBody = makeRequest(getContainer)
+        val response = service.getFileEntries(reqBody)
+        return getResponseData(
+                response, BoxesContainer.FoundFile::class.java
+        )
+    }
+
+    suspend fun saveFiles(saveContainer: BoxesContainer.SaveFilesReq): Pair<Int, BoxesContainer> {
+        val reqBody = makeRequest(saveContainer)
+        val response = service.saveFiles(reqBody)
+        return getResponseData(
+                response, BoxesContainer.SaveFilesRes::class.java
+        )
+    }
+
     override fun parseJSON(jsonStr: String, container: Class<*>): BoxesContainer {
         return BoxesContainer.parseJSON(jsonStr, container)
     }

@@ -36,4 +36,10 @@ interface BoxesService {
 
     @POST("/boxes/files/create")
     suspend fun createFile(@Body requestBody: RequestBody): Response<ResponseBody>
+
+    @POST("/boxes/files/get")
+    suspend fun getFileEntries(@Body requestBody: RequestBody): Response<ResponseBody>
+
+    @POST("/boxes/files/save")
+    suspend fun saveFiles(@Body requestBody: RequestBody): Response<ResponseBody>
 }

@@ -50,6 +50,8 @@ class BoxEditor : Fragment() {
         val boxDataViewModel = ViewModelProvider(requireActivity()).get(BoxDataViewModel::class.java)
         val boxViewModel = ViewModelProvider(requireActivity()).get(CurrentBoxViewModel::class.java)
         val filesListVM = ViewModelProvider(requireActivity()).get(FilesListViewModel::class.java)
+        val openedFilesVM = ViewModelProvider(requireActivity()).get(OpenedFilesViewModel::class.java)
+
         editorsCopyVM = ViewModelProvider(requireActivity()).get(EditorsCopyViewModel::class.java)
         viewersCopyVM = ViewModelProvider(requireActivity()).get(ViewersCopyViewModel::class.java)
         editorsVM = ViewModelProvider(requireActivity()).get(EditorsViewModel::class.java)
@@ -140,7 +142,7 @@ class BoxEditor : Fragment() {
                             .commit()
                 }
 
-        val statesList = listOf(boxViewModel, boxDataViewModel, filesListVM)
+        val statesList = listOf(boxViewModel, boxDataViewModel, filesListVM, openedFilesVM)
         val removeBoxDialog = RemoveBoxDialog(requireContext(), statesList, redirector)
         removeBoxDialog.handleOptionAction(removeBoxBtn)
 

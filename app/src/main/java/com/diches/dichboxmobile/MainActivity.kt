@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxDataViewModel
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.CurrentBoxViewModel
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.FilesListViewModel
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.OpenedFilesViewModel
 import com.diches.dichboxmobile.mv.userDataManager.UserDataFetcher
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
@@ -116,9 +117,10 @@ class MainActivity : AppCompatActivity(), FragmentsRedirector {
     private fun goToHomePage() {
         homePageIcon = findViewById(R.id.homePageIcon)
         val viewStates = listOf(
-            CurrentBoxViewModel::class.java,
-            BoxDataViewModel::class.java,
-            FilesListViewModel::class.java
+                CurrentBoxViewModel::class.java,
+                BoxDataViewModel::class.java,
+                FilesListViewModel::class.java,
+                OpenedFilesViewModel::class.java
         ).map { ViewModelProvider(this).get(it) }
 
         homePageIcon.setOnClickListener {

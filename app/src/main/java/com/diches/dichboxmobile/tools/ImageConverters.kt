@@ -11,7 +11,7 @@ import androidx.annotation.RequiresApi
 import java.io.ByteArrayOutputStream
 
 fun fromBase64ToBitmap(logo: String): Bitmap {
-    val basePrefix = Regex("""^data:image\/png;base64,""")
+    val basePrefix = Regex("""^data:image\/.+;base64,""")
     val logoSrc = logo.replace(basePrefix, "")
     val imageBytes = Base64.decode(logoSrc, Base64.DEFAULT)
     return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)

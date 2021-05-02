@@ -136,4 +136,30 @@ sealed class BoxesContainer {
     ) : BoxesContainer()
 
     data class Removed(val removed: Boolean) : BoxesContainer()
+
+    data class FoundFile(
+            val found: Boolean,
+            val foundData: String
+    ) : BoxesContainer()
+
+    data class OpenedFile(
+            val opened: Boolean,
+            val filePath: String,
+            val src: String,
+            val name: String,
+            val type: String,
+            val edited: String? = null
+    ) : BoxesContainer()
+
+    data class SaveFilesReq(
+            val editorName: String,
+            val files: List<Files>
+    ) : BoxesContainer() {
+        data class Files(val src: String, val filePathStr: String)
+    }
+
+    data class SaveFilesRes(
+            val edited: Boolean,
+            val last_edited: String
+    ) : BoxesContainer()
 }

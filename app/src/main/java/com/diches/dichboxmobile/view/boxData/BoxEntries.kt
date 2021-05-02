@@ -9,8 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxEditedViewModel
-import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.FileRedirectorViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
+import com.diches.dichboxmobile.view.boxData.openedFiles.OpenedContainer
 import com.diches.dichboxmobile.view.userData.*
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -36,7 +37,7 @@ class BoxEntries : Fragment() {
             Pair("info", BoxInfo()),
             Pair("edit", BoxEditor()),
             Pair("files", BoxFiles()),
-            Pair("opened files", OpenedFiles())
+            Pair("opened files", OpenedContainer())
         )
 
         val tabOptions = if (ownPage) allOptions else allOptions.minus(allOptions[1])
@@ -53,6 +54,13 @@ class BoxEntries : Fragment() {
             if (!it) return@observe
             viewPager.currentItem = 0
             editedViewModel.setEdited(false)
+        }
+
+        val redirectorViewModel = ViewModelProvider(requireActivity()).get(FileRedirectorViewModel::class.java)
+        redirectorViewModel.isRedirected.observe(viewLifecycleOwner) {
+            if (!it) return@observe
+            viewPager.currentItem = 3
+            redirectorViewModel.setRedirected(false)
         }
     }
 }

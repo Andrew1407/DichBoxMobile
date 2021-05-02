@@ -1,6 +1,5 @@
 package com.diches.dichboxmobile.mv.boxesDataManager.filesManipulator
 
-import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
@@ -17,7 +16,6 @@ import androidx.core.text.set
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.api.boxes.BoxesAPI
@@ -25,7 +23,9 @@ import com.diches.dichboxmobile.datatypes.BoxesContainer
 import com.diches.dichboxmobile.mv.boxesDataManager.filesManipulator.dialogs.InputDialog
 import com.diches.dichboxmobile.mv.boxesDataManager.filesManipulator.dialogs.RemoveFileDialog
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxDataViewModel
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.FileRedirectorViewModel
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.FilesListViewModel
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.OpenedFilesViewModel
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 import com.diches.dichboxmobile.tools.AppColors
 import kotlinx.coroutines.*
@@ -39,6 +39,8 @@ class EntriesManipulator(
     private val filesListVM = states[0] as FilesListViewModel
     private val boxDataVM = states[1] as BoxDataViewModel
     private val userStateVM = states[2] as UserStateViewModel
+    private val openedFilesVM = states[3] as OpenedFilesViewModel
+    private val redirectorVM = states[4] as FileRedirectorViewModel
     private lateinit var pathDepthView: TextView
     private lateinit var listView: ListView
     private lateinit var goBackView: LinearLayout
@@ -56,7 +58,8 @@ class EntriesManipulator(
     }
 
     fun addRemoveFileDialog(): EntriesManipulator {
-        removeFileDialog = RemoveFileDialog(fragment.requireContext(), filesListVM, userStateVM, boxDataVM)
+        val states = listOf(filesListVM, userStateVM, boxDataVM, openedFilesVM)
+        removeFileDialog = RemoveFileDialog(fragment.requireContext(), states)
         return this
     }
 
@@ -70,6 +73,7 @@ class EntriesManipulator(
         ).handleRedirection { name, type ->
             val size = pathDepthView.text.toString().split(" / ").size
             if (type == "dir") redirectDir(name, size)
+            else openFile(name, type)
         }
             .handleRemove { name, type -> removeFile(name, type) }
             .handleRename { name, type -> renameFile(name, type) }
@@ -85,6 +89,44 @@ class EntriesManipulator(
         editorTools.addFile(addFileIcon, "Add file") { addNewFile("file", it) }
         editorTools.addFile(addDirIcon, "Add directory") { addNewFile("dir", it) }
         return this
+    }
+
+    private fun openFile(name: String, type: String) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val usernames = userStateVM.namesState.value!!
+            val viewer = usernames.first!!
+            val owner = usernames.second!!
+            val path = pathDepthView.text.toString().split(" / ").toMutableList()
+            path.add(0, owner)
+            val getFleBody = BoxesContainer.FilePropertiesReq(
+                    boxPath = path,
+                    viewerName = viewer,
+                    fileName = name,
+                    type = type
+            )
+
+            val (st, res) = withContext(Dispatchers.IO) { api.getFileEntries(getFleBody) }
+            if (st != 200) return@launch
+            val (_, foundData) = res as BoxesContainer.FoundFile
+            val openedFile = BoxesContainer.OpenedFile(
+                    opened = true,
+                    name = name,
+                    filePath = '/' + path.joinToString(separator = "/"),
+                    src = foundData,
+                    type = type
+            )
+            goToOpenedFiles(openedFile)
+            redirectorVM.setRedirected(true)
+        }
+    }
+
+    private fun goToOpenedFiles(openedFile: BoxesContainer.OpenedFile) {
+        val openedFiles = openedFilesVM.liveData.value ?: return openedFilesVM.addNewFile(openedFile)
+        for ((i, file) in openedFiles.withIndex()) {
+            val found = openedFile.name == file.name && openedFile.filePath == file.filePath
+            if (found) return if (!file.opened) openedFilesVM.openFile(i) else Unit
+        }
+        openedFilesVM.addNewFile(openedFile)
     }
 
     private fun observeFilesChanges() {
@@ -157,6 +199,20 @@ class EntriesManipulator(
                 }
                 val entriesEdited = currentEntries.copy(dir = currentFiles.copy(src = filesEdited))
                 filesListVM.setFilesList(BoxesContainer.PathEntries(entriesEdited))
+
+                val openedFiles = openedFilesVM.liveData.value ?: return@launch
+                if (type == "dir") {
+                    val oldPath = "/$owner/$fullPath/$name"
+                    val newPath = "/$owner/$fullPath/$newName"
+                    openedFilesVM.renamePaths(oldPath, newPath)
+                } else {
+                    openedFiles.forEachIndexed { i, file ->
+                        val fPath = file.filePath
+                        val filePath = if (fPath.startsWith('/')) fPath else "/$fPath"
+                        val found = name == file.name && filePath == "/$owner/$fullPath"
+                        if (found) openedFilesVM.renameFile(i, newName)
+                    }
+                }
             }
         }
     }
@@ -273,6 +329,17 @@ class EntriesManipulator(
             val newFiles = currentEntries.copy(dir = currentDir.copy(src = newEntries.src))
             val entriesEdited = BoxesContainer.PathEntries(newFiles)
             filesListVM.setFilesList(entriesEdited)
+
+            if (type == "dir") return@launch
+            val openedFile = BoxesContainer.OpenedFile(
+                opened = true,
+                name = name,
+                filePath = '/' + path.joinToString(separator = "/"),
+                src = src ?: "",
+                type = type
+            )
+            openedFilesVM.addNewFile(openedFile)
+            redirectorVM.setRedirected(true)
         }
     }
 }
