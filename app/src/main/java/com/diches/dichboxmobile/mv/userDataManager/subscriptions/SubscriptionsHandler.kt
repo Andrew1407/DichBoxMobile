@@ -6,11 +6,9 @@ import android.widget.EditText
 import android.widget.Filterable
 import android.widget.ListView
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.api.user.UserAPI
 import com.diches.dichboxmobile.datatypes.UserContainer
-import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
 import kotlinx.coroutines.runBlocking
 
 class SubscriptionsHandler(

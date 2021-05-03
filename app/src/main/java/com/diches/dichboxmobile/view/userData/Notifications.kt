@@ -13,7 +13,6 @@ import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
 import com.diches.dichboxmobile.mv.userDataManager.notifications.NotificationsHandler
 import com.diches.dichboxmobile.mv.userDataManager.notifications.NotificationsViewModel
-import com.diches.dichboxmobile.mv.userDataManager.subscriptions.SubscriptionsViewModel
 
 class Notifications : Fragment() {
     private lateinit var ntsHandler: NotificationsHandler

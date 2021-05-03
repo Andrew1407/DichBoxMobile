@@ -21,7 +21,6 @@ import com.diches.dichboxmobile.mv.boxesDataManager.RemoveBoxDialog
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.*
 import com.diches.dichboxmobile.mv.inputPickers.ColorPicker
 import com.diches.dichboxmobile.mv.inputPickers.ImageCropper
-import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.EditedViewModel
 import com.diches.dichboxmobile.mv.verifiers.editVerifiers.box.BoxFormEditor
 import com.diches.dichboxmobile.mv.verifiers.editVerifiers.box.BoxPrivacyHandler
 import com.diches.dichboxmobile.mv.verifiers.editVerifiers.box.accessList.AccessList
@@ -132,6 +131,14 @@ class BoxEditor : Fragment() {
                     )
                     boxDataViewModel.setBoxData(newData)
 
+                    val openedFiles = openedFilesVM.liveData.value
+                    if (updated.name != null && openedFiles != null) {
+                        val owner = boxDataViewModel.liveData.value!!.owner_name
+                        val oldPath = "/$owner/${oldData.name}"
+                        val newPath = "/$owner/${updated.name}"
+                        openedFilesVM.renamePaths(oldPath, newPath)
+                    }
+
                     Toast.makeText(requireActivity().application, "Edited", Toast.LENGTH_LONG).show()
                     val editedViewModel = ViewModelProvider(requireActivity()).get(BoxEditedViewModel::class.java)
                     editedViewModel.setEdited(true)
@@ -170,12 +177,10 @@ class BoxEditor : Fragment() {
     }
 
     private fun clearListState() {
-        editorsCopyVM.setEditedAddedUsers(emptyList())
-        viewersCopyVM.setEditedAddedUsers(emptyList())
-        editorsVM.setFoundUsers(emptyList())
-        editorsVM.setAddedUsers(emptyList())
-        viewersVM.setFoundUsers(emptyList())
-        viewersVM.setAddedUsers(emptyList())
+        editorsCopyVM.clear()
+        viewersCopyVM.clear()
+        editorsVM.clear()
+        viewersVM.clear()
     }
 
     private fun setColorPickerDialog(

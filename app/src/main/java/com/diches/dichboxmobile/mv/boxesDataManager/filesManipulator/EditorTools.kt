@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Build
 import android.view.View
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.Fragment
 import com.diches.dichboxmobile.mv.boxesDataManager.filesManipulator.dialogs.InputDialog

@@ -10,7 +10,6 @@ import com.diches.dichboxmobile.mv.Cleanable
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxDataViewModel
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.CurrentBoxViewModel
 import com.diches.dichboxmobile.mv.settings.ConfirmDialog
-import com.diches.dichboxmobile.view.boxData.BoxInfo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

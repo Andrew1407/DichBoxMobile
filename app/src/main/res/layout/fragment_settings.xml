@@ -14,10 +14,12 @@
         android:layout_alignParentTop="true"
         android:text="Settings"
         android:textStyle="bold"
+        android:paddingBottom="15dp"
         android:layout_marginBottom="15dp"
         android:layout_marginTop="15dp"
         android:textColor="@color/light_blue"
-        android:textSize="35sp"/>
+        android:textSize="35sp"
+        android:background="@drawable/bottom_border_solid"/>
 
     <LinearLayout
         android:id="@+id/settingsOptions"
@@ -25,7 +27,6 @@
         android:layout_height="match_parent"
         android:layout_below="@id/settingsText"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/top_border_solid"
         android:paddingTop="25dp"
         android:orientation="vertical">
 
@@ -48,7 +49,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/settingsText"
-        android:background="@drawable/top_border_solid"
         android:paddingTop="25dp"
         android:gravity="center"
         android:layout_centerHorizontal="true"
@@ -69,7 +69,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="version: 0.5.0"
+            android:text="version: 0.5.1"
             android:textColor="@color/green"
             android:textSize="19sp"/>
 

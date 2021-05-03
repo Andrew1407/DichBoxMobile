@@ -12,7 +12,6 @@ class TypesSpinnerAdapter(
     private val context: Context,
     var items: List<String>
 ) : BaseAdapter() {
-    private val inflater = LayoutInflater.from(context)
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val row = convertView ?: LayoutInflater

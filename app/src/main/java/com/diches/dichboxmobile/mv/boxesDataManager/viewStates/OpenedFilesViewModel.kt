@@ -82,8 +82,11 @@ class OpenedFilesViewModel : ViewModel(), Cleanable {
 
     fun closeByPath(dirPath: String) {
         if (data.value == null) return
-        val rightPath = if (dirPath.startsWith('/')) dirPath else "/$dirPath"
-        val remained = data.value!!.filter { !it.filePath.startsWith(rightPath) }
+        val leftPath = if (dirPath.startsWith('/')) dirPath else "/$dirPath"
+        val remained = data.value!!.filter {
+            val fullPath = it.filePath + '/' + it.name
+            !fullPath.startsWith(leftPath)
+        }
         if (remained.isEmpty()) {
             data.value = null
             return

@@ -60,6 +60,7 @@ class BoxFiles : Fragment() {
         entriesManipulator = EntriesManipulator(this, states, viewerName!!)
                 .fillFilesState()
                 .setPathDepth(pathDepth, savedInstanceState)
+                .handleBoxChanges()
                 .addRemoveFileDialog()
                 .addListAdapter(filesList)
                 .handleSearch(search, emptyList)

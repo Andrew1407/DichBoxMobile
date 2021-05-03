@@ -18,6 +18,9 @@ import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateView
 
 class OpenedFilesList : Fragment() {
     private lateinit var fileToolbar: FileToolbar
+    private lateinit var boxDataVM: BoxDataViewModel
+    private lateinit var openedFilesVM: OpenedFilesViewModel
+    private lateinit var usernamesVM: UserStateViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,24 +30,29 @@ class OpenedFilesList : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val boxDataVM = ViewModelProvider(requireActivity()).get(BoxDataViewModel::class.java)
-        val openedFilesVM = ViewModelProvider(requireActivity()).get(OpenedFilesViewModel::class.java)
-        val usernamesVM = ViewModelProvider(requireActivity()).get(UserStateViewModel::class.java)
+        boxDataVM = ViewModelProvider(requireActivity()).get(BoxDataViewModel::class.java)
+        openedFilesVM = ViewModelProvider(requireActivity()).get(OpenedFilesViewModel::class.java)
+        usernamesVM = ViewModelProvider(requireActivity()).get(UserStateViewModel::class.java)
 
+        val recyclerView = view.findViewById<RecyclerView>(R.id.openedFilesList)
+        handleToolbar(view, savedInstanceState)
+        FilesViewer(this, openedFilesVM, fileToolbar).addListAdapter(recyclerView)
+        savedInstanceState?.clear()
+    }
+
+    private fun handleToolbar(view: View, bundle: Bundle?) {
         val clipboardIcon = view.findViewById<ImageView>(R.id.clipboardBtn)
         val zoomOutIcon = view.findViewById<ImageView>(R.id.zoomOutBtn)
         val zoomInIcon = view.findViewById<ImageView>(R.id.zoomInBtn)
+        val textArea = view.findViewById<EditText>(R.id.fileEditorArea)
+        val imageArea = view.findViewById<ImageView>(R.id.imageEditorArea)
         val saveAllIcon = view.findViewById<ImageView>(R.id.saveAllFileBtn)
         val saveFileIcon = view.findViewById<ImageView>(R.id.saveFileBtn)
         val editModeIcon = view.findViewById<ImageView>(R.id.setEditModeBtn)
 
-        val textArea = view.findViewById<EditText>(R.id.fileEditorArea)
-        val imageArea = view.findViewById<ImageView>(R.id.imageEditorArea)
-        val recyclerView = view.findViewById<RecyclerView>(R.id.openedFilesList)
-
         val states = Pair(openedFilesVM, boxDataVM)
         val viewer = usernamesVM.namesState.value!!.first
-        fileToolbar = FileToolbar(this, savedInstanceState, viewer, states)
+        fileToolbar = FileToolbar(this, bundle, viewer, states)
                 .handleEditFields(imageArea, textArea)
                 .handleClipboard(clipboardIcon)
                 .handleSaveFile(saveFileIcon)
@@ -52,11 +60,6 @@ class OpenedFilesList : Fragment() {
                 .handleViewMode(editModeIcon)
                 .handleZoomIn(zoomInIcon)
                 .handleZoomOut(zoomOutIcon)
-
-        val filesViewer = FilesViewer(this, openedFilesVM, fileToolbar)
-            .addListAdapter(recyclerView)
-
-        savedInstanceState?.clear()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

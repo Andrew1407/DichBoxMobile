@@ -179,8 +179,8 @@ class FileToolbar(
         val editor = boxDataVM.liveData.value!!.editor
         if (editor) {
             viewMode.isVisible = isFile
-            saveAll.isVisible = isFile
             saveFile.isVisible = isFile
+            saveAll.isVisible = isFile
         }
         zoomOut.isVisible = isFile
         zoomIn.isVisible = isFile

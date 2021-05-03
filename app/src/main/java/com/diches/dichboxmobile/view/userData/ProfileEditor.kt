@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.datatypes.UserContainer
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxDataViewModel
+import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.OpenedFilesViewModel
 import com.diches.dichboxmobile.mv.inputPickers.ColorPicker
 import com.diches.dichboxmobile.mv.inputPickers.ImageCropper
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.EditedViewModel
@@ -33,6 +35,10 @@ class ProfileEditor: Fragment() {
     private lateinit var editHandler: UserEditorVerifier
     private lateinit var nameColorBtn: Button
     private lateinit var descriptionColorBtn: Button
+    private lateinit var userDataViewModel: UserDataViewModel
+    private lateinit var userStateViewModel: UserStateViewModel
+    private lateinit var openedFilesViewModel: OpenedFilesViewModel
+    private lateinit var boxDataViewModel: BoxDataViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,8 +48,10 @@ class ProfileEditor: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val userDataViewModel = ViewModelProvider(requireActivity()).get(UserDataViewModel::class.java)
-        val userStateviewModel = ViewModelProvider(this).get(UserStateViewModel::class.java)
+        userDataViewModel = ViewModelProvider(requireActivity()).get(UserDataViewModel::class.java)
+        userStateViewModel = ViewModelProvider(requireActivity()).get(UserStateViewModel::class.java)
+        openedFilesViewModel = ViewModelProvider(requireActivity()).get(OpenedFilesViewModel::class.java)
+        boxDataViewModel = ViewModelProvider(requireActivity()).get(BoxDataViewModel::class.java)
 
         val userData = userDataViewModel.liveData.value!!
 
@@ -53,10 +61,10 @@ class ProfileEditor: Fragment() {
                 nameColor = savedInstanceState.getInt("nameColor"),
                 descriptionColor = savedInstanceState.getInt("descriptionColor"),
                 passwdAreaVisible = savedInstanceState.getBoolean("passwdArea")
-        )
+            )
 
         setImageEditor(savedState, userData)
-        val editColorFields = setUserVerifier(savedState, userDataViewModel, userStateviewModel)
+        val editColorFields = setUserVerifier(savedState)
         setColorPickers(editColorFields, savedState, userData)
         savedInstanceState?.clear()
     }
@@ -75,11 +83,7 @@ class ProfileEditor: Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
-    private fun setUserVerifier(
-            savedState: SavedEditState?,
-            userDataVM: UserDataViewModel,
-            userStateVM: UserStateViewModel
-    ): Pair<EditText, EditText> {
+    private fun setUserVerifier(savedState: SavedEditState?): Pair<EditText, EditText> {
         val submitter = view?.findViewById<Button>(R.id.editProfileBtn)!!
         val name = requireView().findViewById<EditText>(R.id.editUsername)!!
         val nameWarning = view?.findViewById<TextView>(R.id.editUserNameWarning)!!
@@ -97,7 +101,7 @@ class ProfileEditor: Fragment() {
         val newPasswd = view?.findViewById<EditText>(R.id.editUserNewPasswd)!!
         val newPasswdWarning = view?.findViewById<TextView>(R.id.editUserNewPasswdWarning)!!
 
-        editHandler = UserEditorVerifier(submitter, userDataVM.liveData.value!!)
+        editHandler = UserEditorVerifier(submitter, userDataViewModel.liveData.value!!)
                 .addNameCheck(name, nameWarning, nameColorBtn)
                 .addDescriptionCheck(description, descriptionColorBtn)
                 .handleSavedState(savedState)
@@ -113,12 +117,12 @@ class ProfileEditor: Fragment() {
                     val editedFields = editData.edited
                     if (editedFields.name != null) {
                         val editedName = editedFields.name!!
-                        userStateVM.setState(Pair(editedName, editedName))
+                        userStateViewModel.setState(Pair(editedName, editedName))
                         context?.openFileOutput("signed.txt", Context.MODE_PRIVATE).use {
                             it?.write(editedName.toByteArray())
                         }
                     }
-                    val userData = userDataVM.liveData.value!!
+                    val userData = userDataViewModel.liveData.value!!
                     val editedData = userData.copy(
                             name = editedFields.name ?: userData.name,
                             description = editedFields.description ?: userData.description,
@@ -128,7 +132,18 @@ class ProfileEditor: Fragment() {
                             logo = if (editData.logo == "removed") null else editData.logo
                     )
                     Toast.makeText(requireActivity().application, "Edited", Toast.LENGTH_LONG).show()
-                    userDataVM.setUserData(editedData)
+                    userDataViewModel.setUserData(editedData)
+
+                    val newName = editedFields.name
+                    if (newName != null) {
+                        userStateViewModel.setState(Pair(newName, newName))
+                        val boxData = boxDataViewModel.liveData.value
+                        if (boxData != null)
+                            boxDataViewModel.setBoxData(boxData.copy(owner_name = newName))
+                        val openedFiles = openedFilesViewModel.liveData.value
+                        if (openedFiles != null)
+                            openedFilesViewModel.renamePaths("/${userData.name}", "/$newName")
+                    }
 
                     val editedViewModel = ViewModelProvider(requireActivity()).get(EditedViewModel::class.java)
                     editedViewModel.setEdited(true)

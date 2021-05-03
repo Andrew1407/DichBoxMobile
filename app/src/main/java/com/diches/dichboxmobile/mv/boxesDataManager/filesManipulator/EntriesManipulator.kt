@@ -57,6 +57,18 @@ class EntriesManipulator(
         return this
     }
 
+    fun handleBoxChanges(): EntriesManipulator {
+        boxDataVM.liveData.observe(fragment.viewLifecycleOwner) {
+            val pathDepthStr = pathDepthView.text.toString()
+            if (it == null || pathDepthStr.isEmpty()) return@observe
+            val pathEntries = pathDepthStr.split(" / ").toMutableList()
+            if (pathEntries[0] == it.name) return@observe
+            pathEntries[0] = it.name
+            configurePath(pathEntries.joinToString(" / "))
+        }
+        return this
+    }
+
     fun addRemoveFileDialog(): EntriesManipulator {
         val states = listOf(filesListVM, userStateVM, boxDataVM, openedFilesVM)
         removeFileDialog = RemoveFileDialog(fragment.requireContext(), states)
