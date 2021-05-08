@@ -42,11 +42,11 @@ class SignIn : Fragment(), FragmentCleaner {
                 .checkEmail(email, emailWarning)
                 .checkPassword(password, passwordWarning)
 
-        verifier.setSaveHandler { str ->
+        verifier.setSaveHandler { name, uuid ->
             val viewModel = ViewModelProvider(requireActivity()).get(UserStateViewModel::class.java)
-            viewModel.setState(Pair(str, str))
+            viewModel.setState(Pair(name, name))
             context?.openFileOutput("signed.txt", Context.MODE_PRIVATE).use {
-                it?.write(str.toByteArray())
+                it?.write(uuid.reversed().toByteArray())
             }
             ContextCompat
                     .getSystemService(view.context, InputMethodManager::class.java)
@@ -56,10 +56,8 @@ class SignIn : Fragment(), FragmentCleaner {
     }
 
     override fun cleanFieldsInput() {
-        if (this::email.isInitialized)
-            cleanInput(email)
-        if (this::password.isInitialized)
-            cleanInput(password)
+        if (this::email.isInitialized) cleanInput(email)
+        if (this::password.isInitialized) cleanInput(password)
         if (this::emailWarning.isInitialized && emailWarning.text.isNotEmpty())
             emailWarning.text = ""
         if (this::passwordWarning.isInitialized && passwordWarning.text.isNotEmpty())

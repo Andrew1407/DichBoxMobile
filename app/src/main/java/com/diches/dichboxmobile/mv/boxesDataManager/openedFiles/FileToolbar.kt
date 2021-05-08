@@ -13,6 +13,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.diches.dichboxmobile.R
+import com.diches.dichboxmobile.api.Statuses
 import com.diches.dichboxmobile.api.boxes.BoxesAPI
 import com.diches.dichboxmobile.datatypes.BoxesContainer
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxDataViewModel
@@ -97,7 +98,7 @@ class FileToolbar(
             }
             val saveContainer = BoxesContainer.SaveFilesReq(username!!, editedEntries)
             val (st, res) = withContext(Dispatchers.IO) { api.saveFiles(saveContainer) }
-            if (st == 200) {
+            if (Statuses.OK.eq(st)) {
                 openedFilesVM.writeFiles(openedOnly)
                 val message = if (openedOnly) "File \"${editedFiles[0].name}\" has been saved"
                     else "All edited files have been saved"

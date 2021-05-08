@@ -4,6 +4,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.core.graphics.drawable.DrawableCompat
+import com.diches.dichboxmobile.api.Statuses
 import com.diches.dichboxmobile.tools.AppColors
 import com.diches.dichboxmobile.mv.verifiers.FieldsTemplates
 import com.diches.dichboxmobile.datatypes.UserContainer
@@ -55,25 +56,25 @@ open class SignInVerifier(submitBtn: Button) : SignVerifier() {
         return this
     }
 
-    override suspend fun handleSubmit(saveUser: (String) -> Unit) {
+    override suspend fun handleSubmit(saveUser: (String, String) -> Unit) {
         val values = verifier.getInput()
         val submitContainer = UserContainer.SignIn(
                 email = values[SignFields.EMAIL]!!,
                 passwd = values[SignFields.PASSWD]!!
         )
 
-        val (status, nameContainer) = withContext(Dispatchers.IO) {
+        val (st, resContainer) = withContext(Dispatchers.IO) {
             api.enterUser(submitContainer)
         }
-        val (name) = nameContainer as UserContainer.NameContainer
+        val (name, user_uid) = resContainer as UserContainer.SignedContainer
 
-        if (status == 400 && name == null) {
+        if (Statuses.BAD_REQUEST.eq(st) && name == null) {
             val (field, warning) = passwordFields
             DrawableCompat.setTint(field.background, AppColors.CRIMSON.raw)
             warning.text = FieldsWarnings.PASSWD_INCORRECT.text
             return
         }
 
-        if (name != null) saveUser(name)
+        if (name != null) saveUser(name, user_uid!!)
     }
 }

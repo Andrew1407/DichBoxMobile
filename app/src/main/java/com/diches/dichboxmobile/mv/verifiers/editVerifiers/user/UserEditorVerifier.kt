@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.widget.addTextChangedListener
 import com.diches.dichboxmobile.R
+import com.diches.dichboxmobile.api.Statuses
 import com.diches.dichboxmobile.api.user.UserAPI
 import com.diches.dichboxmobile.tools.AppColors
 import com.diches.dichboxmobile.datatypes.UserContainer
@@ -296,7 +297,7 @@ class UserEditorVerifier (
                 )
 
                 val (st, _) = api.editUser(container)
-                if (st == 200) onSubmitClb(container.copy(logo = logoSrc))
+                if (Statuses.OK.eq(st)) onSubmitClb(container.copy(logo = logoSrc))
             }
         }
     }

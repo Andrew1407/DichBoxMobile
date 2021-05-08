@@ -1,6 +1,7 @@
 package com.diches.dichboxmobile.mv.userDataManager.profilers
 
 import android.widget.TextView
+import com.diches.dichboxmobile.api.Statuses
 import com.diches.dichboxmobile.api.user.UserAPI
 import com.diches.dichboxmobile.tools.AppColors
 import com.diches.dichboxmobile.datatypes.UserContainer
@@ -25,7 +26,7 @@ class VisitedProfiler(
             CoroutineScope(Dispatchers.Main).launch {
                 val action = subscribeButton.text.toString()
                 val (st, res) = subscriptionsRequest(action)
-                if (st != 200) return@launch
+                if (Statuses.OK.eqNot(st)) return@launch
                 val data = res as UserContainer.SubsActionRes
                 val followersParams = Pair(data.followers.toString(), AppColors.GRAY.raw)
                 decorateView(followersView, "followers: ", followersParams)

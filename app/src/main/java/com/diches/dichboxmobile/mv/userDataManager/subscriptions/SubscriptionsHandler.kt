@@ -46,7 +46,7 @@ class SubscriptionsHandler(
     }
 
     private fun getSubsByRequest(): List<UserContainer.FoundUser> {
-        val requestContainer = UserContainer.NameContainer(username)
+        val requestContainer = UserContainer.SignedContainer(username)
         val (st, res) = runBlocking { api.getSubscriptions(requestContainer) }
         val (subs) = (res as UserContainer.Subscriptions)
         return subs

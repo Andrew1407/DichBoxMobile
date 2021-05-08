@@ -3,6 +3,7 @@ package com.diches.dichboxmobile.mv.verifiers.signVerifiers
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import com.diches.dichboxmobile.api.Statuses
 import com.diches.dichboxmobile.mv.verifiers.FieldsTemplates
 import com.diches.dichboxmobile.datatypes.UserContainer
 import com.diches.dichboxmobile.mv.verifiers.FieldsWarnings
@@ -15,25 +16,25 @@ class SignUpVerifier(submitBtn: Button) : SignInVerifier(submitBtn) {
         verifier.addInputEntry(SignFields.NAME)
 
         inputHandler.clean()
-                .addVerifier(
-                        key = SignFields.NAME,
-                        templateWarning = FieldsWarnings.NAME_INVALID.text,
-                        templateTest = { checkFieldTemplate(SignFields.NAME, it) },
-                        fetchWarning = FieldsWarnings.NAME_TAKEN.text,
-                        fetchHandler = { !verifyField(SignFields.NAME.getVal(), it) }
-                )
-                .addVerifier(
-                        key = SignFields.EMAIL,
-                        templateWarning = FieldsWarnings.EMAIL_INVALID.text,
-                        templateTest = { checkFieldTemplate(SignFields.EMAIL, it) },
-                        fetchWarning = FieldsWarnings.EMAIL_TAKEN.text,
-                        fetchHandler = { !verifyField(SignFields.EMAIL.getVal(), it) }
-                )
-                .addVerifier(
-                        key = SignFields.PASSWD,
-                        templateWarning = FieldsWarnings.PASSWD_INVALID.text,
-                        templateTest = { checkFieldTemplate(SignFields.PASSWD, it) }
-                )
+            .addVerifier(
+                key = SignFields.NAME,
+                templateWarning = FieldsWarnings.NAME_INVALID.text,
+                templateTest = { checkFieldTemplate(SignFields.NAME, it) },
+                fetchWarning = FieldsWarnings.NAME_TAKEN.text,
+                fetchHandler = { !verifyField(SignFields.NAME.getVal(), it) }
+            )
+            .addVerifier(
+                key = SignFields.EMAIL,
+                templateWarning = FieldsWarnings.EMAIL_INVALID.text,
+                templateTest = { checkFieldTemplate(SignFields.EMAIL, it) },
+                fetchWarning = FieldsWarnings.EMAIL_TAKEN.text,
+                fetchHandler = { !verifyField(SignFields.EMAIL.getVal(), it) }
+            )
+            .addVerifier(
+                key = SignFields.PASSWD,
+                templateWarning = FieldsWarnings.PASSWD_INVALID.text,
+                templateTest = { checkFieldTemplate(SignFields.PASSWD, it) }
+            )
 
     }
 
@@ -52,20 +53,16 @@ class SignUpVerifier(submitBtn: Button) : SignInVerifier(submitBtn) {
         return this
     }
 
-    override suspend fun handleSubmit(saveUser: (String) -> Unit) {
+    override suspend fun handleSubmit(saveUser: (String, String) -> Unit) {
         val values = verifier.getInput()
         val submitContainer = UserContainer.SignUp(
-                name = values[SignFields.NAME]!!,
-                email = values[SignFields.EMAIL]!!,
-                passwd = values[SignFields.PASSWD]!!
+            name = values[SignFields.NAME]!!,
+            email = values[SignFields.EMAIL]!!,
+            passwd = values[SignFields.PASSWD]!!
         )
 
-        val (status, nameContainer) = withContext(Dispatchers.IO) {
-            api.createUser(submitContainer)
-        }
-
-        val (name) = nameContainer as UserContainer.NameContainer
-
-        if (status == 201 && name != null) saveUser(name)
+        val (st, res) = withContext(Dispatchers.IO) { api.createUser(submitContainer) }
+        val (name, user_uid) = res as UserContainer.SignedContainer
+        if (Statuses.CREATED.eq(st) && name != null) saveUser(name, user_uid!!)
     }
 }

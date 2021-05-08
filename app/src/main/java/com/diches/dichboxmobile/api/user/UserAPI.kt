@@ -2,14 +2,6 @@ package com.diches.dichboxmobile.api.user
 
 import com.diches.dichboxmobile.api.ApiParser
 import com.diches.dichboxmobile.datatypes.UserContainer
-import com.google.gson.Gson
-import com.google.gson.JsonParser
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.ResponseBody
-import retrofit2.Response
-import retrofit2.Retrofit
 
 class UserAPI : ApiParser<UserContainer>() {
     private val service: UserService = retrofit.create(UserService::class.java)
@@ -26,7 +18,7 @@ class UserAPI : ApiParser<UserContainer>() {
         val reqBody = makeRequest(signContainer)
         val response = service.signUp(reqBody)
         return getResponseData(
-                response, UserContainer.NameContainer::class.java
+                response, UserContainer.SignedContainer::class.java
         )
     }
 
@@ -42,7 +34,7 @@ class UserAPI : ApiParser<UserContainer>() {
         val reqBody = makeRequest(signContainer)
         val response = service.signIn(reqBody)
         return getResponseData(
-                response, UserContainer.NameContainer::class.java
+                response, UserContainer.SignedContainer::class.java
         )
     }
 
@@ -78,8 +70,8 @@ class UserAPI : ApiParser<UserContainer>() {
         )
     }
 
-    suspend fun getSubscriptions(nameContainer: UserContainer.NameContainer): Pair<Int, UserContainer> {
-        val reqBody = makeRequest(nameContainer)
+    suspend fun getSubscriptions(signedContainer: UserContainer.SignedContainer): Pair<Int, UserContainer> {
+        val reqBody = makeRequest(signedContainer)
         val response = service.getSubscriptions(reqBody)
         return getResponseData(
                 response, UserContainer.Subscriptions::class.java
@@ -94,8 +86,8 @@ class UserAPI : ApiParser<UserContainer>() {
         )
     }
 
-    suspend fun getNotifications(nameContainer: UserContainer.NameContainer): Pair<Int, UserContainer> {
-        val reqBody = makeRequest(nameContainer)
+    suspend fun getNotifications(signedContainer: UserContainer.SignedContainer): Pair<Int, UserContainer> {
+        val reqBody = makeRequest(signedContainer)
         val response = service.getNotifications(reqBody)
         return getResponseData(
                 response, UserContainer.Notifications::class.java
@@ -123,6 +115,14 @@ class UserAPI : ApiParser<UserContainer>() {
         val response = service.getAccessLists(reqBody)
         return getResponseData(
                 response, UserContainer.AccessLists::class.java
+        )
+    }
+
+    suspend fun getUsernameByUuid(uuidContainer: UserContainer.SignedContainer): Pair<Int, UserContainer> {
+        val reqBody = makeRequest(uuidContainer)
+        val response = service.getUsernameByUuid(reqBody)
+        return getResponseData(
+                response, UserContainer.SignedContainer::class.java
         )
     }
 

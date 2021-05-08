@@ -7,11 +7,11 @@ import com.diches.dichboxmobile.mv.verifiers.FieldsVerifier
 
 abstract class SignVerifier {
     protected val api = UserAPI()
-    private lateinit var saveHandler: (String) -> Unit
+    private lateinit var saveHandler: (String, String) -> Unit
     protected abstract val verifier: FieldsVerifier<SignFields>
     protected abstract val templates: MutableMap<SignFields, FieldsTemplates>
 
-    fun setSaveHandler(fn: (String) -> Unit) {
+    fun setSaveHandler(fn: (String, String) -> Unit) {
         saveHandler = fn
     }
 
@@ -35,5 +35,5 @@ abstract class SignVerifier {
             input: String
     ): Boolean = templates[field]!!.test(input)
 
-    protected abstract suspend fun handleSubmit(fn: (String) -> Unit)
+    protected abstract suspend fun handleSubmit(fn: (String, String) -> Unit)
 }

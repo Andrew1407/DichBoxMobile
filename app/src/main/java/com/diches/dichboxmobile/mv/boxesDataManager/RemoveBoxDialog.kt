@@ -4,6 +4,7 @@ import android.content.Context
 import android.widget.TextView
 import androidx.lifecycle.ViewModel
 import com.diches.dichboxmobile.FragmentsRedirector
+import com.diches.dichboxmobile.api.Statuses
 import com.diches.dichboxmobile.api.boxes.BoxesAPI
 import com.diches.dichboxmobile.datatypes.BoxesContainer
 import com.diches.dichboxmobile.mv.Cleanable
@@ -42,7 +43,7 @@ class RemoveBoxDialog(
                     ownPage = true
             )
             val (st, res) = withContext(Dispatchers.IO) { api.removeBox(rmBody) }
-            if (st != 200) return@launch
+            if (Statuses.OK.eqNot(st)) return@launch
             val (removed) = res as BoxesContainer.Removed
             if (!removed) return@launch
             states.forEach { (it as Cleanable).clear() }

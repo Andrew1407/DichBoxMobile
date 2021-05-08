@@ -31,7 +31,7 @@ class NotificationsHandler(
     }
 
     private fun getNotificationsByRequest(): MutableList<UserContainer.NotificationData> {
-        val reqContainer = UserContainer.NameContainer(username)
+        val reqContainer = UserContainer.SignedContainer(username)
         val (st, res) = runBlocking { api.getNotifications(reqContainer) }
         val (notifications) = res as UserContainer.Notifications
         return notifications.toMutableList()

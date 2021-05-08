@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
+import com.diches.dichboxmobile.api.Statuses
 import com.diches.dichboxmobile.api.boxes.BoxesAPI
 import com.diches.dichboxmobile.datatypes.BoxesContainer
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxDataViewModel
@@ -84,7 +85,7 @@ class BoxProfiler(private val boxState: BoxDataViewModel) {
         val detailsBody = BoxesContainer.BoxDetailsReq(ownerName, viewerName, boxName)
         val (st, res) = runBlocking { api.getBoxDetails(detailsBody) }
         val data = res as BoxesContainer.BoxData
-        if (st == 200) boxState.setBoxData(data)
+        if (Statuses.OK.eq(st)) boxState.setBoxData(data)
         return data
     }
 }

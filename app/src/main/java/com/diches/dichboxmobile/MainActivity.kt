@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
+import com.diches.dichboxmobile.mv.ActivityHandler
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxDataViewModel
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.CurrentBoxViewModel
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.FilesListViewModel
@@ -26,14 +27,17 @@ class MainActivity : AppCompatActivity(), FragmentsRedirector {
     private lateinit var tagList: List<String>
     private lateinit var homePageIcon: ImageView
     private lateinit var viewModel: UserStateViewModel
+    private lateinit var activityHandler: ActivityHandler
     private var currentNavPosition: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(UserStateViewModel::class.java)
+        val userDataViewModel = ViewModelProvider(this).get(UserDataViewModel::class.java)
 
-        if (savedInstanceState == null) initUserPresence()
+        activityHandler = ActivityHandler(this, viewModel, userDataViewModel)
+        if (savedInstanceState == null) activityHandler.fetchUsername(UserDataFetcher())
         setContentView(R.layout.activity_main)
         setUpTitle()
         handleNavBar(savedInstanceState)
@@ -126,7 +130,7 @@ class MainActivity : AppCompatActivity(), FragmentsRedirector {
         homePageIcon.setOnClickListener {
             val oldNamesState = viewModel.namesState.value!!
             if (oldNamesState.first != oldNamesState.second)
-                viewModel.setState(oldNamesState.copy(second = oldNamesState.first))
+                activityHandler.checkModifiedUsername()
             viewStates.forEach { it.clear() }
             redirectToUserPage()
         }
@@ -166,20 +170,6 @@ class MainActivity : AppCompatActivity(), FragmentsRedirector {
                 .show(navFragments[currentNavPosition])
                 .commit()
         bottomNav.selectedItemId = R.id.userOption
-    }
-
-    private fun initUserPresence() {
-        val isSigned = getFileStreamPath("signed.txt")!!.exists()
-        if (!isSigned) {
-            viewModel.setState(Pair(null, null))
-            return
-        }
-        openFileInput("signed.txt").use { stream ->
-            val name = stream?.bufferedReader().use { it?.readText() }
-            viewModel.setState(Pair(name, name))
-            val userDataViewModel = ViewModelProvider(this).get(UserDataViewModel::class.java)
-            UserDataFetcher().fillUserViewModel(userDataViewModel, viewModel)
-        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -101,6 +101,7 @@ class ProfileEditor: Fragment() {
         val newPasswd = view?.findViewById<EditText>(R.id.editUserNewPasswd)!!
         val newPasswdWarning = view?.findViewById<TextView>(R.id.editUserNewPasswdWarning)!!
 
+        val editedViewModel = ViewModelProvider(requireActivity()).get(EditedViewModel::class.java)
         editHandler = UserEditorVerifier(submitter, userDataViewModel.liveData.value!!)
                 .addNameCheck(name, nameWarning, nameColorBtn)
                 .addDescriptionCheck(description, descriptionColorBtn)
@@ -115,37 +116,9 @@ class ProfileEditor: Fragment() {
                 .addLogoEditor(userLogoEditor, imagePicker)
                 .setSubmitClb { editData ->
                     val editedFields = editData.edited
-                    if (editedFields.name != null) {
-                        val editedName = editedFields.name!!
-                        userStateViewModel.setState(Pair(editedName, editedName))
-                        context?.openFileOutput("signed.txt", Context.MODE_PRIVATE).use {
-                            it?.write(editedName.toByteArray())
-                        }
-                    }
-                    val userData = userDataViewModel.liveData.value!!
-                    val editedData = userData.copy(
-                            name = editedFields.name ?: userData.name,
-                            description = editedFields.description ?: userData.description,
-                            name_color = editedFields.name_color ?: userData.name_color,
-                            description_color = editedFields.description_color ?: userData.description_color,
-                            email = editedFields.email ?: userData.email,
-                            logo = if (editData.logo == "removed") null else editData.logo
-                    )
-                    Toast.makeText(requireActivity().application, "Edited", Toast.LENGTH_LONG).show()
-                    userDataViewModel.setUserData(editedData)
-
+                    setEditedUserData(editedFields, editData.logo)
                     val newName = editedFields.name
-                    if (newName != null) {
-                        userStateViewModel.setState(Pair(newName, newName))
-                        val boxData = boxDataViewModel.liveData.value
-                        if (boxData != null)
-                            boxDataViewModel.setBoxData(boxData.copy(owner_name = newName))
-                        val openedFiles = openedFilesViewModel.liveData.value
-                        if (openedFiles != null)
-                            openedFilesViewModel.renamePaths("/${userData.name}", "/$newName")
-                    }
-
-                    val editedViewModel = ViewModelProvider(requireActivity()).get(EditedViewModel::class.java)
+                    if (newName != null) setNewUsername(newName)
                     editedViewModel.setEdited(true)
                     parentFragmentManager
                         .beginTransaction()
@@ -155,6 +128,32 @@ class ProfileEditor: Fragment() {
                 }
 
         return Pair(name, description)
+    }
+
+    private fun setEditedUserData(editedFields: UserContainer.EditedFields, logo: String?) {
+        val userData = userDataViewModel.liveData.value!!
+        val editedData = userData.copy(
+            name = editedFields.name ?: userData.name,
+            description = editedFields.description ?: userData.description,
+            name_color = editedFields.name_color ?: userData.name_color,
+            description_color = editedFields.description_color ?: userData.description_color,
+            email = editedFields.email ?: userData.email,
+            logo = if (logo == "removed") null else logo
+        )
+        Toast.makeText(requireActivity().application, "Edited", Toast.LENGTH_LONG).show()
+        userDataViewModel.setUserData(editedData)
+    }
+
+    private fun setNewUsername(newName: String) {
+        val oldName = userDataViewModel.liveData.value!!.name
+        userStateViewModel.setState(Pair(newName, newName))
+        val boxData = boxDataViewModel.liveData.value
+        if (boxData != null)
+            boxDataViewModel.setBoxData(boxData.copy(owner_name = newName))
+        val openedFiles = openedFilesViewModel.liveData.value
+        if (openedFiles != null)
+            openedFilesViewModel.renamePaths("/${oldName}", "/$newName")
+
     }
 
     private fun setColorPickers(

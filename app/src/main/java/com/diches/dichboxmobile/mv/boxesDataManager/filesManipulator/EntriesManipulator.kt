@@ -18,6 +18,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import com.diches.dichboxmobile.R
+import com.diches.dichboxmobile.api.Statuses
 import com.diches.dichboxmobile.api.boxes.BoxesAPI
 import com.diches.dichboxmobile.datatypes.BoxesContainer
 import com.diches.dichboxmobile.mv.boxesDataManager.filesManipulator.dialogs.InputDialog
@@ -118,7 +119,7 @@ class EntriesManipulator(
             )
 
             val (st, res) = withContext(Dispatchers.IO) { api.getFileEntries(getFleBody) }
-            if (st != 200) return@launch
+            if (Statuses.OK.eqNot(st)) return@launch
             val (_, foundData) = res as BoxesContainer.FoundFile
             val openedFile = BoxesContainer.OpenedFile(
                     opened = true,
@@ -164,7 +165,7 @@ class EntriesManipulator(
             boxPath.add(0, owner)
             val pathBody = BoxesContainer.PathEntriesReq(boxPath, viewerName, true)
             val (st, res) = withContext(Dispatchers.IO) { api.getPathFiles(pathBody) }
-            if (st == 200) {
+            if (Statuses.OK.eq(st)) {
                 val newDir = res as BoxesContainer.PathEntries
                 val entries = newDir.entries.dir!!.src
                 val adapter = listView.adapter as FilesListAdapter
@@ -199,7 +200,7 @@ class EntriesManipulator(
                         newName = newName
                 )
                 val (st, res) = withContext(Dispatchers.IO) { api.renameFile(renameContainer) }
-                if (st != 200) return@launch
+                if (Statuses.OK.eqNot(st)) return@launch
                 val (_, edited) = res as BoxesContainer.RenameFileRes
                 val dataEdited = boxDataVM.liveData.value!!.copy(last_edited = edited)
                 boxDataVM.setBoxData(dataEdited)
@@ -331,7 +332,7 @@ class EntriesManipulator(
                     src = entries
             )
             val (st, res) = withContext(Dispatchers.IO) { api.createFile(createContainer) }
-            if (st != 201) return@launch
+            if (Statuses.CREATED.eq(st)) return@launch
             val (newList, editedDate) = res as BoxesContainer.CreateFileRes
             val currentEntries = filesListVM.liveData.value!!.entries
             val currentDir = currentEntries.dir!!

@@ -3,6 +3,7 @@ package com.diches.dichboxmobile.mv.boxesDataManager.filesManipulator.dialogs
 import android.content.Context
 import android.view.View
 import androidx.lifecycle.ViewModel
+import com.diches.dichboxmobile.api.Statuses
 import com.diches.dichboxmobile.api.boxes.BoxesAPI
 import com.diches.dichboxmobile.datatypes.BoxesContainer
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxDataViewModel
@@ -56,7 +57,7 @@ class RemoveFileDialog(
                     type = type
             )
             val (st, res) = withContext(Dispatchers.IO) { api.removeFile(rmBody) }
-            if (st != 200) return@launch
+            if (Statuses.OK.eqNot(st)) return@launch
             val (_, edited) = res as BoxesContainer.RemoveFileRes
             val dataEdited = boxDataVM.liveData.value!!.copy(last_edited = edited)
             boxDataVM.setBoxData(dataEdited)

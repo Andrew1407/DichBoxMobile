@@ -6,6 +6,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.widget.addTextChangedListener
+import com.diches.dichboxmobile.api.Statuses
 import com.diches.dichboxmobile.api.user.UserAPI
 import com.diches.dichboxmobile.datatypes.BoxesContainer
 import com.diches.dichboxmobile.datatypes.UserContainer
@@ -146,7 +147,7 @@ class BoxFormEditor(
         )
 
         val (st, res) = withContext(Dispatchers.IO) { boxApi.editBox(editedBody) }
-        if (st == 200) submitClb(res)
+        if (Statuses.OK.eq(st)) submitClb(res)
 
     }
 

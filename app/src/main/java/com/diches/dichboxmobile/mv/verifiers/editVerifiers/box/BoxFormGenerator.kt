@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.widget.addTextChangedListener
+import com.diches.dichboxmobile.api.Statuses
 import com.diches.dichboxmobile.api.boxes.BoxesAPI
 import com.diches.dichboxmobile.datatypes.BoxesContainer
 import com.diches.dichboxmobile.mv.verifiers.editVerifiers.box.accessList.AccessList
@@ -179,6 +180,6 @@ open class BoxFormGenerator(
         )
 
         val (st, res) = withContext(Dispatchers.IO) { api.createBox(createdBody) }
-        if (st == 201) submitClb(res)
+        if (Statuses.CREATED.eq(st)) submitClb(res)
     }
 }
