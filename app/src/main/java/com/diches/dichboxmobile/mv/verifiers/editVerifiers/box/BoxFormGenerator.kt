@@ -13,6 +13,7 @@ import androidx.core.widget.addTextChangedListener
 import com.diches.dichboxmobile.api.Statuses
 import com.diches.dichboxmobile.api.boxes.BoxesAPI
 import com.diches.dichboxmobile.datatypes.BoxesContainer
+import com.diches.dichboxmobile.mv.verifiers.FieldsTemplates
 import com.diches.dichboxmobile.mv.verifiers.editVerifiers.box.accessList.AccessList
 import com.diches.dichboxmobile.mv.verifiers.editVerifiers.logoEditors.BoxLogoEditor
 import com.diches.dichboxmobile.tools.AppColors
@@ -58,9 +59,8 @@ open class BoxFormGenerator(
         nameWarning = warning
         nameInput = name
         nameInput.setTextColor(Color.parseColor(nameColor))
-        val validName = Regex("""^[^\s/]{1,40}${'$'}""")
         val nameInvalid =
-                "Box name length should be 1-40 symbols (unique, no spaces and no path definitions like: \"../path1/path2/...\")"
+                "Box name length should be 1-40 symbols (unique, no spaces, \"?\", \"#\", \"%\" or path definitions like: \"../path1/path2/...\")"
         val nameTaken = "You already have a box with the same name"
 
         nameInput.addTextChangedListener {
@@ -71,7 +71,7 @@ open class BoxFormGenerator(
                         handleWarning(input, "")
                         false
                     }
-                    !validName.matches(input) -> {
+                    !FieldsTemplates.NAME.test(input) -> {
                         handleWarning(input, nameInvalid)
                         false
                     }
@@ -138,7 +138,7 @@ open class BoxFormGenerator(
 
     private suspend fun checkBoxNameTaken(input: String): Boolean {
         val verifyContainer = BoxesContainer.VerifyBody(username, input)
-        val (st, res) = api.verify(verifyContainer)
+        val (_, res) = api.verify(verifyContainer)
         val (foundValue) = res as BoxesContainer.VerifyRes
         return foundValue != null
     }

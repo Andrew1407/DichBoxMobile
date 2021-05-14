@@ -67,7 +67,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="version: 0.6.0"
+            android:text="version: 0.6.1"
             android:textColor="@color/green"
             android:textSize="19sp"/>
 

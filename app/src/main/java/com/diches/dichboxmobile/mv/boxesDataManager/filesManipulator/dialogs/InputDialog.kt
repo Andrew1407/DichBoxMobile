@@ -44,7 +44,8 @@ class InputDialog(private val filesListVM: FilesListViewModel) {
             if (!inputValid.matches(inputStr)) {
                 okBtn.isEnabled = false
                 DrawableCompat.setTint(input.background, AppColors.CRIMSON.raw)
-                val warningText = "Invalid input (name can't include slashes and spaces)"
+                val warningText =
+                    "Invalid input (name can\\'t include spaces, \"?\", \"/\", \"#\", \"%\", length should be 1-40 symbols)"
                 warning.text = warningText
                 return@addTextChangedListener
             }
