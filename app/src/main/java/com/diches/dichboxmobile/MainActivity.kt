@@ -131,6 +131,8 @@ class MainActivity : AppCompatActivity(), FragmentsRedirector {
             val oldNamesState = viewModel.namesState.value!!
             if (oldNamesState.first != oldNamesState.second)
                 activityHandler.checkModifiedUsername()
+            if (oldNamesState.first == null)
+                viewModel.setState(Pair(null, null))
             viewStates.forEach { it.clear() }
             redirectToUserPage()
         }

@@ -173,6 +173,15 @@ class BoxEditor : Fragment() {
             boxFormEditor.checkAll()
         }
 
+        boxDataViewModel.liveData.observe(viewLifecycleOwner) {
+            if (it == null || it == boxData) return@observe
+            parentFragmentManager
+                .beginTransaction()
+                .detach(this)
+                .attach(this)
+                .commit()
+        }
+
         savedInstanceState?.clear()
     }
 

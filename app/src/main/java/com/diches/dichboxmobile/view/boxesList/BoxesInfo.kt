@@ -9,6 +9,7 @@ import android.widget.ListView
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.diches.dichboxmobile.FragmentsRedirector
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.mv.boxesDataManager.BoxesListPresenter
@@ -79,6 +80,17 @@ class BoxesInfo : Fragment() {
                 .refreshData(isOwnPage)
             nameArgs = namesRefreshed
         }
+
+        val refreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.refreshBoxesList)
+        refreshLayout.setOnRefreshListener {
+            val isOwnPage = userViewModel.liveData.value!!.ownPage
+            listHandler
+                .setBoxesList(null, nameArgs)
+                .refreshData(isOwnPage)
+            refreshLayout.isRefreshing = false
+        }
+
+        savedInstanceState?.clear()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

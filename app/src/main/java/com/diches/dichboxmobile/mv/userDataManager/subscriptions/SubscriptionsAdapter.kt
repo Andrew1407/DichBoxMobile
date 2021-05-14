@@ -21,10 +21,21 @@ import kotlinx.coroutines.withContext
 class SubscriptionsAdapter(
         context: Context,
         private val resource: Int,
-        private val items: MutableList<UserContainer.FoundUser>,
-        private var itemsShown: MutableList<UserContainer.FoundUser>,
-        private val onRemoveSub: suspend (name: String) -> Boolean
+        var items: MutableList<UserContainer.FoundUser>,
+        var itemsShown: MutableList<UserContainer.FoundUser>
 ) : ArrayAdapter<UserContainer.FoundUser>(context, resource, items), Filterable {
+    private lateinit var onRemoveSub: suspend (name: String) -> Boolean
+    private lateinit var onClickSub: (name: String) -> Unit
+
+    fun setRemoveClb(clb: suspend (name: String) -> Boolean): SubscriptionsAdapter {
+        onRemoveSub = clb
+        return this
+    }
+
+    fun setClickClb(clb: (name: String) -> Unit): SubscriptionsAdapter {
+        onClickSub = clb
+        return this
+    }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val row = convertView ?: LayoutInflater
@@ -35,6 +46,9 @@ class SubscriptionsAdapter(
         val name = row.findViewById<TextView>(R.id.subscription_name)
         val rmIcon = row.findViewById<ImageView>(R.id.removeSubscription)
         val subscription = itemsShown[position]
+
+        name.setOnClickListener { onClickSub(subscription.name) }
+        logo.setOnClickListener { onClickSub(subscription.name) }
 
         setSubscriptionIcon(logo, subscription.logo)
         handleUnsubscribe(rmIcon, subscription.name)

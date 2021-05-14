@@ -9,6 +9,7 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
 import com.diches.dichboxmobile.mv.userDataManager.notifications.NotificationsHandler
@@ -35,6 +36,20 @@ class Notifications : Fragment() {
         ntsHandler = NotificationsHandler(username, listView, userViewModel, notificationsViewModel)
                 .handleCleanAction(cleanBtn)
                 .createListAdapter(requireContext(), savedInstanceState)
+
+        val refreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.refreshNotifications)
+        var userData = userViewModel.liveData.value!!
+        refreshLayout.setOnRefreshListener {
+            ntsHandler.refreshNotifications()
+            refreshLayout.isRefreshing = false
+            userData = userViewModel.liveData.value!!
+        }
+
+        userViewModel.liveData.observe(viewLifecycleOwner) {
+            if (it == null || it == userData) return@observe
+            ntsHandler.refreshNotifications()
+            userData = it
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

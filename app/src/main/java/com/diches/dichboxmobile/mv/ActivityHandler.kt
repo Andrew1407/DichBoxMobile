@@ -17,22 +17,29 @@ class ActivityHandler(
     private val userApi = UserAPI()
 
     fun fetchUsername(userDataFetcher: UserDataFetcher) {
-        val isSigned = activity.getFileStreamPath("signed.txt")!!.exists()
+        val file = activity.getFileStreamPath("signed.txt")!!
+        val isSigned = file.exists()
         if (!isSigned) return usernamesViewModel.setState(Pair(null, null))
         readSignedFile { uuid ->
             val name = requestUsername(uuid)
-            if (name.isEmpty()) return@readSignedFile
-            usernamesViewModel.setState(Pair(name, name))
-            userDataFetcher.fillUserViewModel(userDataViewModel, usernamesViewModel)
+            if (name.isNotEmpty()) {
+                usernamesViewModel.setState(Pair(name, name))
+                userDataFetcher.fillUserViewModel(userDataViewModel, usernamesViewModel)
+            } else {
+                file.delete()
+                usernamesViewModel.setState(Pair(null, null))
+            }
         }
     }
 
     fun checkModifiedUsername() {
-        val username = usernamesViewModel.namesState.value!!.first ?: return
+        val file = activity.getFileStreamPath("signed.txt")!!
         readSignedFile { uuid ->
             val name = requestUsername(uuid)
-            if (name.isEmpty()) return@readSignedFile
-            usernamesViewModel.setState(Pair(name, name))
+            if (name.isNotEmpty())
+                return@readSignedFile usernamesViewModel.setState(Pair(name, name))
+            file.delete()
+            usernamesViewModel.setState(Pair(null, null))
         }
     }
 

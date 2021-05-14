@@ -6,6 +6,7 @@ import android.widget.*
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.diches.dichboxmobile.R
+import com.diches.dichboxmobile.api.Statuses
 import com.diches.dichboxmobile.api.boxes.BoxesAPI
 import com.diches.dichboxmobile.datatypes.BoxesContainer
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxesListViewModel
@@ -35,6 +36,7 @@ class BoxesListPresenter(
         val (viewerName, boxOwnerName) = names
         val getBody = BoxesContainer.UserBoxesReq(viewerName, boxOwnerName)
         val (st, res) = runBlocking { api.getUserBoxes(getBody) }
+        if (Statuses.OK.eqNot(st)) return emptyList()
         val (boxesList) = (res as BoxesContainer.UserBoxes)
         return boxesList
     }

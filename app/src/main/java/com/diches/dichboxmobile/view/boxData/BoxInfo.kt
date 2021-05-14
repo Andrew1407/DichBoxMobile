@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.diches.dichboxmobile.FragmentsRedirector
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.mv.boxesDataManager.BoxProfiler
@@ -42,10 +43,8 @@ class BoxInfo : Fragment() {
         val currentBoxViewModel = viewStates[1] as CurrentBoxViewModel
 
         val boxName = currentBoxViewModel.boxName.value!!
-        val usernames = namesViewModel.namesState.value!!
-        val namesArgs = Pair(usernames.first, usernames.second!!)
 
-        boxProfiler = BoxProfiler(boxDataViewModel).fillViewModel(namesArgs, boxName)
+        boxProfiler = BoxProfiler(boxDataViewModel, namesViewModel).fillViewModel(boxName)
         boxDataViewModel.liveData.observe(viewLifecycleOwner) {
             if (it == null) return@observe
             boxProfiler.refreshData()
@@ -57,6 +56,14 @@ class BoxInfo : Fragment() {
         otherBoxesBtn.setOnClickListener {
             viewStates.forEach { it.clear() }
             redirector.redirectToBoxesList()
+        }
+
+        val refreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.refreshBoxInfo)
+        refreshLayout.setOnRefreshListener {
+            boxProfiler.handleRefresh {
+                handleInfoFields(view)
+                refreshLayout.isRefreshing = false
+            }
         }
     }
 

@@ -33,6 +33,7 @@ import kotlinx.coroutines.*
 
 class EntriesManipulator(
         private val fragment: Fragment,
+        private val bundle: Bundle?,
         states: List<ViewModel>,
         private val viewerName: String
 ) {
@@ -48,12 +49,29 @@ class EntriesManipulator(
     private lateinit var searchView: EditText
     private lateinit var removeFileDialog: RemoveFileDialog
 
+    fun refreshFiles(clb: () -> Unit): EntriesManipulator {
+        CoroutineScope(Dispatchers.Main).launch {
+            val boxData = boxDataVM.liveData.value!!
+            val boxName = boxData.name
+            bundle?.putString("pathDepth", boxName)
+            val boxPath = listOf(boxData.owner_name, boxName)
+            val pathBody = BoxesContainer.PathEntriesReq(boxPath, viewerName, true)
+            val (st, res) = withContext(Dispatchers.IO) { api.getPathFiles(pathBody) }
+            if (Statuses.OK.eqNot(st)) return@launch
+            filesListVM.setFilesList(res as BoxesContainer.PathEntries)
+            searchView.text.clear()
+            clb()
+        }
+        return this
+    }
+
     fun fillFilesState(): EntriesManipulator {
         if (filesListVM.liveData.value != null) return this
         val boxData = boxDataVM.liveData.value!!
         val boxPath = listOf(boxData.owner_name, boxData.name)
         val pathBody = BoxesContainer.PathEntriesReq(boxPath, viewerName, true)
         val (st, res) = runBlocking { api.getPathFiles(pathBody) }
+        if (Statuses.OK.eqNot(st)) return this
         filesListVM.setFilesList(res as BoxesContainer.PathEntries)
         return this
     }
@@ -235,11 +253,11 @@ class EntriesManipulator(
         removeFileDialog.setTitleParams(type, name, filePath)
     }
 
-    fun saveState(bundle: Bundle) {
-        bundle.putString("pathDepth", pathDepthView.text.toString())
+    fun saveState(savedBundle: Bundle) {
+        savedBundle.putString("pathDepth", pathDepthView.text.toString())
     }
 
-    fun setPathDepth(view: TextView, bundle: Bundle?): EntriesManipulator {
+    fun setPathDepth(view: TextView): EntriesManipulator {
         pathDepthView = view
         val initialPath = if (bundle == null) boxDataVM.liveData.value!!.name
             else bundle.getString("pathDepth")!!

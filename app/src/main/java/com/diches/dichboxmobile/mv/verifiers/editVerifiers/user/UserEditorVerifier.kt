@@ -59,7 +59,7 @@ class UserEditorVerifier (
                         key = UserEditFields.NAME,
                         templateWarning = FieldsWarnings.NAME_INVALID.text,
                         templateTest = { FieldsTemplates.NAME.test(it) },
-                        fetchWarning = FieldsWarnings.EMAIL_TAKEN.text,
+                        fetchWarning = FieldsWarnings.NAME_TAKEN.text,
                         fetchHandler = {
                             val ownName = it == defaultData.name
                             if (ownName) true

@@ -1,96 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/refreshBoxInfo"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/black"
-        android:paddingBottom="?attr/actionBarSize">
-
-        <include
-            layout="@layout/user_logo"
-            android:id="@+id/boxLogo"/>
-
-        <TextView
-            android:id="@+id/boxName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/times_new_roman400"
-            android:textSize="50sp"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:layout_marginBottom="20dp"/>
-
-        <TextView
-            android:id="@+id/boxDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/times_new_roman400"
-            android:textSize="27sp"
-            android:gravity="center"
-            android:layout_marginBottom="25dp"/>
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:paddingTop="15dp"
-            android:gravity="center"
             android:layout_height="wrap_content"
-            android:background="@drawable/top_border_solid"
-            android:layout_marginBottom="20dp">
+            android:background="@color/black"
+            android:paddingBottom="?attr/actionBarSize">
+
+            <include
+                layout="@layout/user_logo"
+                android:id="@+id/boxLogo"/>
 
             <TextView
-                android:id="@+id/boxCreator"
-                android:layout_width="wrap_content"
+                android:id="@+id/boxName"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="30sp"
-                android:textColor="@color/light_blue"
-                android:layout_marginTop="15dp" />
+                android:fontFamily="@font/times_new_roman400"
+                android:textSize="50sp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:layout_marginBottom="20dp"/>
 
             <TextView
-                android:id="@+id/boxType"
-                android:layout_width="wrap_content"
+                android:id="@+id/boxDescription"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="25sp"
-                android:textColor="@color/light_blue"
-                android:layout_marginTop="15dp" />
+                android:fontFamily="@font/times_new_roman400"
+                android:textSize="27sp"
+                android:gravity="center"
+                android:layout_marginBottom="25dp"/>
 
-            <TextView
-                android:id="@+id/boxCreated"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:paddingTop="15dp"
+                android:gravity="center"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textColor="@color/light_blue"
-                android:layout_marginTop="15dp" />
+                android:background="@drawable/top_border_solid"
+                android:layout_marginBottom="20dp">
 
-            <TextView
-                android:id="@+id/boxEdited"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/boxCreator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp"
+                    android:textColor="@color/light_blue"
+                    android:layout_marginTop="15dp" />
+
+                <TextView
+                    android:id="@+id/boxType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="25sp"
+                    android:textColor="@color/light_blue"
+                    android:layout_marginTop="15dp" />
+
+                <TextView
+                    android:id="@+id/boxCreated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/light_blue"
+                    android:layout_marginTop="15dp" />
+
+                <TextView
+                    android:id="@+id/boxEdited"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/light_blue"
+                    android:layout_marginTop="15dp" />
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textColor="@color/light_blue"
-                android:layout_marginTop="15dp" />
+                android:background="@drawable/top_border_solid"
+                android:paddingTop="45dp">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/otherBoxesBtn"
+                    style="@style/editBtnStyle"
+                    android:text="view other boxes"
+                    android:layout_gravity="center"/>
+
+            </FrameLayout>
 
         </LinearLayout>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/top_border_solid"
-            android:paddingTop="45dp">
+    </ScrollView>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/otherBoxesBtn"
-                style="@style/editBtnStyle"
-                android:text="view other boxes"
-                android:layout_gravity="center"/>
-
-        </FrameLayout>
-
-    </LinearLayout>
-
-</ScrollView>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

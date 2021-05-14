@@ -1,6 +1,7 @@
 package com.diches.dichboxmobile.mv.userDataManager.profilers
 
 import android.widget.TextView
+import androidx.core.view.isVisible
 import com.diches.dichboxmobile.api.Statuses
 import com.diches.dichboxmobile.api.user.UserAPI
 import com.diches.dichboxmobile.tools.AppColors
@@ -14,13 +15,13 @@ import kotlinx.coroutines.launch
 
 class VisitedProfiler(
         private val visitorState: UserStateViewModel,
+        private val userDataState: UserDataViewModel,
         private val subscribeButton: TextView
-) : UserProfiler() {
+) : UserProfiler(visitorState, userDataState) {
     private val api = UserAPI()
 
-    fun handleSubscriptionView(followersView: TextView, userDataState: UserDataViewModel): VisitedProfiler {
-        val follower = userDataState.liveData.value!!.follower
-        decorateSubscriptionView(follower)
+    fun handleSubscriptionView(followersView: TextView): VisitedProfiler {
+        checkFollowerState()
 
         subscribeButton.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
@@ -43,9 +44,17 @@ class VisitedProfiler(
         return this
     }
 
+    fun checkFollowerState(): VisitedProfiler {
+        val follower = userDataState.liveData.value!!.follower
+        decorateSubscriptionView(follower)
+        return this
+    }
+
     private fun decorateSubscriptionView(follower: Boolean) {
-        subscribeButton.text = if (follower) "unsubscribe" else "subscribe"
-        val btnTextColor = if (follower) AppColors.PURPLE else AppColors.GREEN
+        val isSigned = visitorState.namesState.value!!.first != null
+        subscribeButton.isVisible = isSigned
+        subscribeButton.text = if (follower && isSigned) "unsubscribe" else "subscribe"
+        val btnTextColor = if (follower && isSigned) AppColors.PURPLE else AppColors.GREEN
         subscribeButton.setTextColor(btnTextColor.raw)
     }
 

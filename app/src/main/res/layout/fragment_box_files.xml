@@ -1,113 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/refreshFilesList"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/black"
-    android:orientation="vertical">
-
-    <LinearLayout
-        android:id="@+id/addBoxFiles"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal"
-        android:background="@drawable/bottom_border_solid"
-        android:paddingTop="10dp"
-        android:paddingBottom="15dp">
-
-        <ImageView
-            android:id="@+id/addImgIcon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="50dp"
-            android:src="@drawable/add_image"/>
-
-        <ImageView
-            android:id="@+id/addFileIcon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="50dp"
-            android:src="@drawable/add_file"/>
-
-        <ImageView
-            android:id="@+id/addDirIcon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/add_folder"/>
-
-    </LinearLayout>
-
-    <EditText
-        android:id="@+id/boxesFilesSearch"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        style="@style/inputStyle"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="20dp"
-        android:hint="search" />
-
-
-    <TextView
-        android:id="@+id/boxFilesPath"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/light_blue"
-        android:textSize="26sp"
-        android:gravity="center_horizontal"
-        android:paddingStart="5dp"
-        android:paddingEnd="5dp"
-        android:layout_marginBottom="15dp"/>
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/top_orange_stroke"
-        android:paddingTop="20dp"
+        android:layout_height="match_parent"
+        android:background="@color/black"
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/goBackOption"
+            android:id="@+id/addBoxFiles"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="5dp"
-            android:paddingEnd="7dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            android:background="@drawable/bottom_border_solid"
+            android:paddingTop="10dp"
+            android:paddingBottom="15dp">
 
             <ImageView
-                android:id="@+id/goBackIcon"
-                android:src="@drawable/folder_icon"
-                android:layout_marginEnd="3dp"
+                android:id="@+id/addImgIcon"
                 android:layout_width="40dp"
-                android:layout_height="40dp"/>
+                android:layout_height="40dp"
+                android:layout_marginEnd="50dp"
+                android:src="@drawable/add_image"/>
 
-            <TextView
-                android:id="@+id/goBackText"
-                android:text="..."
-                android:layout_gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/light_blue"
-                android:textSize="22sp"/>
+            <ImageView
+                android:id="@+id/addFileIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="50dp"
+                android:src="@drawable/add_file"/>
+
+            <ImageView
+                android:id="@+id/addDirIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/add_folder"/>
 
         </LinearLayout>
 
-        <ListView
-            android:id="@+id/boxFilesList"
-            android:layout_width="match_parent"
+        <EditText
+            android:id="@+id/boxesFilesSearch"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="5dp"
-            android:divider="@null"/>
+            style="@style/inputStyle"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="20dp"
+            android:hint="search" />
+
 
         <TextView
-            android:id="@+id/emptyFilesList"
-            android:layout_width="wrap_content"
+            android:id="@+id/boxFilesPath"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/emptyList"
-            android:layout_gravity="center_horizontal"
-            android:text="This directory is empty"/>
+            android:textColor="@color/light_blue"
+            android:textSize="26sp"
+            android:gravity="center_horizontal"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:layout_marginBottom="15dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/top_orange_stroke"
+            android:paddingTop="20dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/goBackOption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="5dp"
+                android:paddingEnd="7dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/goBackIcon"
+                    android:src="@drawable/folder_icon"
+                    android:layout_marginEnd="3dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"/>
+
+                <TextView
+                    android:id="@+id/goBackText"
+                    android:text="..."
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/light_blue"
+                    android:textSize="22sp"/>
+
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/boxFilesList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:nestedScrollingEnabled="true"
+                android:divider="@null"/>
+
+            <TextView
+                android:id="@+id/emptyFilesList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/emptyList"
+                android:layout_gravity="center_horizontal"
+                android:text="This directory is empty"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
-
-</LinearLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

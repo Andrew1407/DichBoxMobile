@@ -47,7 +47,6 @@ class RemoveFileDialog(
     private fun onOkClick() {
         CoroutineScope(Dispatchers.Main).launch {
             val path = fullPath.split("/").toMutableList()
-            println(userStateVM.namesState.value)
             val users = userStateVM.namesState.value!!
             path.add(0, users.second!!)
             val rmBody = BoxesContainer.FilePropertiesReq(

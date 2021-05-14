@@ -7,8 +7,16 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <include
-        android:id="@+id/include"
-        layout="@layout/sign_area" />
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/sign_area" />
+
+    </ScrollView>
 
 </LinearLayout>

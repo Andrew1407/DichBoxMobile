@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 class NotificationsAdapter(
     context: Context,
     private val resource: Int,
-    private val items: MutableList<UserContainer.NotificationData>,
+    var items: MutableList<UserContainer.NotificationData>,
     private val onRemoveNotification: suspend (id: Int) -> Unit
 ) : ArrayAdapter<UserContainer.NotificationData>(context, resource, items) {
 
@@ -43,7 +43,7 @@ class NotificationsAdapter(
         return row
     }
 
-    fun getItems(): MutableList<UserContainer.NotificationData> = items
+    override fun getCount(): Int = items.size
 
     private fun setNoteIcon(logoView: ImageView, logoSrc: String?) {
         if (logoSrc != null) {

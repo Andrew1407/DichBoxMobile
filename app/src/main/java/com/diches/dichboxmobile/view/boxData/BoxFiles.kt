@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.mv.boxesDataManager.filesManipulator.EditorTools
 import com.diches.dichboxmobile.mv.boxesDataManager.filesManipulator.EntriesManipulator
@@ -39,11 +40,6 @@ class BoxFiles : Fragment() {
         val openedFilesVM = ViewModelProvider(requireActivity()).get(OpenedFilesViewModel::class.java)
         val redirectorVM = ViewModelProvider(requireActivity()).get(FileRedirectorViewModel::class.java)
 
-        val pathDepth = view.findViewById<TextView>(R.id.boxFilesPath)
-        val goBackView = view.findViewById<LinearLayout>(R.id.goBackOption)
-        val filesList = view.findViewById<ListView>(R.id.boxFilesList)
-        val emptyList = view.findViewById<TextView>(R.id.emptyFilesList)
-        val search = view.findViewById<EditText>(R.id.boxesFilesSearch)
         val addFilesView = view.findViewById<LinearLayout>(R.id.addBoxFiles)
         val addFileIcon = view.findViewById<ImageView>(R.id.addFileIcon)
         val addImgIcon = view.findViewById<ImageView>(R.id.addImgIcon)
@@ -51,27 +47,45 @@ class BoxFiles : Fragment() {
 
         editor = boxDataVM.liveData.value!!.editor
         addFilesView.isVisible = editor
-        filesList.emptyView = emptyList
 
         val names = usernamesVM.namesState.value!!
         val viewerName = names.first
 
         val states = listOf(filesListVM, boxDataVM, usernamesVM, openedFilesVM, redirectorVM)
-        entriesManipulator = EntriesManipulator(this, states, viewerName!!)
-                .fillFilesState()
-                .setPathDepth(pathDepth, savedInstanceState)
-                .handleBoxChanges()
-                .addRemoveFileDialog()
-                .addListAdapter(filesList)
-                .handleSearch(search, emptyList)
-                .setGoBackView(goBackView)
+        entriesManipulator = EntriesManipulator(this, savedInstanceState, states, viewerName!!)
+            .fillFilesState()
+
+        handleManipulator(view)
 
         if (editor) {
             editorTools = EditorTools(this, filesListVM).addImage(addImgIcon)
             entriesManipulator.handleEntriesAddition(editorTools, Pair(addFileIcon, addDirIcon))
         }
 
-        savedInstanceState?.clear()
+        val refreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.refreshFilesList)
+        refreshLayout.setOnRefreshListener {
+            entriesManipulator.refreshFiles {
+                handleManipulator(view)
+                refreshLayout.isRefreshing = false
+            }
+        }
+    }
+
+    private fun handleManipulator(view: View) {
+        val pathDepth = view.findViewById<TextView>(R.id.boxFilesPath)
+        val filesList = view.findViewById<ListView>(R.id.boxFilesList)
+        val emptyList = view.findViewById<TextView>(R.id.emptyFilesList)
+        val search = view.findViewById<EditText>(R.id.boxesFilesSearch)
+        val goBackView = view.findViewById<LinearLayout>(R.id.goBackOption)
+        filesList.emptyView = emptyList
+
+        entriesManipulator
+            .setPathDepth(pathDepth)
+            .handleBoxChanges()
+            .addRemoveFileDialog()
+            .addListAdapter(filesList)
+            .handleSearch(search, emptyList)
+            .setGoBackView(goBackView)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

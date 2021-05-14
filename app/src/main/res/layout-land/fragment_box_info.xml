@@ -1,118 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/refreshBoxInfo"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <GridLayout
-        android:orientation="vertical"
-        android:rowCount="3"
-        android:columnCount="3"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/black"
-        android:paddingBottom="?attr/actionBarSize">
+        android:layout_height="wrap_content">
 
-        <include
-            layout="@layout/user_logo"
-            android:id="@+id/boxLogo"
-            android:layout_column="0"
-            android:layout_row="0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:layout_marginBottom="25dp"
-            android:layout_marginStart="30sp"/>
-
-        <LinearLayout
+        <GridLayout
             android:orientation="vertical"
-            android:layout_gravity="fill"
-            android:layout_column="1"
-            android:layout_row="0"
-            android:layout_columnSpan="2">
-
-            <TextView
-                android:id="@+id/boxName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/times_new_roman400"
-                android:textSize="50sp"
-                android:gravity="center"
-                android:layout_marginBottom="20dp"/>
-
-            <TextView
-                android:id="@+id/boxDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/times_new_roman400"
-                android:textSize="27sp"
-                android:gravity="center"
-                android:layout_marginBottom="25dp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_columnSpan="3"
-            android:layout_column="0"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:paddingTop="15dp"
-            android:gravity="center"
-            android:layout_height="wrap_content"
-            android:background="@drawable/top_border_solid"
-            android:layout_marginBottom="20dp">
-
-            <TextView
-                android:id="@+id/boxCreator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="30sp"
-                android:textColor="@color/light_blue"
-                android:layout_marginTop="15dp" />
-
-            <TextView
-                android:id="@+id/boxType"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="25sp"
-                android:textColor="@color/light_blue"
-                android:layout_marginTop="15dp" />
-
-            <TextView
-                android:id="@+id/boxCreated"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textColor="@color/light_blue"
-                android:layout_marginTop="15dp" />
-
-            <TextView
-                android:id="@+id/boxEdited"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textColor="@color/light_blue"
-                android:layout_marginTop="15dp" />
-
-        </LinearLayout>
-
-        <FrameLayout
+            android:rowCount="3"
+            android:columnCount="3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/top_border_solid"
-            android:paddingTop="45dp"
-            android:layout_columnSpan="3"
-            android:layout_column="0">
+            android:background="@color/black"
+            android:paddingBottom="?attr/actionBarSize">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/otherBoxesBtn"
-                style="@style/editBtnStyle"
-                android:text="view other boxes"
-                android:layout_gravity="center"/>
+            <include
+                layout="@layout/user_logo"
+                android:id="@+id/boxLogo"
+                android:layout_column="0"
+                android:layout_row="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="25dp"
+                android:layout_marginStart="30sp"/>
 
-        </FrameLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_gravity="fill"
+                android:layout_column="1"
+                android:layout_row="0"
+                android:layout_columnSpan="2">
 
-    </GridLayout>
+                <TextView
+                    android:id="@+id/boxName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/times_new_roman400"
+                    android:textSize="50sp"
+                    android:gravity="center"
+                    android:layout_marginBottom="20dp"/>
 
-</ScrollView>
+                <TextView
+                    android:id="@+id/boxDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/times_new_roman400"
+                    android:textSize="27sp"
+                    android:gravity="center"
+                    android:layout_marginBottom="25dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_columnSpan="3"
+                android:layout_column="0"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:paddingTop="15dp"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:background="@drawable/top_border_solid"
+                android:layout_marginBottom="20dp">
+
+                <TextView
+                    android:id="@+id/boxCreator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp"
+                    android:textColor="@color/light_blue"
+                    android:layout_marginTop="15dp" />
+
+                <TextView
+                    android:id="@+id/boxType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="25sp"
+                    android:textColor="@color/light_blue"
+                    android:layout_marginTop="15dp" />
+
+                <TextView
+                    android:id="@+id/boxCreated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/light_blue"
+                    android:layout_marginTop="15dp" />
+
+                <TextView
+                    android:id="@+id/boxEdited"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/light_blue"
+                    android:layout_marginTop="15dp" />
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/top_border_solid"
+                android:paddingTop="45dp"
+                android:layout_columnSpan="3"
+                android:layout_column="0">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/otherBoxesBtn"
+                    style="@style/editBtnStyle"
+                    android:text="view other boxes"
+                    android:layout_gravity="center"/>
+
+            </FrameLayout>
+
+        </GridLayout>
+
+    </ScrollView>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

@@ -69,6 +69,7 @@ class BoxFormEditor(
         val box = boxDataVM.liveData.value!!
         val listsBody = UserContainer.AccessListsReq(box.owner_name, box.name)
         val (st, res) = runBlocking { userApi.getAccessLists(listsBody) }
+        if (Statuses.OK.eqNot(st)) return this
         val (limitedUsers, editors) = res as UserContainer.AccessLists
         editorsCopy.setEditedAddedUsers(editors)
         viewersCopy.setEditedAddedUsers(limitedUsers)

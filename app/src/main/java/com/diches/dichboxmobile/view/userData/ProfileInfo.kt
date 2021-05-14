@@ -8,12 +8,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserDataViewModel
 import com.diches.dichboxmobile.mv.userDataManager.profilers.UserProfiler
+import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 
 class ProfileInfo: Fragment() {
-    private val userProfiler = UserProfiler()
+    private lateinit var userProfiler: UserProfiler
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -23,11 +25,19 @@ class ProfileInfo: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewModel = ViewModelProvider(requireActivity()).get(UserDataViewModel::class.java)
-        userProfiler.setUserData(viewModel)
-        viewModel.liveData.observe(viewLifecycleOwner) {
+        val userDataVM = ViewModelProvider(requireActivity()).get(UserDataViewModel::class.java)
+        val usernamesVM = ViewModelProvider(requireActivity()).get(UserStateViewModel::class.java)
+
+        userProfiler = UserProfiler(usernamesVM, userDataVM).setUserData()
+        userDataVM.liveData.observe(viewLifecycleOwner) {
             if (it == null || !it.ownPage) return@observe
             userProfiler.refreshData(it)
+            handleInfoFields(view)
+        }
+
+        val refreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.refreshUserInfo)
+        refreshLayout.setOnRefreshListener {
+            userProfiler.refetchData(this.requireActivity(), refreshLayout)
             handleInfoFields(view)
         }
     }

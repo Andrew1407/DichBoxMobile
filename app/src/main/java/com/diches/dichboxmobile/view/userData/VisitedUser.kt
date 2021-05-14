@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.diches.dichboxmobile.R
 import com.diches.dichboxmobile.mv.userDataManager.UserDataFetcher
 import com.diches.dichboxmobile.mv.userDataManager.profilers.VisitedProfiler
@@ -36,9 +37,9 @@ class VisitedUser : Fragment() {
         if (savedInstanceState == null)
             dataFetcher.fillUserViewModel(userDataViewModel, userStateViewModel)
 
-        userProfiler = VisitedProfiler(userStateViewModel, subAction)
-                .handleSubscriptionView(followers, userDataViewModel)
-        userProfiler.setUserData(userDataViewModel)
+        userProfiler = VisitedProfiler(userStateViewModel, userDataViewModel, subAction)
+                .handleSubscriptionView(followers)
+        userProfiler.setUserData()
 
         handleInfoFields(view)
 
@@ -49,6 +50,14 @@ class VisitedUser : Fragment() {
             userProfiler.refreshData(userDataViewModel.liveData.value!!)
             handleInfoFields(view)
         }
+
+        val refreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.refreshVisited)
+        refreshLayout.setOnRefreshListener {
+            dataFetcher.handleRefresh(refreshLayout) {
+                userProfiler.refreshData(userDataViewModel.liveData.value!!)
+                handleInfoFields(view)
+            }
+        }
     }
 
     private fun handleInfoFields(view: View) {
@@ -57,6 +66,7 @@ class VisitedUser : Fragment() {
         val logo = view.findViewById<ImageView>(R.id.userLogo)
 
         userProfiler
+                .checkFollowerState()
                 .fillUsername(username)
                 .fillDescription(description)
                 .fillDate(signedDate)

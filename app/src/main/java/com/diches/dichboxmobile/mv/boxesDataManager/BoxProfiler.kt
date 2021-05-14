@@ -9,17 +9,30 @@ import com.diches.dichboxmobile.api.Statuses
 import com.diches.dichboxmobile.api.boxes.BoxesAPI
 import com.diches.dichboxmobile.datatypes.BoxesContainer
 import com.diches.dichboxmobile.mv.boxesDataManager.viewStates.BoxDataViewModel
+import com.diches.dichboxmobile.mv.userDataManager.viewModelStates.UserStateViewModel
 import com.diches.dichboxmobile.tools.AppColors
 import com.diches.dichboxmobile.tools.decorateView
 import com.diches.dichboxmobile.tools.fillView
 import com.diches.dichboxmobile.tools.fromBase64ToBitmap
 import kotlinx.coroutines.runBlocking
 
-class BoxProfiler(private val boxState: BoxDataViewModel) {
+class BoxProfiler(
+    private val boxState: BoxDataViewModel,
+    private val usernamesState: UserStateViewModel
+) {
     private val api = BoxesAPI()
     private lateinit var boxDetails: BoxesContainer.BoxData
 
-    fun fillViewModel(usernames: Pair<String?, String>, boxName: String): BoxProfiler {
+    fun handleRefresh(clb: () -> Unit) {
+        val usernames = formatNamesPair()
+        val boxName = boxState.liveData.value!!.name
+        boxDetails = fetchBoxData(usernames, boxName)
+        refreshData()
+        clb()
+    }
+
+    fun fillViewModel(boxName: String): BoxProfiler {
+        val usernames = formatNamesPair()
         val stateData = boxState.liveData.value
         boxDetails = stateData ?: fetchBoxData(usernames, boxName)
         return this
@@ -87,5 +100,10 @@ class BoxProfiler(private val boxState: BoxDataViewModel) {
         val data = res as BoxesContainer.BoxData
         if (Statuses.OK.eq(st)) boxState.setBoxData(data)
         return data
+    }
+
+    private fun formatNamesPair(): Pair<String?, String> {
+        val usernames = usernamesState.namesState.value!!
+        return Pair(usernames.first, usernames.second!!)
     }
 }

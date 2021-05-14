@@ -61,6 +61,9 @@
             <TextView
                 android:id="@+id/editUserNameWarning"
                 android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_marginEnd="26dp"
+                android:layout_marginStart="26dp"
                 style="@style/warningStyle" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -94,6 +97,9 @@
             <TextView
                 android:id="@+id/editUserEmailWarning"
                 android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_marginEnd="26dp"
+                android:layout_marginStart="26dp"
                 style="@style/warningStyle" />
 
         </LinearLayout>

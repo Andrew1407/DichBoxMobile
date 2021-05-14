@@ -30,20 +30,29 @@ class NotificationsHandler(
         return this
     }
 
+    fun refreshNotifications() {
+        val nts = getNotificationsByRequest()
+        val adapter = listView.adapter as NotificationsAdapter
+        adapter.items = nts
+        refreshNotificationsAmount(nts.size)
+        adapter.notifyDataSetChanged()
+        onEmptyListCheck()
+    }
+
     private fun getNotificationsByRequest(): MutableList<UserContainer.NotificationData> {
         val reqContainer = UserContainer.SignedContainer(username)
-        val (st, res) = runBlocking { api.getNotifications(reqContainer) }
+        val (_, res) = runBlocking { api.getNotifications(reqContainer) }
         val (notifications) = res as UserContainer.Notifications
         return notifications.toMutableList()
     }
 
     fun saveNotificationsState() {
-        val notificationsList = (listView.adapter as NotificationsAdapter).getItems()
+        val notificationsList = (listView.adapter as NotificationsAdapter).items
         notificationsViewModel.setNotifications(notificationsList)
     }
 
     private suspend fun removeNotifications(ids: List<Int>) {
-        val ntsItems = (listView.adapter as NotificationsAdapter).getItems()
+        val ntsItems = (listView.adapter as NotificationsAdapter).items
         val removed = withContext(Dispatchers.IO) {
             val rmContainer = UserContainer.NotificationsRemoved(username, ids)
             val (st, res) = api.removeNotifications(rmContainer)
@@ -54,14 +63,13 @@ class NotificationsHandler(
         if (!removed) return
         ntsItems.removeIf { ids.indexOf(it.id) != -1 }
         (listView.adapter as NotificationsAdapter).notifyDataSetChanged()
-        refreshNotificationsAmount(ids.size)
+        refreshNotificationsAmount(ntsItems.size)
         onEmptyListCheck()
     }
 
-    private fun refreshNotificationsAmount(deleted: Int) {
+    private fun refreshNotificationsAmount(size: Int) {
         val userState = userViewModel.liveData.value!!
-        val ntsNewAmount = userState.notifications!! - deleted
-        userViewModel.setUserData(userState.copy(notifications = ntsNewAmount))
+        userViewModel.setUserData(userState.copy(notifications = size))
     }
 
     private fun onEmptyListCheck() {
@@ -73,7 +81,7 @@ class NotificationsHandler(
         cleanBtn = btn
         cleanBtn.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
-                val ntsItems = (listView.adapter as NotificationsAdapter).getItems()
+                val ntsItems = (listView.adapter as NotificationsAdapter).items
                 val ntsIds = ntsItems.map { it.id }
                 removeNotifications(ntsIds)
             }
