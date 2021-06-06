@@ -1,4 +1,4 @@
-# DichBox
+# DichBoxMobile
 
 <p align="center">
   <a target="blank"><img src="https://raw.githubusercontent.com/Andrew1407/DichBox/main/client/src/styles/imgs/full-logo.png" width="140" alt="DichBox Logo" /></a>
