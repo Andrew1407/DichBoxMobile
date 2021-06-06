@@ -6,8 +6,7 @@ class MutableInputVerifier <K>: InputVerifier<K>() {
     private val omitList = mutableListOf<K>()
 
     fun addOmitted(key: K): MutableInputVerifier<K> {
-        if (omitList.indexOf(key) == -1)
-            omitList.add(key)
+        if (omitList.indexOf(key) == -1) omitList.add(key)
         return this
     }
 

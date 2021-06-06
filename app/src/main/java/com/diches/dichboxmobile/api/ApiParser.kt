@@ -11,7 +11,7 @@ import retrofit2.Retrofit
 
 abstract class ApiParser <C> {
     protected val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl("http://192.168.1.6:7041")
+        .baseUrl("http://192.168.1.5:7041")
         .build()
 
     protected fun getResponseData(
